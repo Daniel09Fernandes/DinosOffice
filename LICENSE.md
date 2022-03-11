@@ -25,7 +25,7 @@ If you are residing in a country that allows software patents you must verify th
 Publish modifications and credit for the library
 In all cases, any modification made to this source code should be published by any mean (e.g. a download link), even in case of MPL. If you need any additional feature, use the forums and we may introduce a patch to the main framework trunk.
 
-You do not have to pay any fee for using our MPL/GPL/LGPL libraries.
+You do not have to pay any fee for using our MPL/GPL/LGPL libraries. 
 
 
 For instance, if you select the MPL license, here are the requirements:
