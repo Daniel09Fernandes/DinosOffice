@@ -1,0 +1,328 @@
+{ ******************************************************* }
+
+{ Delphi openOffice Library }
+
+{ File     : uOpenOfficeHelper.pas }
+{ Developer: Daniel Fernandes Rodrigures }
+{ Email    : danielfernandesroddrigues@gmail.com }
+{ this unit is a part of the Open Source. }
+{ licensed under a MPL/GPL/LGPL three license - see LICENSE.md}
+
+{ ******************************************************* }
+
+unit uOpenOfficeHelper;
+
+interface
+
+uses vcl.stdCtrls, System.SysUtils, uOpenOffice, uOpenOfficeCollors, math,
+  System.Variants;
+
+type
+
+  TBorder = (bAll, bLeft, bRight, bBottom, bTop);
+
+  TBoderSheet = set of TBorder;
+
+  { STANDARD : é o alinhamento padrão tanto para números como para textos, sendo a esqueda para as strings e a direita para os números;
+    LEFT : o conteúdo é alinhado no lado esquerdo da célula;
+    CENTER : o conteúdo é alinhado no centro da célula;
+    RIGHT : o conteúdo é alinhado no lado direito da célula;
+    BLOCK : o conteúdo é alinhando em relação ao comprimento da célula;
+    REPEAT : o conteúdo é repetido dentro da célula para preenchê-la. }
+  THoriJustify = (fthSTANDARD, fthLEFT, fthCENTER, fthRIGHT, fthBLOCK,
+    fthREPEAT);
+  { STANDARD : é o valor usado como padrão;
+    TOP : o conteúdo da célula é alinhado pelo topo;
+    CENTER : o conteúdo da célula é alinhado pelo centro;
+    BOTTOM : o conteúdo da célula é alinhado pela base. }
+  TVertJustify = (ftvSTANDARD, ftvTOP, ftvCENTER, ftvBOTTOM);
+
+  TTypeChart = (ctDefault, ctVertical, ctPie, ctLine);
+
+  THelperHoriJustify = record helper for THoriJustify
+  public
+    function toInteger: Integer;
+  end;
+
+  THelperVertJustify = record helper for TVertJustify
+  public
+    function toInteger: Integer;
+  end;
+
+  THelperOpenOffice = class helper for TOpenOffice
+    procedure addChart(typeChart: TTypeChart; StartRow, EndRow: Integer; StartColumn, EndColumn, ChartName: string; PositionSheet: Integer);
+    function addBorder(borderPosition: TBoderSheet; opColor: TOpenColor) : TOpenOffice;
+    function changeFont(aNameFont: string; aHeight: Integer): TOpenOffice;
+    function changeJustify(aTypeHori: THoriJustify; aTypeVert: TVertJustify) : TOpenOffice;
+    function setColor(aFontColor, aBackgroud: TOpenColor): TOpenOffice;
+    function setBold(aBold: boolean): TOpenOffice;
+    function SetUnderline(aUnderline: boolean): TOpenOffice;
+    function CountRow: Integer;
+    function CountCell: Integer;
+  end;
+
+implementation
+
+procedure THelperOpenOffice.addChart(typeChart: TTypeChart;
+  StartRow, EndRow: Integer; StartColumn, EndColumn, ChartName: string;
+  PositionSheet: Integer);
+var
+  Chart, Rect, sheet, cursor: OleVariant;
+  RangeAddress: Variant;
+  countChart: Integer;
+begin
+  countChart := 1;
+
+  if ChartName.trim.IsEmpty then
+    ChartName := 'MyChar_' + (StartColumn + StartRow.ToString) + ':' +
+      (EndColumn + EndRow.ToString);
+
+  sheet := objDocument.Sheets.getByIndex(PositionSheet);
+  // getByName(aCollName);
+  Charts := sheet.Charts;
+
+  while Charts.hasByName(ChartName) do
+  begin
+    ChartName := ChartName + '_' + countChart.ToString;
+    inc(countChart);
+  end;
+
+  Rect := objServiceManager.Bridge_GetStruct('com.sun.star.awt.Rectangle');
+  RangeAddress := sheet.Bridge_GetStruct('com.sun.star.table.CellRangeAddress');
+
+  Rect.Width := 12000;
+  Rect.Height := 12000;
+  Rect.X := 8000 * countChart + 1;
+  Rect.Y := 1000;
+
+  RangeAddress.sheet := PositionSheet;
+  RangeAddress.StartColumn := Fields.getIndex(StartColumn);
+  RangeAddress.StartRow := StartRow;
+  RangeAddress.EndColumn := Fields.getIndex(EndColumn);
+  RangeAddress.EndRow := EndRow;
+
+  Charts.addNewByName(ChartName, Rect, VarArrayOf(RangeAddress), true, true);
+
+  if typeChart <> ctDefault then
+  begin
+    Chart := Charts.getByName(ChartName).embeddedObject;
+    Chart.Title.String := ChartName;
+    case typeChart of
+      ctVertical:
+        Chart.Diagram.Vertical := true;
+      ctPie:
+        begin
+          Chart.Diagram := Chart.createInstance
+            ('com.sun.star.chart.PieDiagram');
+          Chart.HasMainTitle := true;
+        end;
+      ctLine:
+        begin
+          Chart.Diagram := Chart.createInstance
+            ('com.sun.star.chart.LineDiagram');
+        end;
+    end;
+  end;
+
+end;
+
+function THelperOpenOffice.changeFont(aNameFont: string; aHeight: Integer)
+  : TOpenOffice;
+begin
+  // Cell := Table.getCellRangeByName(aCollName+aCellNumber.ToString);
+  Cell.CharFontName := aNameFont;
+  Cell.CharHeight := inttostr(aHeight);
+  result := self;
+end;
+
+function THelperOpenOffice.changeJustify(aTypeHori: THoriJustify;
+  aTypeVert: TVertJustify): TOpenOffice;
+begin
+  Cell.HoriJustify := aTypeHori.toInteger;
+  Cell.VertJustify := aTypeVert.toInteger;
+  result := self;
+end;
+
+function THelperOpenOffice.CountRow: Integer;
+var
+  FRow, FCountRow: Integer;
+  FCountBlank: Integer;
+  FBreak, allBlank: boolean;
+  I: Integer;
+begin
+  FBreak := false;
+  FRow := 1;
+  FCountRow := 0;
+  FCountBlank := 0;
+
+  while not FBreak do
+  begin
+    for I := 0 to 21 do
+    begin
+      if GetValue(FRow, Fields.getField(I)).Value.trim.IsEmpty then
+      begin
+        allBlank := true;
+      end
+      else
+      begin
+        if FCountBlank > 0 then // An empty column behind a valued column
+          FCountRow := FCountRow + FCountBlank;
+
+        allBlank := false;
+        FCountBlank := 0;
+
+        inc(FCountRow);
+        break;
+      end;
+    end;
+    inc(FRow);
+
+    if FCountBlank = 50 then
+      FBreak := true;
+
+    if allBlank then
+      inc(FCountBlank);
+
+  end;
+  result := FCountRow;
+end;
+
+function THelperOpenOffice.CountCell: Integer;
+var
+  FCell, FCountCell, FCountBlank: Integer;
+  I: Integer;
+  allBlank: boolean;
+begin
+  FCell := 1;
+  FCountCell := 0;
+  FCountBlank := 0;
+
+  for I := 0 to 21 do
+  begin
+    for FCell := 1 to 10 do
+    begin
+      if not GetValue(FCell, Fields.getField(I)).Value.trim.IsEmpty then
+      begin
+
+        if FCountBlank > 0 then
+          FCountCell := FCountCell + FCountBlank;
+
+        allBlank := false;
+
+        inc(FCountCell);
+        break;
+      end
+      else
+        allBlank := true;
+    end;
+
+    if FCountBlank = 10 then
+    begin
+      FCountBlank := 0;
+      break;
+    end;
+
+    if allBlank then
+      inc(FCountBlank);
+  end;
+
+  result := FCountCell;
+end;
+
+function THelperOpenOffice.addBorder(borderPosition: TBoderSheet;
+  opColor: TOpenColor): TOpenOffice;
+var
+  border: Variant;
+  settings: Variant;
+begin
+  border := ServicesManager.createInstance
+    ('com.sun.star.reflection.CoreReflection');
+
+  border.forName('com.sun.star.table.BorderLine').createObject(settings);
+
+  settings.Color := opColor;
+  settings.InnerLineWidth := 11;
+  settings.OuterLineWidth := 11;
+  settings.LineDistance := 11;
+
+  if bAll in borderPosition then
+  begin
+    Cell.TopBorder := settings;
+    Cell.LeftBorder := settings;
+    Cell.RightBorder := settings;
+    Cell.BottomBorder := settings;
+  end;
+
+  if bTop in borderPosition then
+    Cell.TopBorder := settings;
+
+  if bLeft in borderPosition then
+    Cell.LeftBorder := settings;
+
+  if bRight in borderPosition then
+    Cell.RightBorder := settings;
+
+  if bBottom in borderPosition then
+    Cell.BottomBorder := settings;
+
+  result := self;
+
+end;
+
+function THelperOpenOffice.setColor(aFontColor, aBackgroud: TOpenColor)
+  : TOpenOffice;
+begin
+  Cell.CharColor := aFontColor;
+  Cell.CellBackColor := aBackgroud;
+  result := self;
+end;
+
+function THelperOpenOffice.setBold(aBold: boolean): TOpenOffice;
+begin
+  Cell.CharWeight := ifthen(aBold, 150, 0);
+  result := self;
+end;
+
+function THelperOpenOffice.SetUnderline(aUnderline: boolean): TOpenOffice;
+begin
+  Cell.CharUnderline := ifthen(aUnderline, 1, 0);
+  result := self;
+end;
+
+{ THelperOpenOffice }
+
+function THelperHoriJustify.toInteger: Integer;
+begin
+  case self of
+    fthSTANDARD:
+      result := 0;
+    fthLEFT:
+      result := 1;
+    fthCENTER:
+      result := 2;
+    fthRIGHT:
+      result := 3;
+    fthBLOCK:
+      result := 4;
+    fthREPEAT:
+      result := 5;
+  end;
+end;
+
+{ THelperVertJustify }
+
+function THelperVertJustify.toInteger: Integer;
+begin
+  case self of
+    ftvSTANDARD:
+      result := 0;
+    ftvTOP:
+      result := 1;
+    ftvCENTER:
+      result := 2;
+    ftvBOTTOM:
+      result := 3;
+  end;
+end;
+
+end.

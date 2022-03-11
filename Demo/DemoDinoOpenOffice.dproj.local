@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2022/02/17 18:06:11.000.115,E:\Daniel\fontes\package_OpenOffice\Src\uOpenOfficeCollors.pas=</Transaction>
+    <Transaction>2022/02/17 18:06:11.000.132,E:\Daniel\fontes\package_OpenOffice\Src\uOpenOfficeHelper.pas=</Transaction>
+    <Transaction>2022/02/17 18:06:11.000.062,E:\Daniel\fontes\package_OpenOffice\Src\uOpenOffice.pas=</Transaction>
+    <Transaction>2022/03/11 00:01:44.000.414,E:\Daniel\fontes\package_OpenOffice\Demo\Project1.dproj=E:\Daniel\fontes\package_OpenOffice\Demo\DemoDinoOpenOffice.dproj</Transaction>
+  </Transactions>
+</BorlandProject>
