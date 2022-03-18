@@ -1,3 +1,5 @@
+Necessario instalar o libreoffice : https://pt-br.libreoffice.org/donate/dl/win-x86_64/7.3.1/pt-BR/LibreOffice_7.3.1_Win_x64.msi
+
 1 - Open project "OpenOffice_Calc.dproj"
 2 - Clean
 3 - Build
