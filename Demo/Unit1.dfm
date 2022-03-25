@@ -487,16 +487,7 @@ object Form1: TForm1
     OnClick = BitBtn2Click
   end
   object OpenOffice1: TOpenOffice
-    OnBeforeStartSheet = OpenOffice1BeforeStartSheet
-    OnAfterStartSheet = OpenOffice1AfterStartSheet
-    OnBeforeCloseSheet = OpenOffice1BeforeCloseSheet
-    OnAfterCloseSheet = OpenOffice1AfterCloseSheet
-    OnBeforePrint = OpenOffice1BeforePrint
-    OnBeforeGetValue = OpenOffice1BeforeGetValue
-    OnAfterGetValue = OpenOffice1AfterGetValue
-    OnBeforeSetValue = OpenOffice1BeforeSetValue
-    OnAfterSetValue = OpenOffice1AfterSetValue
-    Left = 488
-    Top = 184
+    Left = 496
+    Top = 192
   end
 end

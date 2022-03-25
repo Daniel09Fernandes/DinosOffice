@@ -130,6 +130,9 @@ function TOpenOffice.SetValue(aCellNumber: integer; aCollName: string;
 var
   map: string;
 begin
+  if aCellNumber = 0 then
+    aCellNumber := 1;
+
   map := aCollName + aCellNumber.ToString;
   objCell := objTable.getCellRangeByName(map);
 

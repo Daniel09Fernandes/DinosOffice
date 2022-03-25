@@ -136,6 +136,7 @@ begin
    OpenOffice1.startSheet;
 
   OpenOffice1.SetValue(1,'A', 'STATUS')
+     .SetBorder([bAll], opBrown)
      .changeJustify(  fthRIGHT , ftvTOP)
      .setBold(true)
      .changeFont('Arial',12)
@@ -143,16 +144,17 @@ begin
      .setColor( opWhite ,opMagenta);
 
   OpenOffice1.SetValue(1,'B', 'VALOR').changeJustify(  fthRIGHT , ftvTOP)
+     .SetBorder([bAll], opBrown)
      .setBold(true)
      .changeFont('Arial',12)
      .SetUnderline(true)
      .setColor( opWhite ,opMagenta);
 
-  OpenOffice1.SetValue(2,'B', 109, ftNumeric);
-  OpenOffice1.SetValue(2,'A', 'AGUA');
+  OpenOffice1.SetValue(2,'B', 109, ftNumeric).SetBorder([bAll], opBrown);
+  OpenOffice1.SetValue(2,'A', 'AGUA').SetBorder([bAll], opBrown);
 
-  OpenOffice1.SetValue(3,'B', 105.55, ftNumeric);
-  OpenOffice1.SetValue(3,'A', 'LUZ');
+  OpenOffice1.SetValue(3,'B', 105.55, ftNumeric).SetBorder([bAll], opBrown);
+  OpenOffice1.SetValue(3,'A', 'LUZ').SetBorder([bAll], opBrown);
 
   OpenOffice1.SetValue(4,'B', 1005.22, ftNumeric);
   OpenOffice1.SetValue(4,'A', 'ALUGUEL');
@@ -167,33 +169,33 @@ begin
   OpenOffice1.addNewSheet('A Receber',1);
 
   OpenOffice1.SetValue(1,'A', 'VALOR')
+     .SetBorder([bAll], opBrown)
      .changeJustify(  fthRIGHT , ftvTOP)
-     .setBold(true)
-     .addBorder([bAll], opBrown);
+     .setBold(true);
 
   OpenOffice1.SetValue(1,'B', 'DESC')
+     .SetBorder([bAll], opBrown)
      .changeJustify(  fthRIGHT , ftvTOP)
      .setBold(true)
      .changeFont('Arial',12)
      .SetUnderline(true)
-     .setColor( opWhite ,opCiano)
-     .addBorder([bAll], opBrown);
+     .setColor( opWhite ,opCiano);
 
   OpenOffice1.SetValue(1,'C', 'SOMA')
+     .SetBorder([bAll], opBrown)
      .changeJustify(  fthRIGHT , ftvTOP)
      .setBold(true)
      .changeFont('Arial',12)
      .SetUnderline(true)
-     .setColor( opWhite ,opSoftRed)
-     .addBorder([bAll], opBrown);
+     .setColor( opWhite ,opSoftRed);
 
   OpenOffice1.SetValue(1,'H', 'SOMA')
+     .SetBorder([bAll], opBrown)
      .changeJustify(  fthRIGHT , ftvTOP)
      .setBold(true)
      .changeFont('Arial',12)
      .SetUnderline(true)
-     .setColor( opWhite ,opSoftRed)
-     .addBorder([bAll], opBrown);
+     .setColor( opWhite ,opSoftRed);
 
   OpenOffice1.SetValue(2,'A', 200, ftNumeric);
   OpenOffice1.SetValue(2,'B', 'Emprestimo');
@@ -293,7 +295,7 @@ begin
     .setColor(TOpenColor( CBCorFont.Items.Objects[ CBCorFont.ItemIndex]),TOpenColor( CBCorFundo.Items.Objects[ CBCorFundo.ItemIndex]))
     .changeFont(cbFontes.Text,edtTamanhoFonte.ValueInt)
     .changeJustify(jusH,jusV)
-    .addBorder([bAll], opBlack);
+    .SetBorder([bAll], opBlack);
 end;
 
 procedure TForm1.Button7Click(Sender: TObject);
