@@ -51,7 +51,7 @@ type
 
   THelperOpenOffice = class helper for TOpenOffice
     procedure addChart(typeChart: TTypeChart; StartRow, EndRow: Integer; StartColumn, EndColumn, ChartName: string; PositionSheet: Integer);
-    function addBorder(borderPosition: TBoderSheet; opColor: TOpenColor) : TOpenOffice;
+    function setBorder(borderPosition: TBoderSheet; opColor: TOpenColor; RemoveBorder: boolean = false) : TOpenOffice;
     function changeFont(aNameFont: string; aHeight: Integer): TOpenOffice;
     function changeJustify(aTypeHori: THoriJustify; aTypeVert: TVertJustify) : TOpenOffice;
     function setColor(aFontColor, aBackgroud: TOpenColor): TOpenOffice;
@@ -229,21 +229,29 @@ begin
   result := FCountCell;
 end;
 
-function THelperOpenOffice.addBorder(borderPosition: TBoderSheet;
-  opColor: TOpenColor): TOpenOffice;
+function THelperOpenOffice.seTBorder(borderPosition: TBoderSheet; opColor: TOpenColor; RemoveBorder: boolean): TOpenOffice;
 var
   border: Variant;
   settings: Variant;
 begin
-  border := ServicesManager.createInstance
-    ('com.sun.star.reflection.CoreReflection');
+  border := ServicesManager.createInstance('com.sun.star.reflection.CoreReflection');
+  border.forName('com.sun.star.table.BorderLine2').createObject(settings);
 
-  border.forName('com.sun.star.table.BorderLine').createObject(settings);
-
-  settings.Color := opColor;
-  settings.InnerLineWidth := 11;
-  settings.OuterLineWidth := 11;
-  settings.LineDistance := 11;
+ if not RemoveBorder then
+  begin
+    settings.Color := opColor;
+    settings.InnerLineWidth := 20;
+    settings.LineDistance := 60;
+    settings.LineWidth := 2;
+    settings.OuterLineWidth := 20;
+  end else
+  begin
+    settings.Color := 0;
+    settings.InnerLineWidth := 0;
+    settings.LineDistance := 0;
+    settings.LineWidth := 0;
+    settings.OuterLineWidth := 0;
+  end;
 
   if bAll in borderPosition then
   begin
@@ -266,7 +274,6 @@ begin
     Cell.BottomBorder := settings;
 
   result := self;
-
 end;
 
 function THelperOpenOffice.setColor(aFontColor, aBackgroud: TOpenColor)
