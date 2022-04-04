@@ -1,7 +1,21 @@
-Necessario instalar o libreoffice : https://pt-br.libreoffice.org/donate/dl/win-x86_64/7.3.1/pt-BR/LibreOffice_7.3.1_Win_x64.msi
+Necessario instalar o libreoffice : 
+Need to install :
+https://pt-br.libreoffice.org/donate/dl/win-x86_64/7.3.1/pt-BR/LibreOffice_7.3.1_Win_x64.msi
 
 1 - Open project "OpenOffice_Calc.dproj"
 2 - Clean
 3 - Build
 4 - install
-5 - tools -> options -> language -> Delphi -> Library -> Library -> ADD "C:\yourLocal\Component_OpenOffice_Calc\Src"
+5 - tools -> options -> language -> Delphi -> Library -> Library/ADD "C:\yourLocal\Component_OpenOffice_Calc\Src"
+
+Tested Delphi version
+- 10.4
+- Seattle
+- X8
+
+Para uso básico de leitura e gravação de plhanilha, use apenas o componente
+For basic read and write sheet usage, just use the component
+
+Para estilizar a planilha, use as units adicionais: uOpenOfficeHelper.pas, uOpenOfficeCollors.pas 
+To style the worksheet, use the additional units: uOpenOfficeHelper.pas, uOpenOfficeCollors.pas 
+
