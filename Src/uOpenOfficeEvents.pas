@@ -17,8 +17,8 @@ interface
 
  type TBeforeStartSheet = procedure (sender : TObject) of object;
  type TAfterStartSheet  = procedure (sender : TObject) of object;
- type TBeforeCloseSheet = procedure (sender : TObject) of object;
- type TAfterCloseSheet  = procedure (sender : TObject) of object;
+ type TBeforeCloseFile  = procedure (sender : TObject) of object;
+ type TAfterCloseFile   = procedure (sender : TObject) of object;
  type TBeforePrint      = procedure (sender : TObject; var SetPrinter: TSetPrinter ) of object;
  type TAfterSetValue    = procedure (sender : TObject) of object;
  type TBeforeSetValue   = procedure (sender : TObject) of object;

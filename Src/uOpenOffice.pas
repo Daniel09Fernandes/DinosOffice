@@ -1,164 +1,71 @@
-{ ******************************************************* }
-
-{ Delphi openOffice Library }
-
-{ File     : uOpenOffice.pas }
-{ Developer: Daniel Fernandes Rodrigures }
-{ Email    : danielfernandesroddrigues@gmail.com }
-{ this unit is a part of the Open Source. }
-{ licensed under a MPL/GPL/LGPL three license - see LICENSE.md}
-
-{ ******************************************************* }
-
-{ Documentation:                                           }
-{
-  https://wiki.openoffice.org/wiki/Documentation/BASIC_Guide/Editing_Spreadsheet_Documents
-  https://wiki.openoffice.org/wiki/Documentation/BASIC_Guide/Cells_and_Ranges
-  https://wiki.openoffice.org/wiki/Documentation/BASIC_Guide/Templates
-  https://wiki.openoffice.org/wiki/Documentation/BASIC_Guide/StarDesktop
-}
-{ ******************************************************* }
-
 unit uOpenOffice;
 
 interface
 
-uses
-  System.Classes, DB, ActiveX,
-  dbWeb, ComObj, XMLDoc, XMLIntf, Vcl.Dialogs, System.Variants, Windows, uOpenOfficeEvents, uOpenOfficeSetPrinter;
+uses ActiveX, System.Classes, Vcl.Dialogs, System.Variants, Windows,
+  uOpenOfficeSetPrinter, uOpenOfficeEvents;
 
-type
+  Type
+   TTypeOffice   = (TpCalc,TpWriter);
+   TTypeLanguage = (TpCalcPTbr,TpCalcEn,TpWriterPTbr,TpWriterEn);
 
-  TTypeValue = (ftString, ftNumeric);
-
-  TFieldsSheet = record
-  private
-  var
-    arrFields: array of string;
-    procedure setArrayFieldsSheet;
-
-  public
-    function getField(aIndex: integer): String;
-    function getIndex(aNameField: String): integer;
-  end;
-
-
+Type
   TOpenOffice = class(TComponent)
-  private const
-    NewSheet = 'private:factory/scalc';
-    DefaultNewSheetNamePT = 'Planilha1';
-    DefaultNewSheetNameEn = 'Sheet1';
-  var
-    //--------events------//
-    FOnBeforeStartSheet: TBeforeStartSheet;
-    FOnAfterStartSheet : TAfterStartSheet;
-    FOnBeforeCloseSheet: TBeforeCloseSheet;
-    FOnAfterCloseSheet : TAfterCloseSheet;
-    FOnBeforePrint     : TBeforePrint;
+  private
+    FURlFile: string;
+    FSetPrinter         : TSetPrinter;
+    FOnBeforePrint      : TBeforePrint;
+    FOnBeforeCloseSheet : TBeforeCloseFile;
+    FOnAfterCloseSheet  : TAfterCloseFile;
 
     FOnAfterGetValue   : TAfterGetValue;
     FOnBeforeGetValue  : TBeforeGetValue;
     FOnAfterSetValue   : TAfterSetValue;
     FOnBeforeSetValue  : TBeforeSetValue;
 
-    //--------------------//
-    FFields: TFieldsSheet;
-    FURlFile: string;
-    FSheetName: string;
-    FSetPrinter : TSetPrinter;
     procedure SetURlFile(const Value: string);
-    procedure SetSheetName(const Value: string);
-    function convertFilePathToUrlFile(aFilePath: string): string;
-    procedure ValidateSheetName;
     procedure inicialization;
   protected
     { Protected declarations }
-    // LibreOffice
-      objCoreReflection, objDesktop, objServiceManager, objDocument, objTable,
-      objCell, Charts: OleVariant;
-  public
-  var
-    Value: string;
-    destructor Destroy; override;
-    constructor Create(AOwner: TComponent); override;
-    procedure startSheet;
-    procedure closeSheet;
-    procedure positionSheetByName(aSheetName: string);
-    procedure addNewSheet(aSheetName: string; aPosition: integer);
-    procedure saveSheet(aFileName: String = '');
-    procedure print;
-    function setFormula(aCellNumber: integer; aCollName: string; aFormula: string): TOpenOffice;
-    function SetValue(aCellNumber: integer; aCollName: string; aValue: variant; TypeValue: TTypeValue = ftString; Wrapped: boolean = false): TOpenOffice;
-    function GetValue(aCellNumber: integer; aCollName: String): TOpenOffice;
-
+    objCoreReflection,
+    objDesktop,
+    objServiceManager,
+    objDocument,
+    objSCalc,
+    objWriter,
+    objDispatcher,
+    objCell, Charts: OleVariant;
+    NewFile    : array[0..1] of string;
+    function convertFilePathToUrlFile(aFilePath: string): string;
+    Property SetPrinter: TSetPrinter read FSetPrinter write FSetPrinter;
+    procedure LoadDocument(FileName: string = '');
   published
-    property ServicesManager: OleVariant read objServiceManager;
-    property Cell: OleVariant read objCell write objCell;
-    property Table: OleVariant read objTable;
-    property Fields: TFieldsSheet read FFields;
-
     property URlFile: string read FURlFile write SetURlFile;
-    property SheetName: string read FSheetName write SetSheetName;
-
-    //---------events-----------//
-    property OnBeforeStartSheet: TBeforeStartSheet read FOnBeforeStartSheet write FOnBeforeStartSheet;
-    property OnAfterStartSheet : TAfterStartSheet  read FOnAfterStartSheet  write FOnAfterStartSheet;
-    property OnBeforeCloseSheet: TBeforeCloseSheet read FOnBeforeCloseSheet write FOnBeforeCloseSheet;
-    property OnAfterCloseSheet : TAfterCloseSheet  read FOnAfterCloseSheet  write FOnAfterCloseSheet;
     property OnBeforePrint     : TBeforePrint      read FOnBeforePrint      write FOnBeforePrint;
+    property OnBeforeCloseSheet: TBeforeCloseFile read FOnBeforeCloseSheet write FOnBeforeCloseSheet;
+    property OnAfterCloseSheet : TAfterCloseFile  read FOnAfterCloseSheet  write FOnAfterCloseSheet;
     property OnBeforeGetValue  : TBeforeGetValue   read FOnBeforeGetValue   write FOnBeforeGetValue;
     property OnAfterGetValue   : TAfterGetValue    read FOnAfterGetValue    write FOnAfterGetValue;
     property OnBeforeSetValue  : TBeforeSetValue   read FOnBeforeSetValue   write FOnBeforeSetValue;
     property OnAfterSetValue   : TAfterSetValue    read FOnAfterSetValue    write FOnAfterSetValue;
-
+  public
+    procedure print;
+    procedure CloseFile;
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure saveFile(aFileName: String);
   end;
-
-procedure Register;
 
 implementation
 
 uses
-  System.SysUtils, math;
+  System.SysUtils, System.Win.ComObj;
 
-procedure Register;
+{ TOpenOffice }
+
+procedure TOpenOffice.CloseFile;
 begin
-  RegisterComponents('DinosOffice', [TOpenOffice]);
-end;
-
-function TOpenOffice.SetValue(aCellNumber: integer; aCollName: string;
-  aValue: variant; TypeValue: TTypeValue; Wrapped: boolean): TOpenOffice;
-var
-  map: string;
-begin
-  if aCellNumber = 0 then
-    aCellNumber := 1;
-
-  map := aCollName + aCellNumber.ToString;
-  objCell := objTable.getCellRangeByName(map);
-
-  if  assigned(OnBeforeSetValue) then
-    OnBeforeSetValue(self);
-
-  if TypeValue = ftString then
-  begin
-    objCell.IsTextWrapped := false;
-
-    if Wrapped then
-      objCell.IsTextWrapped := True;
-
-    objCell.setString(aValue);
-  end
-  else
-    objCell.SetValue(aValue);
-  Result := self;
-
-  if  assigned(OnAfterSetValue) then
-    OnAfterSetValue(self);
-end;
-
-procedure TOpenOffice.closeSheet;
-begin
-  if Assigned( FOnBeforeCloseSheet) then
+ if Assigned( FOnBeforeCloseSheet) then
     FOnBeforeCloseSheet(self);
 
   objDocument.close(True);
@@ -177,48 +84,36 @@ begin
   Result := aFilePath;
 end;
 
+procedure TOpenOffice.SetURlFile(const Value: string);
+begin
+  FURlFile := Value;
+
+  if FURlFile.Trim.IsEmpty or (FURlFile = NewFile[integer(TpCalc)] )
+                           or (FURlFile = NewFile[integer(TpWriter)]) then
+    exit;
+
+  FURlFile := convertFilePathToUrlFile(FURlFile);
+end;
+
 constructor TOpenOffice.Create(AOwner: TComponent);
 begin
   inherited;
   inicialization;
-  Fields.setArrayFieldsSheet;
-  FSetPrinter := TSetPrinter.create(nil);
-end;
-
-procedure TOpenOffice.SetSheetName(const Value: string);
-begin
-  FSheetName := Value;
+  FSetPrinter := TSetPrinter.Create(nil);
+  NewFile[integer(TpCalc)]   := 'private:factory/scalc';
+  NewFile[integer(TpWriter)] := 'private:factory/swriter';
 end;
 
 destructor TOpenOffice.Destroy;
 begin
+  inherited;
+  FSetPrinter.Free;
   objCoreReflection := Unassigned;
   objDesktop := Unassigned;
   objServiceManager := Unassigned;
   objDocument := Unassigned;
-  objTable := Unassigned;
+  objSCalc := Unassigned;
   objCell := Unassigned;
-  FSetPrinter.Free;
-  inherited;
-end;
-
-function TOpenOffice.GetValue(aCellNumber: integer; aCollName: String)
-  : TOpenOffice;
-var
-  map: string;
-begin
-  if assigned(onBeforeGetValue) then
-    onBeforeGetValue(self);
-
-
-  map := aCollName + aCellNumber.ToString;
-  objCell := objTable.getCellRangeByName(map);
-  Value := VarToStr(objCell.String);
-
-  Result := self;
-
-  if assigned(onAfterGetValue) then
-    onAfterGetValue(self);
 end;
 
 procedure TOpenOffice.inicialization;
@@ -226,10 +121,8 @@ begin
   try
     // Libre office
     objServiceManager := CreateOleObject('com.sun.star.ServiceManager');
-    objCoreReflection := objServiceManager.createInstance
-      ('com.sun.star.reflection.CoreReflection');
-    objDesktop := objServiceManager.createInstance
-      ('com.sun.star.frame.Desktop');
+    objCoreReflection := objServiceManager.createInstance('com.sun.star.reflection.CoreReflection');
+    objDesktop        := objServiceManager.createInstance('com.sun.star.frame.Desktop');
   except
     messageDlg('Erro(pt-Br):  Instale o LibreOffice para usar o sistema' + #13 +
       #13 + 'Error(En)  :  install  the LibreOffice to use the system',
@@ -237,9 +130,12 @@ begin
   end;
 end;
 
-procedure TOpenOffice.positionSheetByName(aSheetName: string);
+procedure TOpenOffice.LoadDocument(FileName: string = '');
 begin
-  objTable := objDocument.Sheets.getByName(aSheetName);
+  if FileName = '' then
+      FileName := '_blank';
+
+  objDocument := objDesktop.loadComponentFromURL(URlFile, FileName, 0, VarArrayOf([]));
 end;
 
 procedure TOpenOffice.print;
@@ -277,141 +173,14 @@ begin
     objDocument.print(VarArrayOf([]));
 end;
 
-procedure TOpenOffice.addNewSheet(aSheetName: string; aPosition: integer);
-begin
-  objDocument.Sheets.insertNewByName(aSheetName, aPosition);
-  objTable := objDocument.Sheets.getByName(aSheetName);
-end;
-
-procedure TOpenOffice.saveSheet(aFileName: String);
+procedure TOpenOffice.saveFile(aFileName: String);
 begin
   aFileName := convertFilePathToUrlFile(aFileName);
 
   if aFileName.Trim.IsEmpty then
-    aFileName := FURlFile;
+    aFileName := URlFile;
 
   objDocument.storeAsURL(aFileName, VarArrayOf([]));
-end;
-
-function TOpenOffice.setFormula(aCellNumber: integer; aCollName: string;
-  aFormula: string): TOpenOffice;
-var
-  map: string;
-begin
-  map := aCollName + aCellNumber.ToString;
-  objCell := objTable.getCellByPosition(Fields.getIndex(aCollName),
-    aCellNumber);
-  objCell.Formula := (aFormula);
-
-  Result := self;
-end;
-
-procedure TOpenOffice.SetURlFile(const Value: string);
-begin
-  FURlFile := Value;
-
-  if FURlFile.Trim.IsEmpty then
-    exit;
-
-  FURlFile := convertFilePathToUrlFile(FURlFile);
-end;
-
-procedure TOpenOffice.startSheet;
-begin
-
-  if Assigned( FOnBeforeStartSheet) then
-    FOnBeforeStartSheet(self);
-
-
-  if FURlFile.Trim.IsEmpty then
-    FURlFile := NewSheet;
-
-  ValidateSheetName;
-  objDocument := objDesktop.loadComponentFromURL(URlFile, SheetName, 0,
-    VarArrayOf([]));
-
-  if objDocument.Sheets.hasByName(SheetName) then
-    objTable := objDocument.Sheets.getByName(SheetName)
-  else
-  begin
-    objTable := objDocument.createInstance('com.sun.star.sheet.Spreadsheet');
-    objDocument.Sheets.insertByName(SheetName, objTable);
-  end;
-
-  if Assigned( FOnAfterStartSheet) then
-     FOnAfterStartSheet(self);
-end;
-
-procedure TOpenOffice.ValidateSheetName;
-var
-  LCID: LangID;
-  Language: array [0 .. 100] of char;
-begin
-
-  LCID := GetSystemDefaultLangID;
-
-  if SheetName.Trim.IsEmpty then
-  begin
-
-    VerLanguageName(LCID, Language, 100);
-
-    if pos('Português', String(Language)) > 0 then
-      SheetName := DefaultNewSheetNamePT
-    else
-      SheetName := DefaultNewSheetNameEn;
-  end;
-end;
-
-{ TFieldsSheet }
-
-function TFieldsSheet.getField(aIndex: integer): string;
-begin
-  Result := arrFields[aIndex];
-end;
-
-function TFieldsSheet.getIndex(aNameField: String): integer;
-var
-  i: integer;
-begin
-  Result := 0;
-
-  for i := 0 to High(arrFields) do
-    if arrFields[i] = aNameField then
-    begin
-      Result := i;
-      exit;
-    end;
-end;
-
-procedure TFieldsSheet.setArrayFieldsSheet;
-begin
-  SetLength(arrFields, 24);
-
-  arrFields[0] := 'A';
-  arrFields[1] := 'B';
-  arrFields[2] := 'C';
-  arrFields[3] := 'D';
-  arrFields[4] := 'E';
-  arrFields[5] := 'F';
-  arrFields[6] := 'G';
-  arrFields[7] := 'H';
-  arrFields[8] := 'I';
-  arrFields[9] := 'J';
-  arrFields[10] := 'K';
-  arrFields[11] := 'L';
-  arrFields[12] := 'M';
-  arrFields[13] := 'N';
-  arrFields[14] := 'O';
-  arrFields[15] := 'P';
-  arrFields[16] := 'Q';
-  arrFields[17] := 'R';
-  arrFields[18] := 'S';
-  arrFields[19] := 'T';
-  arrFields[20] := 'U';
-  arrFields[21] := 'V';
-  arrFields[22] := 'X';
-  arrFields[23] := 'Y';
-  arrFields[24] := 'Z';
 end;
 
 end.

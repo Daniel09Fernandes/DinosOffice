@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2022/10/17 00:39:47.000.826,=rtl.dcp</Transaction>
+    <Transaction>2022/10/17 00:41:29.000.426,E:\Daniel\fontes\OpenOffice_cmp\OpenOfficeComponent_install.dproj=C:\Users\danie\Documents\Embarcadero\Studio\Projects\Package1.dproj</Transaction>
+    <Transaction>2022/10/17 00:41:50.000.704,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_calc.pas</Transaction>
+    <Transaction>2022/10/17 00:41:50.000.723,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeCollors.pas</Transaction>
+    <Transaction>2022/10/17 00:41:50.000.760,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeSetPrinter.pas</Transaction>
+    <Transaction>2022/10/17 00:41:50.000.737,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeEvents.pas</Transaction>
+    <Transaction>2022/10/17 00:41:50.000.746,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeHelper.pas</Transaction>
+    <Transaction>2022/10/17 00:41:50.000.694,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice.pas</Transaction>
+    <Transaction>2022/10/17 00:41:50.000.713,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_writer.pas</Transaction>
+    <Transaction>2022/10/17 00:42:48.000.979,=xmlrtl.dcp</Transaction>
+    <Transaction>2022/10/17 00:42:49.000.095,=inetdb.dcp</Transaction>
+    <Transaction>2022/10/17 00:42:49.000.048,=inet.dcp</Transaction>
+    <Transaction>2022/10/17 00:42:49.000.025,=dbrtl.dcp</Transaction>
+    <Transaction>2022/10/17 00:42:49.000.072,=dsnap.dcp</Transaction>
+    <Transaction>2022/10/17 00:42:49.000.002,=vcl.dcp</Transaction>
+  </Transactions>
+</BorlandProject>

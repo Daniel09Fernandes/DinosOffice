@@ -4,12 +4,13 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, math, Vcl.Dialogs, Vcl.StdCtrls,  Vcl.ExtCtrls, Vcl.NumberBox, Vcl.Buttons,
+  Vcl.Controls, Vcl.Forms, math, Vcl.Dialogs, Vcl.StdCtrls,  Vcl.ExtCtrls, Vcl.Buttons,
 
-  uOpenOffice,
+  uOpenOffice_calc,
+  UOpenOffice_writer,
   uOpenOfficeCollors,
   uOpenOfficeHelper,
-  uOpenOfficeSetPrinter;
+  uOpenOfficeSetPrinter, Vcl.ComCtrls, Data.DB, Datasnap.DBClient, Vcl.Grids, Vcl.DBGrids, Vcl.Menus, Datasnap.Provider, uOpenOffice;
 
 type
   TForm1 = class(TForm)
@@ -39,7 +40,6 @@ type
     RBvTop: TRadioButton;
     RBvBottom: TRadioButton;
     RBvCenter: TRadioButton;
-    edtTamanhoFonte: TNumberBox;
     Label1: TLabel;
     CBBold: TCheckBox;
     CBUnderline: TCheckBox;
@@ -66,7 +66,38 @@ type
     Bevel4: TBevel;
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
-    OpenOffice1: TOpenOffice;
+    PageControl1: TPageControl;
+    PageControl2: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    BitBtn3: TBitBtn;
+    BitBtn4: TBitBtn;
+    BitBtn5: TBitBtn;
+    BitBtn6: TBitBtn;
+    mmo: TMemo;
+    BitBtn7: TBitBtn;
+    edtFontHg: TEdit;
+    CB_Bold: TCheckBox;
+    Label5: TLabel;
+    Label6: TLabel;
+    CBErase: TCheckBox;
+    BitBtn8: TBitBtn;
+    cbUnderline_wrt: TCheckBox;
+    cbColorWriter: TComboBox;
+    BitBtn10: TBitBtn;
+    edtTamanhoFonte: TEdit;
+    ClientDataSet1: TClientDataSet;
+    DBGrid1: TDBGrid;
+    DataSource1: TDataSource;
+    ClientDataSet1ID: TIntegerField;
+    ClientDataSet1Nome: TStringField;
+    ClientDataSet1Idade: TIntegerField;
+    PopupMenu1: TPopupMenu;
+    Exportarplanilha1: TMenuItem;
+    DataSetProvider1: TDataSetProvider;
+    edtArqWriter: TLabeledEdit;
+    OpenOffice_calc1: TOpenOffice_calc;
+    OpenOffice_writer1: TOpenOffice_writer;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -89,8 +120,22 @@ type
     procedure OpenOffice1AfterSetValue(sender: TObject);
     procedure OpenOffice1AfterGetValue(sender: TObject);
     procedure OpenOffice1AfterCloseSheet(sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure BitBtn4Click(Sender: TObject);
+    procedure BitBtn5Click(Sender: TObject);
+    procedure BitBtn6Click(Sender: TObject);
+    procedure BitBtn7Click(Sender: TObject);
+    procedure BitBtn8Click(Sender: TObject);
+    procedure TabSheet2Show(Sender: TObject);
+    procedure TabSheet1Show(Sender: TObject);
+    procedure BitBtn10Click(Sender: TObject);
+    procedure Exportarplanilha1Click(Sender: TObject);
   private
+ //   Openoffice_calc   : TOpenOffice_calc;
+ //   Openoffice_writer : TOpenOffice_writer;
+     FontTop, fontLeft : integer;
     procedure CapturarNomesDeFontes;
+
     { Private declarations }
   public
     { Public declarations }
@@ -104,14 +149,76 @@ implementation
 {$R *.dfm}
 
 
+procedure TForm1.BitBtn10Click(Sender: TObject);
+begin
+   Openoffice_writer1.gotoEndOfSentence;
+end;
+
 procedure TForm1.BitBtn1Click(Sender: TObject);
 begin
-  ShowMessage(OpenOffice1.CountCell.ToString);
+  ShowMessage(Openoffice_calc1.CountCell.ToString);
 end;
 
 procedure TForm1.BitBtn2Click(Sender: TObject);
 begin
-  ShowMessage(OpenOffice1.CountRow.ToString)
+  ShowMessage(Openoffice_calc1.CountRow.ToString)
+end;
+
+procedure TForm1.BitBtn3Click(Sender: TObject);
+begin
+   Openoffice_writer1.URlFile   := edtArqWriter.Text;
+   Openoffice_writer1.startDoc;
+end;
+
+procedure TForm1.BitBtn4Click(Sender: TObject);
+begin
+  Openoffice_writer1.CloseFile;
+end;
+
+procedure TForm1.BitBtn5Click(Sender: TObject);
+begin
+  Openoffice_writer1.saveFile(edtSalvar.Text);
+end;
+
+procedure TForm1.BitBtn6Click(Sender: TObject);
+begin
+   Openoffice_writer1.URlFile   := edtArq.Text;
+   Openoffice_writer1.startDoc;
+end;
+
+procedure TForm1.BitBtn7Click(Sender: TObject);
+begin
+  Openoffice_writer1.
+  setValue(mmo.Text).
+  setBold(CB_Bold.Checked).
+  setColorText(TOpenColor( cbColorWriter.Items.Objects[ cbColorWriter.ItemIndex])).
+  setFontHeight(StrToInt(edtFontHg.Text)).
+  setUnderline(cbUnderline_wrt.Checked).
+  setFontName(cbFontes.Text);
+end;
+
+procedure TForm1.BitBtn8Click(Sender: TObject);
+begin
+  Openoffice_writer1.setBold(true)
+     .setFontHeight(16)
+     .setValue('Título: Apresentando o componente Libre Office writer via Delphi <3'+#13#13);
+     Openoffice_writer1.gotoEndOfSentence;
+
+  Openoffice_writer1.setBold(false)
+     .setFontHeight(12)
+     .setValue('Neste exemplo estou mostrando a criação de documentos via código, de um jeito simples, rápido e fácil.'+#13 );
+     Openoffice_writer1.gotoEndOfSentence;
+
+     Openoffice_writer1.setBold(false)
+     .setFontHeight(12)
+     .setValue('Espero que seja útil e que estejam gostando, lembrando o componente é open source e totalmente free!'+#13#13);
+     Openoffice_writer1.gotoEndOfSentence;
+
+     Openoffice_writer1.setBold(false)
+     .setFontHeight(12)
+     .SetBold(true)
+     .setValue('Obrigado a todos pela presença!!!' +#13);
+     Openoffice_writer1.gotoEndOfSentence;
 end;
 
 procedure TForm1.Button10Click(Sender: TObject);
@@ -127,15 +234,15 @@ begin
      tpGrafico := ctVertical;
 
 
-   OpenOffice1.addChart(tpGrafico, StrToInt(edtLde.Text), StrToInt(edtLAte.Text)
+   Openoffice_calc1.addChart(tpGrafico, StrToInt(edtLde.Text), StrToInt(edtLAte.Text)
         ,uppercase(edtCde.Text),UpperCase(edtCAte.Text),edtNomeGrafico.Text, strToInt(edtPos.Text));
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
 begin
-   OpenOffice1.startSheet;
+   Openoffice_calc1.startSheet;
 
-  OpenOffice1.SetValue(1,'A', 'STATUS')
+  Openoffice_calc1.SetValue(1,'A', 'STATUS')
      .SetBorder([bAll], opBrown)
      .changeJustify(  fthRIGHT , ftvTOP)
      .setBold(true)
@@ -143,37 +250,37 @@ begin
      .SetUnderline(true)
      .setColor( opWhite ,opMagenta);
 
-  OpenOffice1.SetValue(1,'B', 'VALOR').changeJustify(  fthRIGHT , ftvTOP)
+  Openoffice_calc1.SetValue(1,'B', 'VALOR').changeJustify(  fthRIGHT , ftvTOP)
      .SetBorder([bAll], opBrown)
      .setBold(true)
      .changeFont('Arial',12)
      .SetUnderline(true)
      .setColor( opWhite ,opMagenta);
 
-  OpenOffice1.SetValue(2,'B', 109, ftNumeric).SetBorder([bAll], opBrown);
-  OpenOffice1.SetValue(2,'A', 'AGUA').SetBorder([bAll], opBrown);
+  Openoffice_calc1.SetValue(2,'B', 109, ftNumeric).SetBorder([bAll], opBrown);
+  Openoffice_calc1.SetValue(2,'A', 'AGUA').SetBorder([bAll], opBrown);
 
-  OpenOffice1.SetValue(3,'B', 105.55, ftNumeric).SetBorder([bAll], opBrown);
-  OpenOffice1.SetValue(3,'A', 'LUZ').SetBorder([bAll], opBrown);
+  Openoffice_calc1.SetValue(3,'B', 105.55, ftNumeric).SetBorder([bAll], opBrown);
+  Openoffice_calc1.SetValue(3,'A', 'LUZ').SetBorder([bAll], opBrown);
 
-  OpenOffice1.SetValue(4,'B', 1005.22, ftNumeric);
-  OpenOffice1.SetValue(4,'A', 'ALUGUEL');
+  Openoffice_calc1.SetValue(4,'B', 1005.22, ftNumeric);
+  Openoffice_calc1.SetValue(4,'A', 'ALUGUEL');
 
-   OpenOffice1.SetValue(6,'A', 'Total de linhas');
-   OpenOffice1.SetValue(6,'B', OpenOffice1.CountRow, ftNumeric);
+   Openoffice_calc1.SetValue(6,'A', 'Total de linhas');
+   Openoffice_calc1.SetValue(6,'B', Openoffice_calc1.CountRow, ftNumeric);
 
-  OpenOffice1.SetValue(7,'A', 'Total de Colunas');
-  OpenOffice1.SetValue(7,'B', OpenOffice1.CountCell, ftNumeric);
+  Openoffice_calc1.SetValue(7,'A', 'Total de Colunas');
+  Openoffice_calc1.SetValue(7,'B', Openoffice_calc1.CountCell, ftNumeric);
 
 
-  OpenOffice1.addNewSheet('A Receber',1);
+  Openoffice_calc1.addNewSheet('A Receber',1);
 
-  OpenOffice1.SetValue(1,'A', 'VALOR')
+  Openoffice_calc1.SetValue(1,'A', 'VALOR')
      .SetBorder([bAll], opBrown)
      .changeJustify(  fthRIGHT , ftvTOP)
      .setBold(true);
 
-  OpenOffice1.SetValue(1,'B', 'DESC')
+  Openoffice_calc1.SetValue(1,'B', 'DESC')
      .SetBorder([bAll], opBrown)
      .changeJustify(  fthRIGHT , ftvTOP)
      .setBold(true)
@@ -181,7 +288,7 @@ begin
      .SetUnderline(true)
      .setColor( opWhite ,opCiano);
 
-  OpenOffice1.SetValue(1,'C', 'SOMA')
+  Openoffice_calc1.SetValue(1,'C', 'SOMA')
      .SetBorder([bAll], opBrown)
      .changeJustify(  fthRIGHT , ftvTOP)
      .setBold(true)
@@ -189,7 +296,7 @@ begin
      .SetUnderline(true)
      .setColor( opWhite ,opSoftRed);
 
-  OpenOffice1.SetValue(1,'H', 'SOMA')
+  Openoffice_calc1.SetValue(1,'H', 'SOMA')
      .SetBorder([bAll], opBrown)
      .changeJustify(  fthRIGHT , ftvTOP)
      .setBold(true)
@@ -197,48 +304,48 @@ begin
      .SetUnderline(true)
      .setColor( opWhite ,opSoftRed);
 
-  OpenOffice1.SetValue(2,'A', 200, ftNumeric);
-  OpenOffice1.SetValue(2,'B', 'Emprestimo');
-  OpenOffice1.SetValue(2,'C', 0, ftNumeric);
+  Openoffice_calc1.SetValue(2,'A', 200, ftNumeric);
+  Openoffice_calc1.SetValue(2,'B', 'Emprestimo');
+  Openoffice_calc1.SetValue(2,'C', 0, ftNumeric);
 
-  OpenOffice1.SetValue(3,'A', 369.55, ftNumeric);
-  OpenOffice1.SetValue(3,'B', 'Dividendos');
-  OpenOffice1.SetValue(3,'C', 0, ftNumeric);
+  Openoffice_calc1.SetValue(3,'A', 369.55, ftNumeric);
+  Openoffice_calc1.SetValue(3,'B', 'Dividendos');
+  Openoffice_calc1.SetValue(3,'C', 0, ftNumeric);
 
-  OpenOffice1.SetValue(4,'A', 1585.22, ftNumeric);
-  OpenOffice1.SetValue(4,'B', 'ALUGUEL');
-  OpenOffice1.SetValue(4,'C', 0, ftNumeric);
+  Openoffice_calc1.SetValue(4,'A', 1585.22, ftNumeric);
+  Openoffice_calc1.SetValue(4,'B', 'ALUGUEL');
+  Openoffice_calc1.SetValue(4,'C', 0, ftNumeric);
 
-  OpenOffice1.SetValue(8,'A', 1585.22, ftNumeric);
-  OpenOffice1.SetValue(8,'B', 'Renda extra');
-  OpenOffice1.SetValue(8,'C', 0, ftNumeric);
+  Openoffice_calc1.SetValue(8,'A', 1585.22, ftNumeric);
+  Openoffice_calc1.SetValue(8,'B', 'Renda extra');
+  Openoffice_calc1.SetValue(8,'C', 0, ftNumeric);
 
-  OpenOffice1.SetValue(15,'A', 1585.22, ftNumeric);
-  OpenOffice1.SetValue(15,'B', 'ALUGUEL 2');
-  OpenOffice1.SetValue(15,'C', 0, ftNumeric);
+  Openoffice_calc1.SetValue(15,'A', 1585.22, ftNumeric);
+  Openoffice_calc1.SetValue(15,'B', 'ALUGUEL 2');
+  Openoffice_calc1.SetValue(15,'C', 0, ftNumeric);
 
-  OpenOffice1.SetValue(17,'A', 'Total de linhas');
-  OpenOffice1.SetValue(17,'B', OpenOffice1.CountRow, ftNumeric);
+  Openoffice_calc1.SetValue(17,'A', 'Total de linhas');
+  Openoffice_calc1.SetValue(17,'B', Openoffice_calc1.CountRow, ftNumeric);
 
-  OpenOffice1.SetValue(19,'A', 'Total de Colunas');
-  OpenOffice1.SetValue(19,'B', OpenOffice1.CountCell, ftNumeric);
-  OpenOffice1.setFormula(20,'A',  '=A2+A3+A4+A15')
+  Openoffice_calc1.SetValue(19,'A', 'Total de Colunas');
+  Openoffice_calc1.SetValue(19,'B', Openoffice_calc1.CountCell, ftNumeric);
+  Openoffice_calc1.setFormula(20,'A',  '=A2+A3+A4+A15')
     .setBold(true);
 
 
-  OpenOffice1.positionSheetByName('Planilha1');
+  Openoffice_calc1.positionSheetByName('Planilha1');
 
-  OpenOffice1.addChart(ctDefault, 0,3,'A','B','MeuGrafico',0);
-  OpenOffice1.addChart(ctVertical, 0,3,'A','B','MeuGrafico',0);
-  OpenOffice1.addChart(ctPie, 0,3,'A','B','MeuGrafico',0);
-  OpenOffice1.addChart(ctLine, 0,3,'A','B','MeuGrafico',0);
+  Openoffice_calc1.addChart(ctDefault, 0,3,'A','B','MeuGrafico',0);
+  Openoffice_calc1.addChart(ctVertical, 0,3,'A','B','MeuGrafico',0);
+  Openoffice_calc1.addChart(ctPie, 0,3,'A','B','MeuGrafico',0);
+  Openoffice_calc1.addChart(ctLine, 0,3,'A','B','MeuGrafico',0);
 
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
 begin
    try
-      OpenOffice1.print;
+      Openoffice_calc1.print;
       ShowMessage('Impressão Finalizada!');
    except
       ShowMessage('Erro ao imprimir!');
@@ -248,19 +355,19 @@ end;
 procedure TForm1.Button3Click(Sender: TObject);
 begin
   if edtSalvar.Text <> '' then
-    OpenOffice1.saveSheet(edtSalvar.Text);
+    Openoffice_calc1.saveFile(edtSalvar.Text);
 end;
 
 procedure TForm1.Button4Click(Sender: TObject);
 begin
-  OpenOffice1.closeSheet;
+  Openoffice_calc1.CloseFile;
 end;
 
 procedure TForm1.Button5Click(Sender: TObject);
 begin
-   OpenOffice1.URlFile   := edtArq.Text;
-   OpenOffice1.SheetName := edtAba.Text;
-   OpenOffice1.startSheet;
+   Openoffice_calc1.URlFile   := edtArq.Text;
+   Openoffice_calc1.SheetName := edtAba.Text;
+   Openoffice_calc1.startSheet;
 end;
 
 procedure TForm1.Button6Click(Sender: TObject);
@@ -289,33 +396,33 @@ begin
   else if RBvCenter.Checked then
     jusV := ftvCENTER;
 
-  OpenOffice1.SetValue(StrToInt(edtLinha.Text), edtColuna.Text, edtValor.Text, tp,cbQuebraLinha.Checked)
+  Openoffice_calc1.SetValue(StrToInt(edtLinha.Text), edtColuna.Text, edtValor.Text, tp,cbQuebraLinha.Checked)
     .setBold(CBBold.Checked)
     .SetUnderline(CBUnderline.Checked)
     .setColor(TOpenColor( CBCorFont.Items.Objects[ CBCorFont.ItemIndex]),TOpenColor( CBCorFundo.Items.Objects[ CBCorFundo.ItemIndex]))
-    .changeFont(cbFontes.Text,edtTamanhoFonte.ValueInt)
+    .changeFont(cbFontes.Text,strToInt(edtTamanhoFonte.Text))
     .changeJustify(jusH,jusV)
     .SetBorder([bAll], opBlack);
 end;
 
 procedure TForm1.Button7Click(Sender: TObject);
 begin
-  edtValor.Text := OpenOffice1.GetValue( StrToInt(edtLinha.Text), edtColuna.Text).Value;
+  edtValor.Text := Openoffice_calc1.GetValue( StrToInt(edtLinha.Text), edtColuna.Text).Value;
 end;
 
 procedure TForm1.Button8Click(Sender: TObject);
 begin
-  OpenOffice1.addNewSheet(edtAba.Text, StrToInt(edtPos.Text));
+  Openoffice_calc1.addNewSheet(edtAba.Text, StrToInt(edtPos.Text));
 end;
 
 procedure TForm1.Button9Click(Sender: TObject);
 begin
-  OpenOffice1.positionSheetByName(edtAba.Text);
+  Openoffice_calc1.positionSheetByName(edtAba.Text);
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-    CBCorFont.Items.AddObject('Preto', TObject(opBlack));
+  CBCorFont.Items.AddObject('Preto', TObject(opBlack));
   CBCorFont.Items.AddObject('Azul'    , TObject(opBlue));
   CBCorFont.Items.AddObject('Verde'   , TObject(opGreen));
   CBCorFont.Items.AddObject('Turquesa', TObject(optTurquesa));
@@ -337,17 +444,50 @@ begin
   CBCorFont.Items.AddObject('Laranja 80', TObject(opOrange80));
   CBCorFont.Items.AddObject('Bordo',TObject(opBordo));
 
-  CBCorFundo.Items :=  CBCorFont.Items;
+  CBCorFundo.Items    :=  CBCorFont.Items;
+  cbColorWriter.Items := CBCorFont.Items;
 
+  cbColorWriter.ItemIndex :=0;
   CBCorFundo.ItemIndex := 15;
   CBCorFont.ItemIndex  := 0;
 
-  edtTamanhoFonte.Value := 10;
+  edtTamanhoFonte.text := '10';
+
+  fontTop  := 0;
+  fontLeft := 0;
 
   CapturarNomesDeFontes;
 
-  edtSalvar.Text := ExtractFileDir(GetCurrentDir)+'\';
-  edtArq.Text    :=   edtSalvar.Text;
+  edtSalvar.Text    := ExtractFileDir(GetCurrentDir)+'\';
+  edtArq.Text       := edtSalvar.Text;
+  Openoffice_calc1   := TOpenOffice_calc.Create(self);
+  Openoffice_writer1 := TOpenOffice_writer.Create(self);
+
+
+  ClientDataSet1.Open;
+  ClientDataSet1.Insert;
+  ClientDataSet1ID.Value := 1;
+  ClientDataSet1Nome.Value := 'Daniel Fernandes';
+  ClientDataSet1Idade.Value := 28;
+  ClientDataSet1.Post;
+
+  ClientDataSet1.Insert;
+  ClientDataSet1ID.Value := 2;
+  ClientDataSet1Nome.Value := 'Bruna Silva';
+  ClientDataSet1Idade.Value := 29;
+  ClientDataSet1.Post;
+
+  ClientDataSet1.Insert;
+  ClientDataSet1ID.Value := 3;
+  ClientDataSet1Nome.Value := 'João do vale';
+  ClientDataSet1Idade.Value := 40;
+  ClientDataSet1.Post;
+
+  ClientDataSet1.Insert;
+  ClientDataSet1ID.Value := 4;
+  ClientDataSet1Nome.Value := 'Peter Parker';
+  ClientDataSet1Idade.Value := 25;
+  ClientDataSet1.Post;
 
 end;
 
@@ -401,6 +541,36 @@ begin
 //  ShowMessage(  'Iniciando...'  );
 end;
 
+procedure TForm1.TabSheet1Show(Sender: TObject);
+begin
+   cbFontes.Parent :=  TabSheet1;
+   label4.Parent   :=  tabSheet1;
+
+   if fontTop > 0 then
+   begin
+     cbFontes.top   := fontTop;
+     cbFontes.Left  := fontLeft;
+   end;
+
+   label4.left    :=  cbFontes.Left;
+   label4.top     :=  cbFontes.top -15;
+end;
+
+procedure TForm1.TabSheet2Show(Sender: TObject);
+begin
+   cbFontes.Parent :=  TabSheet2;
+   label4.Parent   :=  tabSheet2;
+
+   fontTop  := cbFontes.top;
+   fontLeft := cbFontes.Left;
+
+   cbFontes.top   := 85;
+   cbFontes.Left  := 48;
+
+   label4.left    := cbFontes.Left;
+   label4.top     :=  cbFontes.top -15;
+end;
+
 function EnumFontsProc(var LogFont: TLogFont; var TextMetric: TTextMetric;
   FontType: Integer; Data: Pointer): Integer; stdcall;
 
@@ -424,6 +594,12 @@ begin
 
   cbFontes.ItemIndex := 0;
 
+end;
+
+procedure TForm1.Exportarplanilha1Click(Sender: TObject);
+begin
+   Openoffice_calc1.startSheet;
+   Openoffice_calc1.DataSetToSheet(ClientDataSet1);
 end;
 
 end.
