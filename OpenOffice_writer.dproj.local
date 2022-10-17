@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2022/08/01 20:08:20.000.631,=rtl.dcp</Transaction>
+    <Transaction>2022/08/01 20:08:55.000.396,E:\Daniel\fontes\OpenOffice_cmp\OpenOffice_write.dproj=C:\Users\danie\Documents\Embarcadero\Studio\Projects\Package1.dproj</Transaction>
+    <Transaction>2022/08/01 20:09:35.000.724,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeSetPrinter.pas</Transaction>
+    <Transaction>2022/08/01 20:09:35.000.693,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeEvents.pas</Transaction>
+    <Transaction>2022/08/01 20:09:35.000.661,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice.pas</Transaction>
+    <Transaction>2022/08/01 20:09:49.000.411,=E:\Daniel\fontes\OpenOffice_cmp\Unit1.pas</Transaction>
+    <Transaction>2022/08/01 20:10:01.000.489,E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_write.pas=E:\Daniel\fontes\OpenOffice_cmp\Unit1.pas</Transaction>
+    <Transaction>2022/08/01 20:44:24.000.349,E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_writer.pas=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_write.pas</Transaction>
+    <Transaction>2022/10/16 23:47:31.000.854,=dbrtl.dcp</Transaction>
+    <Transaction>2022/10/16 23:47:31.000.864,=inetdb.dcp</Transaction>
+    <Transaction>2022/10/16 23:47:31.000.849,=vcl.dcp</Transaction>
+    <Transaction>2022/10/16 23:47:31.000.844,=xmlrtl.dcp</Transaction>
+    <Transaction>2022/10/16 23:47:31.000.860,=inet.dcp</Transaction>
+    <Transaction>2022/10/16 23:54:53.000.696,E:\Daniel\fontes\OpenOffice_cmp\OpenOffice_writer.dproj=E:\Daniel\fontes\OpenOffice_cmp\OpenOffice_write.dproj</Transaction>
+    <Transaction>2022/10/16 23:57:20.000.700,=OpenOffice_write.dcp</Transaction>
+    <Transaction>2022/10/16 23:57:20.000.609,E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeSetPrinter.pas=</Transaction>
+    <Transaction>2022/10/16 23:57:20.000.581,E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeEvents.pas=</Transaction>
+    <Transaction>2022/10/16 23:57:20.000.635,E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_writer.pas=</Transaction>
+    <Transaction>2022/10/16 23:57:20.000.554,E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice.pas=</Transaction>
+    <Transaction>2022/10/17 00:06:56.000.094,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_writer.pas</Transaction>
+    <Transaction>2022/10/17 00:07:37.000.319,E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_writer.pas=</Transaction>
+    <Transaction>2022/10/17 00:12:38.000.575,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_writer.pas</Transaction>
+    <Transaction>2022/10/17 00:14:58.000.810,=OpenOffice_write.dcp</Transaction>
+    <Transaction>2022/10/17 00:14:58.000.764,E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_writer.pas=</Transaction>
+    <Transaction>2022/10/17 00:16:09.000.527,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_writer.pas</Transaction>
+    <Transaction>2022/10/17 00:17:16.000.620,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeHelper.pas</Transaction>
+    <Transaction>2022/10/17 00:17:44.000.646,E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_writer.pas=</Transaction>
+    <Transaction>2022/10/17 00:17:44.000.691,=dsnap.dcp</Transaction>
+    <Transaction>2022/10/17 00:17:44.000.714,=OpenOffice_write.dcp</Transaction>
+    <Transaction>2022/10/17 00:18:24.000.519,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_writer.pas</Transaction>
+    <Transaction>2022/10/17 00:20:20.000.950,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeCollors.pas</Transaction>
+    <Transaction>2022/10/17 00:21:38.000.731,E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_writer.pas=</Transaction>
+    <Transaction>2022/10/17 00:21:38.000.799,=OpenOffice_write.dcp</Transaction>
+    <Transaction>2022/10/17 00:21:38.000.754,E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeCollors.pas=</Transaction>
+    <Transaction>2022/10/17 00:25:01.000.003,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_writer.pas</Transaction>
+    <Transaction>2022/10/17 00:25:46.000.045,E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_writer.pas=</Transaction>
+    <Transaction>2022/10/17 00:25:46.000.021,E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeHelper.pas=</Transaction>
+    <Transaction>2022/10/17 00:25:46.000.089,=OpenOffice_write.dcp</Transaction>
+    <Transaction>2022/10/17 00:25:46.000.110,=OpenOffice_Calc.dcp</Transaction>
+    <Transaction>2022/10/17 00:30:12.000.894,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_writer.pas</Transaction>
+    <Transaction>2022/10/17 00:30:23.000.583,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeHelper.pas</Transaction>
+    <Transaction>2022/10/17 00:30:38.000.748,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeEvents.pas</Transaction>
+    <Transaction>2022/10/17 00:31:00.000.988,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeCollors.pas</Transaction>
+    <Transaction>2022/10/17 00:31:00.000.928,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice.pas</Transaction>
+    <Transaction>2022/10/17 00:31:00.000.946,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_calc.pas</Transaction>
+    <Transaction>2022/10/17 00:31:01.000.034,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeSetPrinter.pas</Transaction>
+  </Transactions>
+</BorlandProject>
