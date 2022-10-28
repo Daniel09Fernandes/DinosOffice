@@ -6,7 +6,7 @@
 { Developer: Daniel Fernandes Rodrigures }
 { Email    : danielfernandesroddrigues@gmail.com }
 { this unit is a part of the Open Source. }
-{ licensed under a MPL/GPL/LGPL three license - see LICENSE.md}
+{ licensed under a MIT - see LICENSE.md}
 
 { ******************************************************* }
 
@@ -23,18 +23,18 @@ type
 
   TBoderSheet = set of TBorder;
 
-  { STANDARD : é o alinhamento padrão tanto para números como para textos, sendo a esqueda para as strings e a direita para os números;
-    LEFT : o conteúdo é alinhado no lado esquerdo da célula;
-    CENTER : o conteúdo é alinhado no centro da célula;
-    RIGHT : o conteúdo é alinhado no lado direito da célula;
-    BLOCK : o conteúdo é alinhando em relação ao comprimento da célula;
-    REPEAT : o conteúdo é repetido dentro da célula para preenchê-la. }
+  { STANDARD : Ã© o alinhamento padrÃ£o tanto para nÃºmeros como para textos, sendo a esqueda para as strings e a direita para os nÃºmeros;
+    LEFT : o conteÃºdo Ã© alinhado no lado esquerdo da cÃ©lula;
+    CENTER : o conteÃºdo Ã© alinhado no centro da cÃ©lula;
+    RIGHT : o conteÃºdo Ã© alinhado no lado direito da cÃ©lula;
+    BLOCK : o conteÃºdo Ã© alinhando em relaÃ§Ã£o ao comprimento da cÃ©lula;
+    REPEAT : o conteÃºdo Ã© repetido dentro da cÃ©lula para preenchÃª-la. }
   THoriJustify = (fthSTANDARD, fthLEFT, fthCENTER, fthRIGHT, fthBLOCK,
     fthREPEAT);
-  { STANDARD : é o valor usado como padrão;
-    TOP : o conteúdo da célula é alinhado pelo topo;
-    CENTER : o conteúdo da célula é alinhado pelo centro;
-    BOTTOM : o conteúdo da célula é alinhado pela base. }
+  { STANDARD : Ã© o valor usado como padrÃ£o;
+    TOP : o conteÃºdo da cÃ©lula Ã© alinhado pelo topo;
+    CENTER : o conteÃºdo da cÃ©lula Ã© alinhado pelo centro;
+    BOTTOM : o conteÃºdo da cÃ©lula Ã© alinhado pela base. }
   TVertJustify = (ftvSTANDARD, ftvTOP, ftvCENTER, ftvBOTTOM);
 
   TTypeChart = (ctDefault, ctVertical, ctPie, ctLine);
@@ -201,7 +201,7 @@ begin
   CtrlBold := false;
   propsText[0].Name := 'bold';
   propsText[0].Value := aBold;
-  //Funcionando, porém rever
+  //Funcionando, porÃ©m rever
   if BoldActive and (not aBold) then
   begin
     BoldActive   := false;
