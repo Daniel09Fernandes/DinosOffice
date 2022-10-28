@@ -1,3 +1,14 @@
+{ ******************************************************* }
+
+{ Delphi openOffice Library }
+
+{ File     : uOpenOffice_writer.pas }
+{ Developer: Daniel Fernandes Rodrigures }
+{ Email    : danielfernandesroddrigues@gmail.com }
+{ this unit is a part of the Open Source. }
+{ licensed under a MIT - see LICENSE.md}
+
+{ ******************************************************* }
 unit uOpenOffice_writer;
 
 interface
