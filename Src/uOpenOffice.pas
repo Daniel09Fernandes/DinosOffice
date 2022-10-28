@@ -19,6 +19,17 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.}
+{ ******************************************************* }
+
+{ Delphi openOffice Library }
+
+{ File     : uOpenOffice.pas }
+{ Developer: Daniel Fernandes Rodrigures }
+{ Email    : danielfernandesroddrigues@gmail.com }
+{ this unit is a part of the Open Source. }
+{ licensed under a MIT - see LICENSE.md}
+
+{ ******************************************************* }
 
 unit uOpenOffice;
 
