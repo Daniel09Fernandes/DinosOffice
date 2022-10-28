@@ -6,7 +6,7 @@
 { Developer: Daniel Fernandes Rodrigures }
 { Email    : danielfernandesroddrigues@gmail.com }
 { this unit is a part of the Open Source. }
-{ licensed under a MPL/GPL/LGPL three license - see LICENSE.md}
+{ licensed under a MIT - see LICENSE.md}
 
 { ******************************************************* }
 
@@ -109,7 +109,7 @@ begin
 
     VerLanguageName(LCID, Language, 100);
 
-    if pos('Português', String(Language)) > 0 then
+    if pos('PortuguÃªs', String(Language)) > 0 then
       SheetName := DefaultNewSheetNamePT
     else
       SheetName := DefaultNewSheetNameEn;
