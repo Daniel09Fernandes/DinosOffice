@@ -12,9 +12,27 @@
     <Transaction>2022/10/17 00:41:50.000.713,=E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_writer.pas</Transaction>
     <Transaction>2022/10/17 00:42:48.000.979,=xmlrtl.dcp</Transaction>
     <Transaction>2022/10/17 00:42:49.000.095,=inetdb.dcp</Transaction>
-    <Transaction>2022/10/17 00:42:49.000.048,=inet.dcp</Transaction>
     <Transaction>2022/10/17 00:42:49.000.025,=dbrtl.dcp</Transaction>
+    <Transaction>2022/10/17 00:42:49.000.048,=inet.dcp</Transaction>
     <Transaction>2022/10/17 00:42:49.000.072,=dsnap.dcp</Transaction>
     <Transaction>2022/10/17 00:42:49.000.002,=vcl.dcp</Transaction>
   </Transactions>
+	<ProjectSortOrder AutoSort="0" SortType="0">
+    <File Path="Src"/>
+    <File Path="Src\uOpenOffice.pas"/>
+    <File Path="Src\uOpenOfficeCollors.pas"/>
+    <File Path="Src\uOpenOfficeEvents.pas"/>
+    <File Path="Src\uOpenOfficeHelper.pas"/>
+    <File Path="Src\uOpenOfficeSetPrinter.pas"/>
+    <File Path="Src\uOpenOffice_.dcr"/>
+    <File Path="Src\uOpenOffice_calc.pas"/>
+    <File Path="Src\uOpenOffice_writer.pas"/>
+    <File Path="dbrtl.dcp"/>
+    <File Path="dsnap.dcp"/>
+    <File Path="inet.dcp"/>
+    <File Path="inetdb.dcp"/>
+    <File Path="rtl.dcp"/>
+    <File Path="vcl.dcp"/>
+    <File Path="xmlrtl.dcp"/>
+  </ProjectSortOrder>
 </BorlandProject>

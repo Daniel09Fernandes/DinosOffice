@@ -1,41 +1,8 @@
-{MIT License
-
-Copyright (c) 2022 Daniel Fernandes
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.}
-{ ******************************************************* }
-
-{ Delphi openOffice Library }
-
-{ File     : uOpenOffice.pas }
-{ Developer: Daniel Fernandes Rodrigures }
-{ Email    : danielfernandesroddrigues@gmail.com }
-{ this unit is a part of the Open Source. }
-{ licensed under a MIT - see LICENSE.md}
-
-{ ******************************************************* }
-
 unit uOpenOffice;
 
 interface
 
-uses ActiveX, System.Classes, Vcl.Dialogs, System.Variants, Windows,
+uses ActiveX, Classes, Dialogs, Variants, Windows,
   uOpenOfficeSetPrinter, uOpenOfficeEvents;
 
   Type
@@ -48,8 +15,8 @@ Type
     FURlFile: string;
     FSetPrinter         : TSetPrinter;
     FOnBeforePrint      : TBeforePrint;
-    FOnBeforeCloseFile  : TBeforeCloseFile;
-    FOnAfterCloseFile   : TAfterCloseFile;
+    FOnBeforeCloseFile : TBeforeCloseFile;
+    FOnAfterCloseFile  : TAfterCloseFile;
 
     FOnAfterGetValue   : TAfterGetValue;
     FOnBeforeGetValue  : TBeforeGetValue;
@@ -75,8 +42,8 @@ Type
   published
     property URlFile: string read FURlFile write SetURlFile;
     property OnBeforePrint     : TBeforePrint      read FOnBeforePrint      write FOnBeforePrint;
-    property OnBeforeCloseFile : TBeforeCloseFile  read FOnBeforeCloseFile  write FOnBeforeCloseFile;
-    property OnAfterCloseFile  : TAfterCloseFile   read FOnAfterCloseFile   write FOnAfterCloseFile;
+    property OnBeforeCloseFile : TBeforeCloseFile read FOnBeforeCloseFile   write FOnBeforeCloseFile;
+    property OnAfterCloseFile  : TAfterCloseFile  read FOnAfterCloseFile    write FOnAfterCloseFile;
     property OnBeforeGetValue  : TBeforeGetValue   read FOnBeforeGetValue   write FOnBeforeGetValue;
     property OnAfterGetValue   : TAfterGetValue    read FOnAfterGetValue    write FOnAfterGetValue;
     property OnBeforeSetValue  : TBeforeSetValue   read FOnBeforeSetValue   write FOnBeforeSetValue;
@@ -92,7 +59,7 @@ Type
 implementation
 
 uses
-  System.SysUtils, System.Win.ComObj;
+  SysUtils, ComObj;
 
 { TOpenOffice }
 
@@ -121,7 +88,7 @@ procedure TOpenOffice.SetURlFile(const Value: string);
 begin
   FURlFile := Value;
 
-  if FURlFile.Trim.IsEmpty or (FURlFile = NewFile[integer(TpCalc)] )
+  if (trim(FURlFile) <> '') or (FURlFile = NewFile[integer(TpCalc)] )
                            or (FURlFile = NewFile[integer(TpWriter)]) then
     exit;
 
@@ -159,7 +126,7 @@ begin
   except
     messageDlg('Erro(pt-Br):  Instale o LibreOffice para usar o sistema' + #13 +
       #13 + 'Error(En)  :  install  the LibreOffice to use the system',
-      TMsgDlgType.mtError, [TMsgDlgBtn.mbOK], 0);
+      mtError, [mbOK], 0);
   end;
 end;
 
@@ -210,7 +177,7 @@ procedure TOpenOffice.saveFile(aFileName: String);
 begin
   aFileName := convertFilePathToUrlFile(aFileName);
 
-  if aFileName.Trim.IsEmpty then
+  if Trim(aFileName) <> '' then
     aFileName := URlFile;
 
   objDocument.storeAsURL(aFileName, VarArrayOf([]));
