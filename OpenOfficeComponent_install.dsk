@@ -1,19 +1,18 @@
 ﻿[Closed Files]
-File_0=TSourceModule,'E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice.dcr',0,1,1,1,1,0,0,,
-File_1=TSourceModule,'E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice.pas',0,1,54,7,57,0,0,,
+File_0=TSourceModule,'F:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice.dcr',0,1,1,1,1,0,0,,
+File_1=TSourceModule,'E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice.dcr',0,1,1,1,1,0,0,,
 File_2=TSourceModule,'E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeCollors.pas',0,1,1,1,1,0,0,,
 File_3=TSourceModule,'E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_writer.pas',0,1,35,3,49,0,0,,
 File_4=TSourceModule,'E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeHelper.pas',0,1,1,1,1,0,0,,
-File_5=TSourceModule,'E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOffice_calc.pas',0,1,88,1,94,0,0,,
-File_6=TSourceModule,'E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeEvents.pas',0,1,1,1,1,0,0,,
-File_7=TSourceModule,'E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeSetPrinter.pas',0,1,1,1,1,0,0,,
-File_8=TSourceModule,'E:\Daniel\fontes\OpenOffice_cmp\Demo\Unit1.pas',0,1,165,40,173,0,0,,{1
-File_9=TSourceModule,'c:\program files (x86)\embarcadero\studio\17.0\source\data\dsnap\Datasnap.DBClient.pas',0,1,5173,1,5183,0,0,,
-File_10=TSourceModule,'c:\program files (x86)\embarcadero\studio\17.0\source\data\Data.DB.pas',0,1,3254,1,3264,0,0,,
-File_11=TSourceModule,'E:\Daniel\fontes\CarterinhaMukiadaCruzeiroDoSul_API\uMain.pas',0,1,140,68,147,0,0,,
-File_12=TSourceModule,'E:\Daniel\fontes\SmartAgenda\API\Services\UServices.Agendamentos.pas',0,1,6,27,7,0,0,,
-File_13=TSourceModule,'E:\Daniel\fontes\SmartAgenda\API\Model\UModel.Agendametos.pas',0,1,118,42,135,0,0,,
-File_14=TSourceModule,'E:\Daniel\fontes\SmartAgenda\API\StandAlone\FormUnit1.pas',0,1,77,21,80,0,0,,
+File_5=TSourceModule,'E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeEvents.pas',0,1,1,1,1,0,0,,
+File_6=TSourceModule,'E:\Daniel\fontes\OpenOffice_cmp\Src\uOpenOfficeSetPrinter.pas',0,1,1,1,1,0,0,,
+File_7=TSourceModule,'E:\Daniel\fontes\OpenOffice_cmp\Demo\Unit1.pas',0,1,165,40,173,0,0,,{1
+File_8=TSourceModule,'c:\program files (x86)\embarcadero\studio\17.0\source\data\dsnap\Datasnap.DBClient.pas',0,1,5173,1,5183,0,0,,
+File_9=TSourceModule,'c:\program files (x86)\embarcadero\studio\17.0\source\data\Data.DB.pas',0,1,3254,1,3264,0,0,,
+File_10=TSourceModule,'E:\Daniel\fontes\CarterinhaMukiadaCruzeiroDoSul_API\uMain.pas',0,1,140,68,147,0,0,,
+File_11=TSourceModule,'E:\Daniel\fontes\SmartAgenda\API\Services\UServices.Agendamentos.pas',0,1,6,27,7,0,0,,
+File_12=TSourceModule,'E:\Daniel\fontes\SmartAgenda\API\Model\UModel.Agendametos.pas',0,1,118,42,135,0,0,,
+File_13=TSourceModule,'E:\Daniel\fontes\SmartAgenda\API\StandAlone\FormUnit1.pas',0,1,77,21,80,0,0,,
 
 [Modules]
 Module0=default.htm
@@ -238,7 +237,7 @@ TBDockHeight=6841
 LRDockWidth=1896
 Dockable=1
 StayOnTop=0
-SplitPos=154
+SplitPos=111
 
 [ClassBrowserTool]
 PercentageSizes=1

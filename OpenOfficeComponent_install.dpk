@@ -1,6 +1,7 @@
 package OpenOfficeComponent_install;
 
 {$R *.res}
+{$R 'Src\uOpenOffice_.dcr'}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}

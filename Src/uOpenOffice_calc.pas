@@ -52,8 +52,8 @@ type
 
     var
     //--------events------//
-    FOnBeforeStartSheet: TBeforeStartSheet;
-    FOnAfterStartSheet : TAfterStartSheet;
+    FOnBeforeStartFile: TBeforeStartFile;
+    FOnAfterStartFile : TAfterStartFile;
     //--------------------//
     FFields: TFieldsSheet;
     FSheetName: string;
@@ -79,8 +79,8 @@ type
     property SheetName: string read FSheetName write SetSheetName;
 
     //---------events-----------//
-    property OnBeforeStartSheet: TBeforeStartSheet read FOnBeforeStartSheet write FOnBeforeStartSheet;
-    property OnAfterStartSheet : TAfterStartSheet  read FOnAfterStartSheet  write FOnAfterStartSheet;
+    property OnBeforeStartFile: TBeforeStartFile read FOnBeforeStartFile write FOnBeforeStartFile;
+    property OnAfterStartFile : TAfterStartFile  read FOnAfterStartFile  write FOnAfterStartFile;
 
   end;
 
@@ -245,8 +245,8 @@ end;
 procedure TOpenOffice_calc.startSheet;
 begin
 
-  if Assigned( FOnBeforeStartSheet) then
-    FOnBeforeStartSheet(self);
+  if Assigned( FOnBeforeStartFile) then
+    FOnBeforeStartFile(self);
 
   if URlFile.Trim.IsEmpty then
     URlFile := NewFile[integer(TpCalc)];
@@ -262,8 +262,8 @@ begin
     objDocument.Sheets.insertByName(SheetName, objSCalc);
   end;
 
-  if Assigned( FOnAfterStartSheet) then
-     FOnAfterStartSheet(self);
+  if Assigned( FOnAfterStartFile) then
+     FOnAfterStartFile(self);
 end;
 
 

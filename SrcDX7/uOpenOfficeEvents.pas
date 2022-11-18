@@ -15,8 +15,8 @@ unit uOpenOfficeEvents;
 interface
  uses classes, uOpenOfficeSetPrinter;
 
- type TBeforeStartFile  = procedure (sender : TObject) of object;
- type TAfterStartFile   = procedure (sender : TObject) of object;
+ type TBeforeStartFile = procedure (sender : TObject) of object;
+ type TAfterStartFile  = procedure (sender : TObject) of object;
  type TBeforeCloseFile  = procedure (sender : TObject) of object;
  type TAfterCloseFile   = procedure (sender : TObject) of object;
  type TBeforePrint      = procedure (sender : TObject; var SetPrinter: TSetPrinter ) of object;

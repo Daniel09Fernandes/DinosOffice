@@ -2,7 +2,7 @@ unit uOpenOffice;
 
 interface
 
-uses ActiveX, System.Classes, Vcl.Dialogs, System.Variants, Windows,
+uses ActiveX, Classes, Dialogs, Variants, Windows,
   uOpenOfficeSetPrinter, uOpenOfficeEvents;
 
   Type
@@ -15,8 +15,8 @@ Type
     FURlFile: string;
     FSetPrinter         : TSetPrinter;
     FOnBeforePrint      : TBeforePrint;
-    FOnBeforeCloseFile  : TBeforeCloseFile;
-    FOnAfterCloseFile   : TAfterCloseFile;
+    FOnBeforeCloseFile : TBeforeCloseFile;
+    FOnAfterCloseFile  : TAfterCloseFile;
 
     FOnAfterGetValue   : TAfterGetValue;
     FOnBeforeGetValue  : TBeforeGetValue;
@@ -42,8 +42,8 @@ Type
   published
     property URlFile: string read FURlFile write SetURlFile;
     property OnBeforePrint     : TBeforePrint      read FOnBeforePrint      write FOnBeforePrint;
-    property OnBeforeCloseFile : TBeforeCloseFile  read FOnBeforeCloseFile  write FOnBeforeCloseFile;
-    property OnAfterCloseFile  : TAfterCloseFile   read FOnAfterCloseFile   write FOnAfterCloseFile;
+    property OnBeforeCloseFile : TBeforeCloseFile read FOnBeforeCloseFile   write FOnBeforeCloseFile;
+    property OnAfterCloseFile  : TAfterCloseFile  read FOnAfterCloseFile    write FOnAfterCloseFile;
     property OnBeforeGetValue  : TBeforeGetValue   read FOnBeforeGetValue   write FOnBeforeGetValue;
     property OnAfterGetValue   : TAfterGetValue    read FOnAfterGetValue    write FOnAfterGetValue;
     property OnBeforeSetValue  : TBeforeSetValue   read FOnBeforeSetValue   write FOnBeforeSetValue;
@@ -59,7 +59,7 @@ Type
 implementation
 
 uses
-  System.SysUtils, System.Win.ComObj;
+  SysUtils, ComObj;
 
 { TOpenOffice }
 
@@ -88,7 +88,7 @@ procedure TOpenOffice.SetURlFile(const Value: string);
 begin
   FURlFile := Value;
 
-  if FURlFile.Trim.IsEmpty or (FURlFile = NewFile[integer(TpCalc)] )
+  if (trim(FURlFile) <> '') or (FURlFile = NewFile[integer(TpCalc)] )
                            or (FURlFile = NewFile[integer(TpWriter)]) then
     exit;
 
@@ -126,7 +126,7 @@ begin
   except
     messageDlg('Erro(pt-Br):  Instale o LibreOffice para usar o sistema' + #13 +
       #13 + 'Error(En)  :  install  the LibreOffice to use the system',
-      TMsgDlgType.mtError, [TMsgDlgBtn.mbOK], 0);
+      mtError, [mbOK], 0);
   end;
 end;
 
@@ -177,7 +177,7 @@ procedure TOpenOffice.saveFile(aFileName: String);
 begin
   aFileName := convertFilePathToUrlFile(aFileName);
 
-  if aFileName.Trim.IsEmpty then
+  if Trim(aFileName) <> '' then
     aFileName := URlFile;
 
   objDocument.storeAsURL(aFileName, VarArrayOf([]));
