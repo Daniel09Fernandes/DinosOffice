@@ -127,7 +127,6 @@
         <DCCReference Include="dsnap.dcp"/>
         <DCCReference Include="inetdb.dcp"/>
         <DCCReference Include="vclie.dcp"/>
-        <DCCReference Include="vcledge.dcp"/>
         <DCCReference Include="Src\uOpenOffice.pas"/>
         <DCCReference Include="Src\uOpenOffice_calc.pas"/>
         <DCCReference Include="Src\uOpenOffice_writer.pas"/>
