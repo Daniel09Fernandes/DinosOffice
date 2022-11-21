@@ -291,7 +291,7 @@ end;
 
 procedure TFieldsSheet.setArrayFieldsSheet;
 begin
-  SetLength(arrFields, 24);
+  SetLength(arrFields, 25);
 
   arrFields[0] := 'A';
   arrFields[1] := 'B';
@@ -315,9 +315,10 @@ begin
   arrFields[19] := 'T';
   arrFields[20] := 'U';
   arrFields[21] := 'V';
-  arrFields[22] := 'X';
-  arrFields[23] := 'Y';
-  arrFields[24] := 'Z';
+  arrFields[22] := 'W';
+  arrFields[23] := 'X';
+  arrFields[24] := 'Y';
+  arrFields[25] := 'Z';
 end;
 
 end.
