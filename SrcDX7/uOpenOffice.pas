@@ -125,7 +125,8 @@ begin
     objDesktop        := objServiceManager.createInstance('com.sun.star.frame.Desktop');
   except
     messageDlg('Erro(pt-Br):  Instale o LibreOffice para usar o sistema' + #13 +
-      #13 + 'Error(En)  :  install  the LibreOffice to use the system',
+      #13 + 'Error(En)  :  install  the LibreOffice to use the system' +#13#13+
+      'Dowload in: https://www.libreoffice.org/download/download-libreoffice/',
       mtError, [mbOK], 0);
   end;
 end;
