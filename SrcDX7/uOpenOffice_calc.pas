@@ -577,7 +577,7 @@ end;
 
 procedure TOpenOffice_calc.setArrayFieldsSheet;
 begin
-  SetLength(FFields.arrFields, 25);
+  SetLength(FFields.arrFields, 26);
   with FFields do
   begin
    arrFields[0] := 'A';
@@ -602,9 +602,10 @@ begin
    arrFields[19] := 'T';
    arrFields[20] := 'U';
    arrFields[21] := 'V';
-   arrFields[22] := 'X';
-   arrFields[23] := 'Y';
-   arrFields[24] := 'Z';
+   arrFields[22] := 'W';
+   arrFields[23] := 'X';
+   arrFields[24] := 'Y';
+   arrFields[25] := 'Z';
   end
 end;
 
