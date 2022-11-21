@@ -35,7 +35,9 @@ requires
   dbrtl,
   inet,
   dsnap,
-  inetdb;
+  inetdb,
+  vclie,
+  vcledge;
 
 contains
   uOpenOffice in 'Src\uOpenOffice.pas',
@@ -44,6 +46,8 @@ contains
   uOpenOfficeCollors in 'Src\uOpenOfficeCollors.pas',
   uOpenOfficeEvents in 'Src\uOpenOfficeEvents.pas',
   uOpenOfficeHelper in 'Src\uOpenOfficeHelper.pas',
-  uOpenOfficeSetPrinter in 'Src\uOpenOfficeSetPrinter.pas';
+  uOpenOfficeSetPrinter in 'Src\uOpenOfficeSetPrinter.pas',
+  UConvertPDFToSheet in 'Src\UConvertPDFToSheet.pas',
+  uInstallLibreOffice in 'Src\uInstallLibreOffice.pas';
 
 end.

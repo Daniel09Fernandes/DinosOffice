@@ -24,7 +24,7 @@ unit uOpenOffice_calc;
 interface
 
 uses
-  System.Classes, DB, ActiveX, uOpenOffice,
+  System.Classes, data.DB, ActiveX, uOpenOffice,
   dbWeb, ComObj, XMLDoc, XMLIntf, Vcl.Dialogs, System.Variants,
   Windows, uOpenOfficeEvents, Datasnap.DBClient;
 
@@ -71,6 +71,8 @@ type
     function SetValue(aCellNumber: integer; aCollName: string; aValue: variant; TypeValue: TTypeValue = ftString; Wrapped: boolean = false): TOpenOffice_calc;
     function GetValue(aCellNumber: integer; aCollName: String): TOpenOffice_calc;
     procedure DataSetToSheet(const aCds : TClientDataSet);
+    procedure CallConversorPDFTOSheet;
+    function  SheetToDataSet(TabSheetName: String): TClientDataSet;
   published
     property ServicesManager: OleVariant read objServiceManager;
     property Cell: OleVariant read objCell write objCell;
@@ -89,11 +91,22 @@ procedure Register;
 implementation
 
 uses
-  System.SysUtils, math,uOpenOfficeHelper, uOpenOfficeCollors;
+  System.SysUtils, math,uOpenOfficeHelper, uOpenOfficeCollors, uConvertPDFToSheet;
 
 procedure Register;
 begin
   RegisterComponents('DinosOffice', [TOpenOffice_calc]);
+end;
+
+procedure TOpenOffice_calc.CallConversorPDFTOSheet;
+var PdfToSheet : TConvertPDFToSheet;
+begin
+  PdfToSheet := TConvertPDFToSheet.create;
+  try
+    PdfToSheet.callConversor;
+  finally
+    freeAndNil(PdfToSheet);
+  end;
 end;
 
 procedure TOpenOffice_calc.ValidateSheetName;
@@ -266,6 +279,31 @@ begin
      FOnAfterStartFile(self);
 end;
 
+function TOpenOffice_calc.SheetToDataSet(TabSheetName: String): TClientDataSet;
+var I, IdxField : Integer;
+begin
+  Result := TClientDataSet.Create(nil);
+  try
+     positionSheetByName(TabSheetName);
+     for I := 0 to CountCell -1 do
+       Result.FieldDefs.Add(GetValue(1,Fields.getField(I)).Value,TFieldType.ftString,100);
+     Result.CreateDataSet;
+     Result.DisableControls;
+     Result.LogChanges := false;
+     for I := 2 to CountRow do
+     begin
+       Result.Append;
+       for IdxField := 0 to pred(Result.FieldCount) do
+         Result.Fields[IdxField] .AsString := GetValue(I,Fields.getField(IdxField)).Value;
+
+       Result.Post;
+      end;
+  finally
+    Result.EnableControls;
+    CloseFile;
+  end;
+end;
+
 
 
 { TFieldsSheet }
@@ -291,7 +329,7 @@ end;
 
 procedure TFieldsSheet.setArrayFieldsSheet;
 begin
-  SetLength(arrFields, 24);
+  SetLength(arrFields, 25);
 
   arrFields[0] := 'A';
   arrFields[1] := 'B';
@@ -315,9 +353,10 @@ begin
   arrFields[19] := 'T';
   arrFields[20] := 'U';
   arrFields[21] := 'V';
-  arrFields[22] := 'X';
-  arrFields[23] := 'Y';
-  arrFields[24] := 'Z';
+  arrFields[22] := 'W';
+  arrFields[23] := 'X';
+  arrFields[24] := 'Y';
+  arrFields[25] := 'Z';
 end;
 
 end.

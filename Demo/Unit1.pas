@@ -98,6 +98,8 @@ type
     edtArqWriter: TLabeledEdit;
     OpenOffice_calc1: TOpenOffice_calc;
     OpenOffice_writer1: TOpenOffice_writer;
+    Button11: TButton;
+    Button12: TButton;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -130,6 +132,8 @@ type
     procedure TabSheet1Show(Sender: TObject);
     procedure BitBtn10Click(Sender: TObject);
     procedure Exportarplanilha1Click(Sender: TObject);
+    procedure Button11Click(Sender: TObject);
+    procedure Button12Click(Sender: TObject);
   private
  //   Openoffice_calc   : TOpenOffice_calc;
  //   Openoffice_writer : TOpenOffice_writer;
@@ -236,6 +240,19 @@ begin
 
    Openoffice_calc1.addChart(tpGrafico, StrToInt(edtLde.Text), StrToInt(edtLAte.Text)
         ,uppercase(edtCde.Text),UpperCase(edtCAte.Text),edtNomeGrafico.Text, strToInt(edtPos.Text));
+end;
+
+procedure TForm1.Button11Click(Sender: TObject);
+begin
+  OpenOffice_calc1.CallConversorPDFTOSheet;
+end;
+
+procedure TForm1.Button12Click(Sender: TObject);
+begin
+  if edtAba.Text = '' then
+    edtAba.Text := 'Planilha 1';
+
+  OpenOffice_calc1.SheetToDataSet(edtAba.Text);
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
