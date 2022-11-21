@@ -527,6 +527,24 @@ object Form1: TForm1
         TitleFont.Name = 'Tahoma'
         TitleFont.Style = []
       end
+      object Button11: TButton
+        Left = 6
+        Top = 256
+        Width = 97
+        Height = 25
+        Caption = 'Pdf para planilha'
+        TabOrder = 36
+        OnClick = Button11Click
+      end
+      object Button12: TButton
+        Left = 109
+        Top = 256
+        Width = 117
+        Height = 25
+        Caption = 'Planilha para DataSet'
+        TabOrder = 37
+        OnClick = Button12Click
+      end
     end
     object TabSheet2: TTabSheet
       Caption = 'Writer'

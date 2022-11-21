@@ -279,7 +279,6 @@ begin
      FOnAfterStartFile(self);
 end;
 
-//TODO : Testar está funcção
 function TOpenOffice_calc.SheetToDataSet(TabSheetName: String): TClientDataSet;
 var I, IdxField : Integer;
 begin
