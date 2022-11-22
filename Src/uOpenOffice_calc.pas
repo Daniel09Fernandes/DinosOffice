@@ -329,7 +329,7 @@ end;
 
 procedure TFieldsSheet.setArrayFieldsSheet;
 begin
-  SetLength(arrFields, 25);
+  SetLength(arrFields, 26);
 
   arrFields[0] := 'A';
   arrFields[1] := 'B';
