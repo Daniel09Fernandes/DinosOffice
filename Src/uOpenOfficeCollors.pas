@@ -36,7 +36,9 @@ Type
       opSalmon = 26316,
       opOrange = 16750950,
       opOrange80 = 10066431,
-      opBordo = 16777164
+      opBordo = 16777164,
+      opYellowAQ = 16776960,
+      opYellowAQ2 =16765992
     );
 
 implementation
