@@ -10,10 +10,13 @@ https://pt-br.libreoffice.org/baixe-ja/libreoffice-novo/
 5 - tools -> options -> language -> Delphi -> Library -> Library/ADD "C:\yourLocal\Component_OpenOffice\Src" (for delphi 7 use the "C:\yourLocal\Component_OpenOffice\SrcDX7")
 
 Tested Delphi version
-- 10.4
-- Seattle
-- X8
-- Delphi 7
+
+| Version | Supported          |
+| ------- | ------------------ |
+| > 10.x  | :white_check_mark: |
+| Seattle | :white_check_mark: |
+| X8      | :white_check_mark: |
+| Delphi 7| :white_check_mark: |
 
 Para uso básico de leitura e gravação de plhanilha, use apenas o componente
 For basic read and write sheet usage, just use the component
