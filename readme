@@ -11,12 +11,12 @@ https://pt-br.libreoffice.org/baixe-ja/libreoffice-novo/
 
 Tested Delphi version
 
-| Version | Supported          |
-| ------- | ------------------ |
-| > 10.x  | :white_check_mark: |
-| Seattle | :white_check_mark: |
-| X8      | :white_check_mark: |
-| Delphi 7| :white_check_mark: |
+| Version  | Supported  | 
+| -------  | ---------- |
+| > 10.x   |    ✅     |
+| Seattle  |    ✅     |
+| X8       |    ✅     |
+| Delphi 7 |    ✅     |
 
 Para uso básico de leitura e gravação de plhanilha, use apenas o componente
 For basic read and write sheet usage, just use the component
