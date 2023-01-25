@@ -1,3 +1,10 @@
+################################### Important #########################################
+
+In the last update, the DocVisible property was included, by default it is false, so when generating the spreadsheet it is not displayed on the screen,
+If you want to see the spreadsheet being generated, set it to true;
+
+########################################################################################
+
 Necessario instalar o libreoffice : 
 Need to install :
 
