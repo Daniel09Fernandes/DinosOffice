@@ -47,6 +47,7 @@ contains
   uOpenOfficeHelper in 'Src\uOpenOfficeHelper.pas',
   uOpenOfficeSetPrinter in 'Src\uOpenOfficeSetPrinter.pas',
   UConvertPDFToSheet in 'Src\UConvertPDFToSheet.pas',
-  uInstallLibreOffice in 'Src\uInstallLibreOffice.pas';
+  uInstallLibreOffice in 'Src\uInstallLibreOffice.pas',
+  uOpenOfficeHungThread in 'Src\uOpenOfficeHungThread.pas';
 
 end.

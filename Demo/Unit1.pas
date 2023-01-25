@@ -100,6 +100,8 @@ type
     OpenOffice_writer1: TOpenOffice_writer;
     Button11: TButton;
     Button12: TButton;
+    lbl1: TLabel;
+    lbl2: TLabel;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -139,6 +141,7 @@ type
  //   Openoffice_writer : TOpenOffice_writer;
      FontTop, fontLeft : integer;
     procedure CapturarNomesDeFontes;
+    procedure CreateDemoSheet;
 
     { Private declarations }
   public
@@ -255,108 +258,115 @@ begin
   OpenOffice_calc1.SheetToDataSet(edtAba.Text);
 end;
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.CreateDemoSheet;
 begin
-   Openoffice_calc1.startSheet;
+  Openoffice_calc1.startSheet;
 
-  Openoffice_calc1.SetValue(1,'A', 'STATUS')
-     .SetBorder([bAll], opBrown)
-     .changeJustify(  fthRIGHT , ftvTOP)
-     .setBold(true)
-     .changeFont('Arial',12)
-     .SetUnderline(true)
-     .setColor( opWhite ,opMagenta);
+    Openoffice_calc1.SetValue(1,'A', 'STATUS')
+       .SetBorder([bAll], opBrown)
+       .changeJustify(  fthRIGHT , ftvTOP)
+       .setBold(true)
+       .changeFont('Arial',12)
+       .SetUnderline(true)
+       .setColor( opWhite ,opMagenta);
 
-  Openoffice_calc1.SetValue(1,'B', 'VALOR').changeJustify(  fthRIGHT , ftvTOP)
-     .SetBorder([bAll], opBrown)
-     .setBold(true)
-     .changeFont('Arial',12)
-     .SetUnderline(true)
-     .setColor( opWhite ,opMagenta);
+    Openoffice_calc1.SetValue(1,'B', 'VALOR').changeJustify(  fthRIGHT , ftvTOP)
+       .SetBorder([bAll], opBrown)
+       .setBold(true)
+       .changeFont('Arial',12)
+       .SetUnderline(true)
+       .setColor( opWhite ,opMagenta);
 
-  Openoffice_calc1.SetValue(2,'B', 109, ftNumeric).SetBorder([bAll], opBrown);
-  Openoffice_calc1.SetValue(2,'A', 'AGUA').SetBorder([bAll], opBrown);
+    Openoffice_calc1.SetValue(2,'B', 109, ftNumeric).SetBorder([bAll], opBrown);
+    Openoffice_calc1.SetValue(2,'A', 'AGUA').SetBorder([bAll], opBrown);
 
-  Openoffice_calc1.SetValue(3,'B', 105.55, ftNumeric).SetBorder([bAll], opBrown);
-  Openoffice_calc1.SetValue(3,'A', 'LUZ').SetBorder([bAll], opBrown);
+    Openoffice_calc1.SetValue(3,'B', 105.55, ftNumeric).SetBorder([bAll], opBrown);
+    Openoffice_calc1.SetValue(3,'A', 'LUZ').SetBorder([bAll], opBrown);
 
-  Openoffice_calc1.SetValue(4,'B', 1005.22, ftNumeric);
-  Openoffice_calc1.SetValue(4,'A', 'ALUGUEL');
+    Openoffice_calc1.SetValue(4,'B', 1005.22, ftNumeric);
+    Openoffice_calc1.SetValue(4,'A', 'ALUGUEL');
 
-   Openoffice_calc1.SetValue(6,'A', 'Total de linhas');
-   Openoffice_calc1.SetValue(6,'B', Openoffice_calc1.CountRow, ftNumeric);
+     Openoffice_calc1.SetValue(6,'A', 'Total de linhas');
+     Openoffice_calc1.SetValue(6,'B', Openoffice_calc1.CountRow, ftNumeric);
 
-  Openoffice_calc1.SetValue(7,'A', 'Total de Colunas');
-  Openoffice_calc1.SetValue(7,'B', Openoffice_calc1.CountCell, ftNumeric);
-
-
-  Openoffice_calc1.addNewSheet('A Receber',1);
-
-  Openoffice_calc1.SetValue(1,'A', 'VALOR')
-     .SetBorder([bAll], opBrown)
-     .changeJustify(  fthRIGHT , ftvTOP)
-     .setBold(true);
-
-  Openoffice_calc1.SetValue(1,'B', 'DESC')
-     .SetBorder([bAll], opBrown)
-     .changeJustify(  fthRIGHT , ftvTOP)
-     .setBold(true)
-     .changeFont('Arial',12)
-     .SetUnderline(true)
-     .setColor( opWhite ,opCiano);
-
-  Openoffice_calc1.SetValue(1,'C', 'SOMA')
-     .SetBorder([bAll], opBrown)
-     .changeJustify(  fthRIGHT , ftvTOP)
-     .setBold(true)
-     .changeFont('Arial',12)
-     .SetUnderline(true)
-     .setColor( opWhite ,opSoftRed);
-
-  Openoffice_calc1.SetValue(1,'H', 'SOMA')
-     .SetBorder([bAll], opBrown)
-     .changeJustify(  fthRIGHT , ftvTOP)
-     .setBold(true)
-     .changeFont('Arial',12)
-     .SetUnderline(true)
-     .setColor( opWhite ,opSoftRed);
-
-  Openoffice_calc1.SetValue(2,'A', 200, ftNumeric);
-  Openoffice_calc1.SetValue(2,'B', 'Emprestimo');
-  Openoffice_calc1.SetValue(2,'C', 0, ftNumeric);
-
-  Openoffice_calc1.SetValue(3,'A', 369.55, ftNumeric);
-  Openoffice_calc1.SetValue(3,'B', 'Dividendos');
-  Openoffice_calc1.SetValue(3,'C', 0, ftNumeric);
-
-  Openoffice_calc1.SetValue(4,'A', 1585.22, ftNumeric);
-  Openoffice_calc1.SetValue(4,'B', 'ALUGUEL');
-  Openoffice_calc1.SetValue(4,'C', 0, ftNumeric);
-
-  Openoffice_calc1.SetValue(8,'A', 1585.22, ftNumeric);
-  Openoffice_calc1.SetValue(8,'B', 'Renda extra');
-  Openoffice_calc1.SetValue(8,'C', 0, ftNumeric);
-
-  Openoffice_calc1.SetValue(15,'A', 1585.22, ftNumeric);
-  Openoffice_calc1.SetValue(15,'B', 'ALUGUEL 2');
-  Openoffice_calc1.SetValue(15,'C', 0, ftNumeric);
-
-  Openoffice_calc1.SetValue(17,'A', 'Total de linhas');
-  Openoffice_calc1.SetValue(17,'B', Openoffice_calc1.CountRow, ftNumeric);
-
-  Openoffice_calc1.SetValue(19,'A', 'Total de Colunas');
-  Openoffice_calc1.SetValue(19,'B', Openoffice_calc1.CountCell, ftNumeric);
-  Openoffice_calc1.setFormula(20,'A',  '=A2+A3+A4+A15')
-    .setBold(true);
+    Openoffice_calc1.SetValue(7,'A', 'Total de Colunas');
+    Openoffice_calc1.SetValue(7,'B', Openoffice_calc1.CountCell, ftNumeric);
 
 
-  Openoffice_calc1.positionSheetByName('Planilha1');
+    Openoffice_calc1.addNewSheet('A Receber',1);
 
-  Openoffice_calc1.addChart(ctDefault, 0,3,'A','B','MeuGrafico',0);
-  Openoffice_calc1.addChart(ctVertical, 0,3,'A','B','MeuGrafico',0);
-  Openoffice_calc1.addChart(ctPie, 0,3,'A','B','MeuGrafico',0);
-  Openoffice_calc1.addChart(ctLine, 0,3,'A','B','MeuGrafico',0);
+    Openoffice_calc1.SetValue(1,'A', 'VALOR')
+       .SetBorder([bAll], opBrown)
+       .changeJustify(  fthRIGHT , ftvTOP)
+       .setBold(true);
 
+    Openoffice_calc1.SetValue(1,'B', 'DESC')
+       .SetBorder([bAll], opBrown)
+       .changeJustify(  fthRIGHT , ftvTOP)
+       .setBold(true)
+       .changeFont('Arial',12)
+       .SetUnderline(true)
+       .setColor( opWhite ,opCiano);
+
+    Openoffice_calc1.SetValue(1,'C', 'SOMA')
+       .SetBorder([bAll], opBrown)
+       .changeJustify(  fthRIGHT , ftvTOP)
+       .setBold(true)
+       .changeFont('Arial',12)
+       .SetUnderline(true)
+       .setColor( opWhite ,opSoftRed);
+
+    Openoffice_calc1.SetValue(1,'H', 'SOMA')
+       .SetBorder([bAll], opBrown)
+       .changeJustify(  fthRIGHT , ftvTOP)
+       .setBold(true)
+       .changeFont('Arial',12)
+       .SetUnderline(true)
+       .setColor( opWhite ,opSoftRed);
+
+    Openoffice_calc1.SetValue(2,'A', 200, ftNumeric);
+    Openoffice_calc1.SetValue(2,'B', 'Emprestimo');
+    Openoffice_calc1.SetValue(2,'C', 0, ftNumeric);
+
+    Openoffice_calc1.SetValue(3,'A', 369.55, ftNumeric);
+    Openoffice_calc1.SetValue(3,'B', 'Dividendos');
+    Openoffice_calc1.SetValue(3,'C', 0, ftNumeric);
+
+    Openoffice_calc1.SetValue(4,'A', 1585.22, ftNumeric);
+    Openoffice_calc1.SetValue(4,'B', 'ALUGUEL');
+    Openoffice_calc1.SetValue(4,'C', 0, ftNumeric);
+
+    Openoffice_calc1.SetValue(8,'A', 1585.22, ftNumeric);
+    Openoffice_calc1.SetValue(8,'B', 'Renda extra');
+    Openoffice_calc1.SetValue(8,'C', 0, ftNumeric);
+
+    Openoffice_calc1.SetValue(15,'A', 1585.22, ftNumeric);
+    Openoffice_calc1.SetValue(15,'B', 'ALUGUEL 2');
+    Openoffice_calc1.SetValue(15,'C', 0, ftNumeric);
+
+    Openoffice_calc1.SetValue(17,'A', 'Total de linhas');
+    Openoffice_calc1.SetValue(17,'B', Openoffice_calc1.CountRow, ftNumeric);
+
+    Openoffice_calc1.SetValue(19,'A', 'Total de Colunas');
+    Openoffice_calc1.SetValue(19,'B', Openoffice_calc1.CountCell, ftNumeric);
+    Openoffice_calc1.setFormula(20,'A',  '=A2+A3+A4+A15')
+      .setBold(true);
+
+
+    Openoffice_calc1.positionSheetByName('Planilha1');
+
+    Openoffice_calc1.addChart(ctDefault, 0,3,'A','B','MeuGrafico',0);
+    Openoffice_calc1.addChart(ctVertical, 0,3,'A','B','MeuGrafico',0);
+    Openoffice_calc1.addChart(ctPie, 0,3,'A','B','MeuGrafico',0);
+    Openoffice_calc1.addChart(ctLine, 0,3,'A','B','MeuGrafico',0);
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+var
+  i: integer;
+  TempOld: TTime;
+begin
+  Openoffice_calc1.ExeThread(CreateDemoSheet);
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
@@ -590,7 +600,6 @@ end;
 
 function EnumFontsProc(var LogFont: TLogFont; var TextMetric: TTextMetric;
   FontType: Integer; Data: Pointer): Integer; stdcall;
-
 begin
   TStrings(Data).Add(LogFont.lfFaceName);
   Result := 1;
