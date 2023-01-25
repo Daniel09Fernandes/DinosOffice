@@ -26,7 +26,7 @@ interface
 uses
   System.Classes, data.DB, ActiveX, uOpenOffice,
   dbWeb, ComObj, XMLDoc, XMLIntf, Vcl.Dialogs, System.Variants,
-  Windows, uOpenOfficeEvents, Datasnap.DBClient;
+  Windows, uOpenOfficeEvents, Datasnap.DBClient, System.SysUtils;
 
 type
 
@@ -49,8 +49,7 @@ type
     DefaultNewSheetNamePT = 'Planilha1';
     DefaultNewSheetNameEn = 'Sheet1';
     procedure ValidateSheetName;
-
-    var
+   var
     //--------events------//
     FOnBeforeStartFile: TBeforeStartFile;
     FOnAfterStartFile : TAfterStartFile;
@@ -73,6 +72,7 @@ type
     procedure DataSetToSheet(const aCds : TClientDataSet);
     procedure CallConversorPDFTOSheet;
     function  SheetToDataSet(TabSheetName: String): TClientDataSet;
+    procedure ExeThread(pProc : Tproc);
   published
     property ServicesManager: OleVariant read objServiceManager;
     property Cell: OleVariant read objCell write objCell;
@@ -91,7 +91,7 @@ procedure Register;
 implementation
 
 uses
-  System.SysUtils, math,uOpenOfficeHelper, uOpenOfficeCollors, uConvertPDFToSheet;
+  math,uOpenOfficeHelper, uOpenOfficeCollors, uConvertPDFToSheet;
 
 procedure Register;
 begin
@@ -190,10 +190,10 @@ begin
       begin
         for idxFields := 0 to pred(aCds.Fields.Count) do
         begin
-          if (aCds.Fields[idx] is TCurrencyField) or
-             (aCds.Fields[idx] is TIntegerField)  or
-             (aCds.Fields[idx] is TFloatField)    or
-             (aCds.Fields[idx] is TNumericField)  then
+          if (aCds.Fields[idxFields] is TCurrencyField) or
+             (aCds.Fields[idxFields] is TIntegerField)  or
+             (aCds.Fields[idxFields] is TFloatField)    or
+             (aCds.Fields[idxFields] is TNumericField)  then
             lTypeVl := ftNumeric
            else
              lTypeVl := ftString;
@@ -211,6 +211,12 @@ end;
 destructor TOpenOffice_calc.Destroy;
 begin
   inherited;
+end;
+
+procedure TOpenOffice_calc.ExeThread(pProc: Tproc);
+begin
+  HungThread.ExecProc := pProc;
+  HungThread.Start;
 end;
 
 function TOpenOffice_calc.GetValue(aCellNumber: integer; aCollName: String) : TOpenOffice_calc;
@@ -257,7 +263,6 @@ end;
 
 procedure TOpenOffice_calc.startSheet;
 begin
-
   if Assigned( FOnBeforeStartFile) then
     FOnBeforeStartFile(self);
 
@@ -274,6 +279,7 @@ begin
     objSCalc := objDocument.createInstance('com.sun.star.sheet.Spreadsheet');
     objDocument.Sheets.insertByName(SheetName, objSCalc);
   end;
+
 
   if Assigned( FOnAfterStartFile) then
      FOnAfterStartFile(self);
@@ -309,22 +315,77 @@ end;
 { TFieldsSheet }
 
 function TFieldsSheet.getField(aIndex: integer): string;
+var DifIdx : double;
+    Letter : String;
 begin
+
+  if (aIndex > High(arrFields) ) and (arrFields[aIndex].Trim.IsEmpty ) then
+  begin
+     DifIdx := aIndex / 26;
+     DifIdx := round(DifIdx - 1);
+
+     SetLength(arrFields,aIndex);
+  end;
+
+  if arrFields[aIndex].Trim.IsEmpty then
+  begin
+     Letter := arrFields[trunc(DifIdx)]; //First Letter
+
+     if DifIdx = 0 then
+       DifIdx := 1;
+
+     DifIdx := DifIdx * 26;
+     Letter := Letter + arrFields[trunc(aIndex  - DifIdx)]; //Other letter of collumn
+
+    arrFields[aIndex] := Letter;
+  end;
+
+
   Result := arrFields[aIndex];
 end;
 
 function TFieldsSheet.getIndex(aNameField: String): integer;
 var
-  i: integer;
+  i, idx: integer;
+  rep,aux, firstIdx,
+  secondIdx : integer;
 begin
   Result := 0;
+  rep := 26;
+  aux := 0;
+  secondIdx := 0;
+  aNameField := aNameField.ToUpper;
+  if aNameField.length <= 1  then
+  begin
+    for i := 0 to High(arrFields) do
+      if arrFields[i] = aNameField then
+      begin
+        Result := i;
+        exit;
+      end;
+  end else
+  begin
+    for idx := 1 to aNameField.Length - 2 do
+      rep := (rep * 26) + 26;
 
-  for i := 0 to High(arrFields) do
-    if arrFields[i] = aNameField then
+      //26*26 + 26
+
+    for idx := 2 to aNameField.Length do
     begin
-      Result := i;
-      exit;
+      for i := 0 to High(arrFields) do
+          if arrFields[i] = aNameField[idx] then
+            break;
     end;
+    firstIdx  :=  getIndex(aNameField[1]) + 1;
+
+    if  aNameField.Length = 3 then
+    begin
+      secondIdx := getIndex(aNameField[2]) + 27;
+      aux := 26;
+    end;
+
+    Result := ( (firstIdx * 26) + (secondIdx * 26) + i) - aux;
+  end;
 end;
 
 procedure TFieldsSheet.setArrayFieldsSheet;

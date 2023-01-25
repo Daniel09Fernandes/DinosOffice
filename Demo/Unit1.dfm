@@ -2,7 +2,7 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'Demo'
-  ClientHeight = 556
+  ClientHeight = 599
   ClientWidth = 547
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -19,7 +19,7 @@ object Form1: TForm1
     Left = 0
     Top = 0
     Width = 547
-    Height = 556
+    Height = 599
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 0
@@ -81,6 +81,18 @@ object Form1: TForm1
         Width = 33
         Height = 13
         Caption = 'Fontes'
+      end
+      object lbl1: TLabel
+        Left = 3
+        Top = 529
+        Width = 3
+        Height = 13
+      end
+      object lbl2: TLabel
+        Left = 3
+        Top = 548
+        Width = 3
+        Height = 13
       end
       object BitBtn1: TBitBtn
         Left = 180
@@ -753,10 +765,12 @@ object Form1: TForm1
     Top = 280
   end
   object OpenOffice_calc1: TOpenOffice_calc
+    DocVisible = False
     Left = 296
     Top = 232
   end
   object OpenOffice_writer1: TOpenOffice_writer
+    DocVisible = False
     Left = 420
     Top = 224
   end

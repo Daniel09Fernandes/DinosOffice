@@ -36,7 +36,7 @@ unit uOpenOffice;
 interface
 
 uses ActiveX, System.Classes, Vcl.Dialogs, System.Variants, Windows,
-  uOpenOfficeSetPrinter, uOpenOfficeEvents, uInstallLibreOffice,
+  uOpenOfficeSetPrinter, uOpenOfficeEvents, uInstallLibreOffice,uOpenOfficeHungThread,
   System.UITypes;
 
 Type
@@ -48,6 +48,7 @@ Type
   private
     FURlFile: string;
     FSetPrinter: TSetPrinter;
+    FOpenOfficeHungThread : TOpenOfficeHungThread;
     FOnBeforePrint: TBeforePrint;
     FOnBeforeCloseFile: TBeforeCloseFile;
     FOnAfterCloseFile: TAfterCloseFile;
@@ -58,16 +59,20 @@ Type
     FOnBeforeSetValue: TBeforeSetValue;
 
     InstallLibreOffice: TInstallLibreOffice;
+    FDocVisible: boolean;
     procedure SetURlFile(const Value: string);
     procedure inicialization;
+    procedure setParamsInicialization;
   protected
     { Protected declarations }
-    objCoreReflection, objDesktop, objServiceManager, objDocument, objSCalc,
-      objWriter, objDispatcher, objCell, Charts: OleVariant;
+    objCoreReflection, objDesktop, objServiceManager, objDocument, oValMacro,
+    objSCalc, objWriter, objDispatcher, objCell, Charts: OleVariant;
+    oInicializationProperties : array [0 .. 1] of variant;
     NewFile: array [0 .. 1] of string;
     function convertFilePathToUrlFile(aFilePath: string): string;
     Property SetPrinter: TSetPrinter read FSetPrinter write FSetPrinter;
     procedure LoadDocument(FileName: string = '');
+     property HungThread : TOpenOfficeHungThread read FOpenOfficeHungThread write FOpenOfficeHungThread;
   published
     property URlFile: string read FURlFile write SetURlFile;
     property OnBeforePrint: TBeforePrint read FOnBeforePrint
@@ -84,6 +89,7 @@ Type
       write FOnBeforeSetValue;
     property OnAfterSetValue: TAfterSetValue read FOnAfterSetValue
       write FOnAfterSetValue;
+    property DocVisible : boolean read FDocVisible write FDocVisible;
   public
     procedure print;
     procedure CloseFile;
@@ -134,6 +140,7 @@ end;
 constructor TOpenOffice.Create(AOwner: TComponent);
 begin
   inherited;
+  FOpenOfficeHungThread := TOpenOfficeHungThread.Create;
   inicialization;
   FSetPrinter := TSetPrinter.Create(nil);
   NewFile[integer(TpCalc)] := 'private:factory/scalc';
@@ -151,6 +158,7 @@ begin
   objSCalc := Unassigned;
   objCell := Unassigned;
 
+  freeAndNil(FOpenOfficeHungThread);
   if assigned(InstallLibreOffice) then
     freeAndNil(InstallLibreOffice);
 end;
@@ -162,8 +170,7 @@ begin
     objServiceManager := CreateOleObject('com.sun.star.ServiceManager');
     objCoreReflection := objServiceManager.createInstance
       ('com.sun.star.reflection.CoreReflection');
-    objDesktop := objServiceManager.createInstance
-      ('com.sun.star.frame.Desktop');
+    objDesktop := objServiceManager.createInstance('com.sun.star.frame.Desktop');
   except
     if messageDlg('Erro(pt-Br):  Instale o LibreOffice para usar o sistema' +
       #13 + #13 + 'Error(En)  :  install  the LibreOffice to use the system' +
@@ -181,12 +188,32 @@ begin
 end;
 
 procedure TOpenOffice.LoadDocument(FileName: string = '');
+var i: integer;
 begin
+  CoInitialize(nil);
   if FileName = '' then
     FileName := '_blank';
 
-  objDocument := objDesktop.loadComponentFromURL(URlFile, FileName, 0,
-    VarArrayOf([]));
+  for I := 0 to High(oInicializationProperties) do
+    VarClear(oInicializationProperties[i]);
+
+  if not DocVisible then
+    setParamsInicialization;
+
+  objDocument := objDesktop.loadComponentFromURL(URlFile, FileName, 0,VarArrayOf(oInicializationProperties));
+end;
+
+procedure TOpenOffice.setParamsInicialization;
+begin
+    oInicializationProperties[0] := objServiceManager.Bridge_GetStruct('com.sun.star.beans.PropertyValue');
+    oInicializationProperties[0].Name := 'Hidden';
+    oInicializationProperties[0].Value := true;
+
+    oValMacro :=  objServiceManager.createInstance('com.sun.star.document.MacroExecMode.ALWAYS_EXECUTE_NO_WARN');
+
+    oInicializationProperties[1] := objServiceManager.Bridge_GetStruct('com.sun.star.beans.PropertyValue');
+    oInicializationProperties[1].Name := 'MacroExecutionMode';
+    oInicializationProperties[1].Value := oValMacro;
 end;
 
 procedure TOpenOffice.print;
