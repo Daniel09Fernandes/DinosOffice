@@ -102,6 +102,7 @@ type
     Button12: TButton;
     lbl1: TLabel;
     lbl2: TLabel;
+    CheckBox1: TCheckBox;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -136,6 +137,7 @@ type
     procedure Exportarplanilha1Click(Sender: TObject);
     procedure Button11Click(Sender: TObject);
     procedure Button12Click(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
   private
  //   Openoffice_calc   : TOpenOffice_calc;
  //   Openoffice_writer : TOpenOffice_writer;
@@ -260,6 +262,7 @@ end;
 
 procedure TForm1.CreateDemoSheet;
 begin
+  OpenOffice_calc1.DocVisible := CheckBox1.Checked;
   Openoffice_calc1.startSheet;
 
     Openoffice_calc1.SetValue(1,'A', 'STATUS')
@@ -366,6 +369,8 @@ var
   i: integer;
   TempOld: TTime;
 begin
+  //Dica: para desenvolver é mais facil uitilizar a propriedade OpenOffice_calc1.DocVisible := true;
+  //Após desenv, alterar para false; em false, ganha desempenho e segurança, poís não ha risco do cliente fechar a planilha e perder o ponteiro
   Openoffice_calc1.ExeThread(CreateDemoSheet);
 end;
 
@@ -622,8 +627,17 @@ begin
 
 end;
 
+procedure TForm1.CheckBox1Click(Sender: TObject);
+begin
+  if CheckBox1.Checked then
+    lbl1.Caption := ' Para visualizar o arquivo gerado em modo visibilidade oculta, salvar o arquivo'
+  else
+    lbl1.Caption := '';
+end;
+
 procedure TForm1.Exportarplanilha1Click(Sender: TObject);
 begin
+   OpenOffice_calc1.DocVisible := CheckBox1.Checked;
    Openoffice_calc1.startSheet;
    Openoffice_calc1.DataSetToSheet(ClientDataSet1);
 end;

@@ -393,6 +393,7 @@ object Form1: TForm1
         EditLabel.Height = 13
         EditLabel.Caption = 'Salvar em'
         TabOrder = 29
+        Text = 'c:\'
       end
       object edtValor: TLabeledEdit
         Left = 87
@@ -556,6 +557,15 @@ object Form1: TForm1
         Caption = 'Planilha para DataSet'
         TabOrder = 37
         OnClick = Button12Click
+      end
+      object CheckBox1: TCheckBox
+        Left = 236
+        Top = 235
+        Width = 181
+        Height = 17
+        Caption = 'Visualizar gera'#231#227'o do documento? '
+        TabOrder = 38
+        OnClick = CheckBox1Click
       end
     end
     object TabSheet2: TTabSheet

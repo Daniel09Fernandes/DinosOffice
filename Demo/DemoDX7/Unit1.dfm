@@ -13,6 +13,13 @@ object Form1: TForm1
   OldCreateOrder = False
   PixelsPerInch = 96
   TextHeight = 13
+  object Label1: TLabel
+    Left = 80
+    Top = 272
+    Width = 99
+    Height = 13
+    Caption = 'Caminho para salvar:'
+  end
   object BitBtn1: TBitBtn
     Left = 72
     Top = 152
@@ -49,11 +56,47 @@ object Form1: TForm1
     TabOrder = 3
     OnClick = BitBtn4Click
   end
+  object Button1: TButton
+    Left = 72
+    Top = 216
+    Width = 97
+    Height = 25
+    Caption = 'Salvar'
+    TabOrder = 4
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 216
+    Top = 216
+    Width = 105
+    Height = 25
+    Caption = 'Salvar'
+    TabOrder = 5
+    OnClick = Button2Click
+  end
+  object Edit1: TEdit
+    Left = 80
+    Top = 288
+    Width = 241
+    Height = 21
+    TabOrder = 6
+    Text = 'c:\'
+  end
+  object CheckBox1: TCheckBox
+    Left = 80
+    Top = 72
+    Width = 241
+    Height = 17
+    Caption = 'Gerar documento em modo visibilidade?'
+    TabOrder = 7
+  end
   object OpenOffice_calc1: TOpenOffice_calc
+    DocVisible = False
     Left = 112
     Top = 112
   end
   object OpenOffice_writer1: TOpenOffice_writer
+    DocVisible = False
     Left = 256
     Top = 112
   end

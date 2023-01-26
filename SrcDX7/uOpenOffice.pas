@@ -23,8 +23,10 @@ Type
     FOnAfterSetValue   : TAfterSetValue;
     FOnBeforeSetValue  : TBeforeSetValue;
 
+    FDocVisible: boolean;
     procedure SetURlFile(const Value: string);
     procedure inicialization;
+    procedure setParamsInicialization;
   protected
     { Protected declarations }
     objCoreReflection,
@@ -34,8 +36,10 @@ Type
     objSCalc,
     objWriter,
     objDispatcher,
-    objCell, Charts: OleVariant;
+    objCell, Charts,
+    oValMacro: OleVariant;
     NewFile    : array[0..1] of string;
+    oInicializationProperties : array [0 .. 1] of variant;
     function convertFilePathToUrlFile(aFilePath: string): string;
     Property SetPrinter: TSetPrinter read FSetPrinter write FSetPrinter;
     procedure LoadDocument(FileName: string = '');
@@ -48,6 +52,7 @@ Type
     property OnAfterGetValue   : TAfterGetValue    read FOnAfterGetValue    write FOnAfterGetValue;
     property OnBeforeSetValue  : TBeforeSetValue   read FOnBeforeSetValue   write FOnBeforeSetValue;
     property OnAfterSetValue   : TAfterSetValue    read FOnAfterSetValue    write FOnAfterSetValue;
+    property DocVisible : boolean read FDocVisible write FDocVisible;
   public
     procedure print;
     procedure CloseFile;
@@ -132,11 +137,33 @@ begin
 end;
 
 procedure TOpenOffice.LoadDocument(FileName: string = '');
+var i: integer;
 begin
-  if FileName = '' then
-      FileName := '_blank';
+  CoInitialize(nil);
 
-  objDocument := objDesktop.loadComponentFromURL(URlFile, FileName, 0, VarArrayOf([]));
+  if FileName = '' then
+    FileName := '_blank';
+
+  for I := 0 to High(oInicializationProperties) do
+    VarClear(oInicializationProperties[i]);
+
+  if not DocVisible then
+    setParamsInicialization;
+
+  objDocument := objDesktop.loadComponentFromURL(URlFile, FileName, 0,VarArrayOf(oInicializationProperties));
+end;
+
+procedure TOpenOffice.setParamsInicialization;
+begin
+    oInicializationProperties[0] := objServiceManager.Bridge_GetStruct('com.sun.star.beans.PropertyValue');
+    oInicializationProperties[0].Name := 'Hidden';
+    oInicializationProperties[0].Value := true;
+
+    oValMacro :=  objServiceManager.createInstance('com.sun.star.document.MacroExecMode.ALWAYS_EXECUTE_NO_WARN');
+
+    oInicializationProperties[1] := objServiceManager.Bridge_GetStruct('com.sun.star.beans.PropertyValue');
+    oInicializationProperties[1].Name := 'MacroExecutionMode';
+    oInicializationProperties[1].Value := oValMacro;
 end;
 
 procedure TOpenOffice.print;
@@ -178,7 +205,7 @@ procedure TOpenOffice.saveFile(aFileName: String);
 begin
   aFileName := convertFilePathToUrlFile(aFileName);
 
-  if Trim(aFileName) <> '' then
+  if Trim(aFileName) = '' then
     aFileName := URlFile;
 
   objDocument.storeAsURL(aFileName, VarArrayOf([]));

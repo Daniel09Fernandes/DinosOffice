@@ -15,10 +15,17 @@ type
     BitBtn3: TBitBtn;
     BitBtn4: TBitBtn;
     OpenOffice_writer1: TOpenOffice_writer;
+    Button1: TButton;
+    Button2: TButton;
+    Edit1: TEdit;
+    Label1: TLabel;
+    CheckBox1: TCheckBox;
     procedure BitBtn1Click(Sender: TObject);
     procedure BitBtn2Click(Sender: TObject);
     procedure BitBtn3Click(Sender: TObject);
     procedure BitBtn4Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -34,6 +41,7 @@ implementation
 
 procedure TForm1.BitBtn1Click(Sender: TObject);
 begin
+ Openoffice_calc1.DocVisible := CheckBox1.Checked;
  Openoffice_calc1.startSheet;
 
   Openoffice_calc1.SetValue(1,'A', 'STATUS')
@@ -143,6 +151,7 @@ end;
 procedure TForm1.BitBtn3Click(Sender: TObject);
 begin
  //Openoffice_writer1.URlFile := '';
+ OpenOffice_writer1.DocVisible := CheckBox1.Checked;
  OpenOffice_writer1.startDoc;
  Openoffice_writer1.setBold(true)
      .setFontHeight(16)
@@ -169,6 +178,16 @@ end;
 procedure TForm1.BitBtn4Click(Sender: TObject);
 begin
  OpenOffice_writer1.CloseFile;
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+  OpenOffice_calc1.saveFile(Edit1.Text);
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+  OpenOffice_writer1.saveFile(Edit1.Text);
 end;
 
 end.
