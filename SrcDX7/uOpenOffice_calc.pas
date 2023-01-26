@@ -110,7 +110,7 @@ procedure Register;
 implementation
 
 uses
-  SysUtils, math,uOpenOfficeHelper;
+  SysUtils, math, uOpenOfficeHelper;
 
 procedure Register;
 begin
@@ -557,22 +557,79 @@ end;
 
 
 function TOpenOffice_calc.getField(aIndex: integer): string;
+var DifIdx : double;
+    Letter : String;
 begin
-  Result := FFields.arrFields[aIndex];
+   with  FFields do
+   begin
+     if (aIndex > High(arrFields) ) and (arrFields[aIndex] = '' ) then
+     begin
+       DifIdx := aIndex / 26;
+       DifIdx := round(DifIdx - 1);
+
+       SetLength(arrFields,aIndex);
+     end;
+
+     if arrFields[aIndex] = '' then
+     begin
+       Letter := arrFields[trunc(DifIdx)]; //First Letter
+
+       if DifIdx = 0 then
+         DifIdx := 1;
+
+       DifIdx := DifIdx * 26;
+       Letter := Letter + arrFields[trunc(aIndex  - DifIdx)]; //Other letter of collumn
+
+       arrFields[aIndex] := Letter;
+     end;
+
+    Result := arrFields[aIndex];
+  end;
 end;
 
 function TOpenOffice_calc.getIndex(aNameField: String): integer;
+
 var
-  i: integer;
+  i, idx: integer;
+  rep,aux, firstIdx,
+  secondIdx : integer;
 begin
   Result := 0;
+  rep := 26;
+  aux := 0;
+  secondIdx := 0;
+  with  FFields do
+  begin
+    aNameField := UpperCase(aNameField);
+     if length(aNameField) <= 1  then
+     begin
+         for i := 0 to High(arrFields) do
+           if arrFields[i] = aNameField then
+           begin
+               Result := i;
+               exit;
+           end;
+           end else
+           begin
+               for idx := 1 to Length(aNameField) - 2 do
+               rep := (rep * 26) + 26;
 
-  for i := 0 to High(FFields.arrFields) do
-    if FFields.arrFields[i] = aNameField then
-    begin
-      Result := i;
-      exit;
+           for idx := 2 to Length(aNameField) do
+           begin
+           for i := 0 to High(arrFields) do
+             if arrFields[i] = aNameField[idx] then
+             break;
+           end;
+           firstIdx  :=  getIndex(aNameField[1]) + 1;
+
+         if  Length(aNameField) = 3 then
+         begin
+           secondIdx := getIndex(aNameField[2]) + 27;
+             aux := 26;
+         end;
+       Result := ( (firstIdx * 26) + (secondIdx * 26) + i) - aux;
     end;
+  end;
 end;
 
 procedure TOpenOffice_calc.setArrayFieldsSheet;
