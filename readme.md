@@ -26,7 +26,7 @@ Tested Delphi version
 |----------	|-----------	|
 | > 10.x   	|         ✅ 	|
 | Seattle  	|         ✅ 	|
-| X8       	|         ✅ 	|
+| XE 8     	|         ✅ 	|
 | Delphi 7 	|         ✅ 	|
 
 Para uso básico de leitura e gravação de plhanilha, use apenas o componente

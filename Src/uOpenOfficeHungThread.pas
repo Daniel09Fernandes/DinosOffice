@@ -35,7 +35,6 @@ begin
 end;
 
 procedure TOpenOfficeHungThread.Execute;
-var i: integer;
 begin
   inherited;
   Self.Queue(self.ExeProcedureExternal);
