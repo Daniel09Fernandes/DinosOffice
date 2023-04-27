@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, math, Vcl.Dialogs, Vcl.StdCtrls,  Vcl.ExtCtrls, Vcl.Buttons,
+  Vcl.Controls, Vcl.Forms, math, Vcl.Dialogs, Vcl.StdCtrls,  Vcl.ExtCtrls, Vcl.Buttons, Vcl.Mask,
 
   uOpenOffice_calc,
   UOpenOffice_writer,
@@ -139,9 +139,8 @@ type
     procedure Button12Click(Sender: TObject);
     procedure CheckBox1Click(Sender: TObject);
   private
- //   Openoffice_calc   : TOpenOffice_calc;
- //   Openoffice_writer : TOpenOffice_writer;
-     FontTop, fontLeft : integer;
+    FontTop, fontLeft : integer;
+    SettingsChart: TSettingsChart;
     procedure CapturarNomesDeFontes;
     procedure CreateDemoSheet;
 
@@ -240,11 +239,24 @@ begin
    else if RBPie.Checked then
      tpGrafico := ctPie
    else if RBVertical.Checked then
-     tpGrafico := ctVertical;
+     tpGrafico := ctVertical
+   else
+     tpGrafico := ctDefault;
 
+   //Configure the chart settings
+    SettingsChart.Height := 11000;
+    SettingsChart.Width  := 22000;
+    SettingsChart.Position_X := 1500;
+    SettingsChart.Position_Y := 12000;
+    SettingsChart.StartRow := StrToInt(edtLde.Text);
+    SettingsChart.EndRow := StrToInt(edtLAte.Text);
+    SettingsChart.PositionSheet := strToInt(edtPos.Text);
+    SettingsChart.StartColumn := uppercase(edtCde.Text);
+    SettingsChart.EndColumn := UpperCase(edtCAte.Text);
+    SettingsChart.ChartName := edtNomeGrafico.Text;
+    SettingsChart.typeChart := tpGrafico;
 
-   Openoffice_calc1.addChart(tpGrafico, StrToInt(edtLde.Text), StrToInt(edtLAte.Text)
-        ,uppercase(edtCde.Text),UpperCase(edtCAte.Text),edtNomeGrafico.Text, strToInt(edtPos.Text));
+   Openoffice_calc1.addChart(SettingsChart);
 end;
 
 procedure TForm1.Button11Click(Sender: TObject);
@@ -358,16 +370,32 @@ begin
 
     Openoffice_calc1.positionSheetByName('Planilha1');
 
-    Openoffice_calc1.addChart(ctDefault, 0,3,'A','B','MeuGrafico',0);
-    Openoffice_calc1.addChart(ctVertical, 0,3,'A','B','MeuGrafico',0);
-    Openoffice_calc1.addChart(ctPie, 0,3,'A','B','MeuGrafico',0);
-    Openoffice_calc1.addChart(ctLine, 0,3,'A','B','MeuGrafico',0);
+    //Configure the chart settings
+    SettingsChart.Height := 11000;
+    SettingsChart.Width  := 22000;
+    SettingsChart.Position_X := 1500;
+    SettingsChart.Position_Y := 5000;
+    SettingsChart.StartRow := 0;
+    SettingsChart.EndRow := 3;
+    SettingsChart.PositionSheet := 0; //first tab
+    SettingsChart.StartColumn := 'A';
+    SettingsChart.EndColumn := 'B';
+    SettingsChart.ChartName := 'TestChart';
+    SettingsChart.typeChart := ctDefault;
+
+    Openoffice_calc1.addChart(SettingsChart);
+
+    SettingsChart.typeChart := ctVertical;
+    Openoffice_calc1.addChart(SettingsChart);
+
+    SettingsChart.typeChart := ctPie;
+    Openoffice_calc1.addChart(SettingsChart);
+
+    SettingsChart.typeChart := ctLine;
+    Openoffice_calc1.addChart(SettingsChart);
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
-var
-  i: integer;
-  TempOld: TTime;
 begin
   //Dica: para desenvolver é mais facil uitilizar a propriedade OpenOffice_calc1.DocVisible := true;
   //Após desenv, alterar para false; em false, ganha desempenho e segurança, poís não ha risco do cliente fechar a planilha e perder o ponteiro
@@ -409,7 +437,9 @@ var tp   : TTypeValue;
 begin
 
   if chNumeric.Checked then
-    tp := ftNumeric;
+    tp := TTypeValue.ftNumeric
+  else
+    tp := TTypeValue.ftString;
 
 
 
@@ -418,7 +448,9 @@ begin
   else if RBhLeft.Checked then
     jusH := fthLEFT
   else if RBhRight.Checked then
-    jusH := fthRIGHT;
+    jusH := fthRIGHT
+  else
+    jusH := fthSTANDARD;
 
 
   if RBvTop.Checked then
@@ -426,7 +458,9 @@ begin
   else if RBvBottom.Checked then
     jusV := ftvBOTTOM
   else if RBvCenter.Checked then
-    jusV := ftvCENTER;
+    jusV := ftvCENTER
+  else
+    jusV := ftvSTANDARD;
 
   Openoffice_calc1.SetValue(StrToInt(edtLinha.Text), edtColuna.Text, edtValor.Text, tp,cbQuebraLinha.Checked)
     .setBold(CBBold.Checked)

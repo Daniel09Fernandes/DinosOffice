@@ -4,7 +4,7 @@ interface
 
 uses  SysUtils, Variants, Classes, Vcl.OleCtrls, SHDocVw, Vcl.StdCtrls, Vcl.ExtCtrls;
 
-Type
+type
   TInstallLibreOffice = class(TComponent)
   private
     const
@@ -13,13 +13,12 @@ Type
     var
       URL_download :string;
       FWebBrowser : TWebBrowser;
-      FPageReadyForDownload : boolean;
     procedure download;
     procedure  WhenDocIsCompleted(ASender: TObject; const pDisp: IDispatch; const URL: OleVariant);
   public
      procedure DownloadLibreOffice;
-     constructor Create;
-     destructor Destroy;
+     constructor Create(AOwner: TComponent); override;
+     destructor Destroy; override;
   end;
 
 
@@ -30,8 +29,9 @@ uses
 
 { TInstallLibreOffice }
 
-constructor TInstallLibreOffice.Create;
+constructor TInstallLibreOffice.Create(AOwner: TComponent);
 begin
+  inherited Create(AOwner);
   URL_download := 'https://www.libreoffice.org/donate/dl/win-x86_64/versao/pt-BR/LibreOffice_versao_Win_x64.msi';
 
   if not assigned(FWebBrowser) then
@@ -41,6 +41,7 @@ end;
 destructor TInstallLibreOffice.Destroy;
 begin
   FreeAndNil(FWebBrowser);
+  inherited;
 end;
 
 procedure TInstallLibreOffice.download;

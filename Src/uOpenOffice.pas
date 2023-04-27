@@ -181,7 +181,7 @@ begin
       TMsgDlgType.mtWarning, [TMsgDlgBtn.mbYes, TMsgDlgBtn.mbNo], 0) = mrYes
     then
     begin
-      InstallLibreOffice := TInstallLibreOffice.Create;
+      InstallLibreOffice := TInstallLibreOffice.Create(nil);
       InstallLibreOffice.DownloadLibreOffice;
     end;
   end;

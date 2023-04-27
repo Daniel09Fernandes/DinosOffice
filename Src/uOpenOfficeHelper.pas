@@ -1,4 +1,4 @@
-{ ******************************************************* }
+﻿{ ******************************************************* }
 
 { Delphi openOffice Library }
 
@@ -49,6 +49,20 @@ type
     function toInteger: Integer;
   end;
 
+  TSettingsChart = record
+    Height,
+    Width,
+    Position_X,
+    Position_Y,
+    StartRow,
+    PositionSheet,
+    EndRow: integer;
+    StartColumn,
+    EndColumn,
+    ChartName: string;
+    typeChart: TTypeChart;
+  end;
+
   THelperOpenOffice_writer = class helper for TOpenOffice_writer
     function setUnderline(aUnderline: boolean): TOpenOffice_writer;
     function setBold(aBold: boolean): TOpenOffice_writer;
@@ -58,7 +72,7 @@ type
   end;
 
   THelperOpenOffice_calc = class helper for TOpenOffice_calc
-    procedure addChart(typeChart: TTypeChart; StartRow, EndRow: Integer; StartColumn, EndColumn, ChartName: string; PositionSheet: Integer);
+    procedure addChart(aSettingsChart: TSettingsChart);
     function setBorder(borderPosition: TBoderSheet; opColor: TOpenColor; RemoveBorder: boolean = false) : TOpenOffice_calc;
     function changeFont(aNameFont: string; aHeight: Integer): TOpenOffice_calc;
     function changeJustify(aTypeHori: THoriJustify; aTypeVert: TVertJustify) : TOpenOffice_calc;
@@ -71,51 +85,52 @@ type
 
 implementation
 
-procedure THelperOpenOffice_calc.addChart(typeChart: TTypeChart;
-  StartRow, EndRow: Integer; StartColumn, EndColumn, ChartName: string;
-  PositionSheet: Integer);
+procedure THelperOpenOffice_calc.addChart(aSettingsChart: TSettingsChart);
 var
-  Chart, Rect, sheet, cursor: OleVariant;
+  Chart, Rect, sheet : OleVariant;
   RangeAddress: Variant;
   countChart: Integer;
 begin
   countChart := 1;
 
-  if ChartName.trim.IsEmpty then
-    ChartName := 'MyChar_' + (StartColumn + StartRow.ToString) + ':' +
-      (EndColumn + EndRow.ToString);
+  if aSettingsChart.ChartName.trim.IsEmpty then
+    aSettingsChart.ChartName := 'MyChart_' + (aSettingsChart.StartColumn + aSettingsChart.StartRow.ToString) + ':' +
+      (aSettingsChart.EndColumn + aSettingsChart.EndRow.ToString);
 
-  sheet := objDocument.Sheets.getByIndex(PositionSheet);
+  sheet := objDocument.Sheets.getByIndex(aSettingsChart.PositionSheet);
   // getByName(aCollName);
   Charts := sheet.Charts;
 
-  while Charts.hasByName(ChartName) do
+  while Charts.hasByName(aSettingsChart.ChartName) do
   begin
-    ChartName := ChartName + '_' + countChart.ToString;
+    aSettingsChart.ChartName := copy(aSettingsChart.ChartName,0, ifthen( (pos('_',aSettingsChart.ChartName) > 0),
+                                               pos('_',aSettingsChart.ChartName), aSettingsChart.ChartName.Length)
+                      ) + '_' + countChart.ToString;
     inc(countChart);
+    aSettingsChart.Position_Y := (aSettingsChart.Position_Y + aSettingsChart.Height) + 1000;
   end;
 
   Rect := objServiceManager.Bridge_GetStruct('com.sun.star.awt.Rectangle');
   RangeAddress := sheet.Bridge_GetStruct('com.sun.star.table.CellRangeAddress');
 
-  Rect.Width := 12000;
-  Rect.Height := 12000;
-  Rect.X := 8000 * countChart + 1;
-  Rect.Y := 1000;
+  Rect.Width := aSettingsChart.Width;
+  Rect.Height := aSettingsChart.Height;
+  Rect.X := aSettingsChart.Position_X;
+  Rect.Y := aSettingsChart.Position_Y;
 
-  RangeAddress.sheet := PositionSheet;
-  RangeAddress.StartColumn := Fields.getIndex(StartColumn);
-  RangeAddress.StartRow := StartRow;
-  RangeAddress.EndColumn := Fields.getIndex(EndColumn);
-  RangeAddress.EndRow := EndRow;
+  RangeAddress.sheet := aSettingsChart.PositionSheet;
+  RangeAddress.StartColumn := Fields.getIndex(aSettingsChart.StartColumn);
+  RangeAddress.StartRow := aSettingsChart.StartRow;
+  RangeAddress.EndColumn := Fields.getIndex(aSettingsChart.EndColumn);
+  RangeAddress.EndRow := aSettingsChart.EndRow;
 
-  Charts.addNewByName(ChartName, Rect, VarArrayOf(RangeAddress), true, true);
+  Charts.addNewByName(aSettingsChart.ChartName, Rect, VarArrayOf(RangeAddress), true, true);
 
-  if typeChart <> ctDefault then
+  if aSettingsChart.typeChart <> ctDefault then
   begin
-    Chart := Charts.getByName(ChartName).embeddedObject;
-    Chart.Title.String := ChartName;
-    case typeChart of
+    Chart := Charts.getByName(aSettingsChart.ChartName).embeddedObject;
+    Chart.Title.String := aSettingsChart.ChartName;
+    case aSettingsChart.typeChart of
       ctVertical:
         Chart.Diagram.Vertical := true;
       ctPie:
@@ -387,6 +402,8 @@ begin
       result := 4;
     fthREPEAT:
       result := 5;
+    else
+      raise Exception.Create('Unknown Justification Value');
   end;
 end;
 
@@ -403,6 +420,8 @@ begin
       result := 2;
     ftvBOTTOM:
       result := 3;
+    else
+      raise Exception.Create('Unknown Justification Value');
   end;
 end;
 

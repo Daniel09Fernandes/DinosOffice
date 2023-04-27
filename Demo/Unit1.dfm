@@ -564,6 +564,8 @@ object Form1: TForm1
         Width = 181
         Height = 17
         Caption = 'Visualizar gera'#231#227'o do documento? '
+        Checked = True
+        State = cbChecked
         TabOrder = 38
         OnClick = CheckBox1Click
       end

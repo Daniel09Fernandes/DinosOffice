@@ -1,4 +1,4 @@
-{ ******************************************************* }
+﻿{ ******************************************************* }
 
 { Delphi openOffice Library }
 
@@ -64,14 +64,14 @@ type
     destructor Destroy; override;
     constructor Create(AOwner: TComponent); override;
     procedure startSheet;
-    procedure positionSheetByName(aSheetName: string);
-    procedure addNewSheet(aSheetName: string; aPosition: integer);
-    function setFormula(aCellNumber: integer; aCollName: string; aFormula: string): TOpenOffice_calc;
-    function SetValue(aCellNumber: integer; aCollName: string; aValue: variant; TypeValue: TTypeValue = ftString; Wrapped: boolean = false): TOpenOffice_calc;
-    function GetValue(aCellNumber: integer; aCollName: String): TOpenOffice_calc;
+    procedure positionSheetByName(const aSheetName: string);
+    procedure addNewSheet(const aSheetName: string; aPosition: integer);
+    function setFormula(aCellNumber: integer; const aCollName: string; const aFormula: string): TOpenOffice_calc;
+    function SetValue(aCellNumber: integer; const aCollName: string; aValue: variant; TypeValue: TTypeValue = ftString; Wrapped: boolean = false): TOpenOffice_calc;
+    function GetValue(aCellNumber: integer; const aCollName: String) : TOpenOffice_calc;
     procedure DataSetToSheet(const aCds : TClientDataSet);
     procedure CallConversorPDFTOSheet;
-    function  SheetToDataSet(TabSheetName: String): TClientDataSet;
+    function  SheetToDataSet(const TabSheetName: String): TClientDataSet;
     procedure ExeThread(pProc : Tproc);
   published
     property ServicesManager: OleVariant read objServiceManager;
@@ -112,7 +112,8 @@ end;
 procedure TOpenOffice_calc.ValidateSheetName;
 var
   LCID: LangID;
-  Language: array [0 .. 100] of char;
+  Languages: array [0 .. 100] of char;
+  Language : string;
 begin
 
   LCID := GetSystemDefaultLangID;
@@ -120,16 +121,17 @@ begin
   if SheetName.Trim.IsEmpty then
   begin
 
-    VerLanguageName(LCID, Language, 100);
+    VerLanguageName(LCID, Languages, 100);
+    Language := String(Languages);
 
-    if pos('Português', String(Language)) > 0 then
+    if pos('Português', Language) > 0 then
       SheetName := DefaultNewSheetNamePT
     else
       SheetName := DefaultNewSheetNameEn;
   end;
 end;
 
-function TOpenOffice_calc.SetValue(aCellNumber: integer; aCollName: string; aValue: variant; TypeValue: TTypeValue; Wrapped: boolean): TOpenOffice_calc;
+function TOpenOffice_calc.SetValue(aCellNumber: integer; const aCollName: string; aValue: variant; TypeValue: TTypeValue; Wrapped: boolean): TOpenOffice_calc;
 var
   map: string;
 begin
@@ -219,7 +221,7 @@ begin
   HungThread.Start;
 end;
 
-function TOpenOffice_calc.GetValue(aCellNumber: integer; aCollName: String) : TOpenOffice_calc;
+function TOpenOffice_calc.GetValue(aCellNumber: integer; const aCollName: String) : TOpenOffice_calc;
 var
   map: string;
 begin
@@ -237,19 +239,19 @@ begin
     onAfterGetValue(self);
 end;
 
-procedure TOpenOffice_calc.positionSheetByName(aSheetName: string);
+procedure TOpenOffice_calc.positionSheetByName(const aSheetName: string);
 begin
   objSCalc := objDocument.Sheets.getByName(aSheetName);
 end;
 
-procedure TOpenOffice_calc.addNewSheet(aSheetName: string; aPosition: integer);
+procedure TOpenOffice_calc.addNewSheet(const aSheetName: string; aPosition: integer);
 begin
   objDocument.Sheets.insertNewByName(aSheetName, aPosition);
   objSCalc := objDocument.Sheets.getByName(aSheetName);
 end;
 
-function TOpenOffice_calc.setFormula(aCellNumber: integer; aCollName: string;
-  aFormula: string): TOpenOffice_calc;
+function TOpenOffice_calc.setFormula(aCellNumber: integer; const aCollName: string;
+  const aFormula: string): TOpenOffice_calc;
 var
   map: string;
 begin
@@ -285,7 +287,7 @@ begin
      FOnAfterStartFile(self);
 end;
 
-function TOpenOffice_calc.SheetToDataSet(TabSheetName: String): TClientDataSet;
+function TOpenOffice_calc.SheetToDataSet(const TabSheetName: String): TClientDataSet;
 var I, IdxField : Integer;
 begin
   Result := TClientDataSet.Create(nil);

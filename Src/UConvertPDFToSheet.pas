@@ -4,16 +4,17 @@ interface
 
 uses
   SHDocVw, Vcl.Controls;
-  Type
-   TConvertPDFToSheet = class
-     private
-       Const
-         FUrl = 'https://www.ilovepdf.com/pt/pdf_para_excel';
-     public
-        procedure callConversor;
-        constructor Create;
-        destructor Destroy;
-   end;
+
+type
+  TConvertPDFToSheet = class
+  private
+    Const
+      FUrl = 'https://www.ilovepdf.com/pt/pdf_para_excel';
+  public
+    procedure callConversor;
+    constructor Create;
+    destructor Destroy; override;
+  end;
 
 implementation
 
@@ -23,7 +24,7 @@ uses shellApi;
 procedure TConvertPDFToSheet.callConversor;
 begin
 //Provisorio
-  ShellExecute(0,0,FUrl,'','',0);
+  ShellExecute(0,'OPEN', FUrl, '', '', 0);
 end;
 
 constructor TConvertPDFToSheet.Create;
@@ -33,7 +34,7 @@ end;
 
 destructor TConvertPDFToSheet.Destroy;
 begin
-
+  inherited;
 end;
 
 end.

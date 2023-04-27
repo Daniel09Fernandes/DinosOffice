@@ -37,7 +37,7 @@ type
     constructor Create(AOwner: TComponent); override;
     procedure startDoc;
     function gotoEndOfSentence : TOpenOffice_writer;
-    function setValue(aText: string): TOpenOffice_writer;
+    function setValue(const aText: string): TOpenOffice_writer;
     function getValue: string;
     property BoldActive : boolean read FBoldActive write FBoldActive;
     property Cursor : variant read oCursor;
@@ -89,7 +89,6 @@ end;
 
 
 function TOpenOffice_writer.gotoEndOfSentence: TOpenOffice_writer;
-var CursorLocal : variant;
 begin
   objTextCursor.jumpToEndOfPage;
   oText := objTextCursor.Text;
@@ -98,7 +97,7 @@ begin
   Result := self;
 end;
 
-function TOpenOffice_writer.setValue(aText: string): TOpenOffice_writer;
+function TOpenOffice_writer.setValue(const aText: string): TOpenOffice_writer;
 begin
 
   if assigned(onBeforeSetValue) then
