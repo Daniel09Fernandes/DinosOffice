@@ -1,4 +1,4 @@
-{ ******************************************************* }
+﻿{ ******************************************************* }
 
 { Delphi openOffice Library }
 
@@ -75,7 +75,7 @@ procedure THelperOpenOffice_calc.addChart(typeChart: TTypeChart;
   StartRow, EndRow: Integer; StartColumn, EndColumn, ChartName: string;
   PositionSheet: Integer);
 var
-  Chart, Rect, sheet, cursor: OleVariant;
+  Chart, Rect, sheet : OleVariant;
   RangeAddress: Variant;
   countChart: Integer;
 begin
@@ -387,6 +387,8 @@ begin
       result := 4;
     fthREPEAT:
       result := 5;
+    else
+      raise Exception.Create('Unknown Justification Value');
   end;
 end;
 
@@ -403,6 +405,8 @@ begin
       result := 2;
     ftvBOTTOM:
       result := 3;
+    else
+      raise Exception.Create('Unknown Justification Value');
   end;
 end;
 
