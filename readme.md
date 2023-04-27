@@ -24,6 +24,7 @@ Tested Delphi version
 
 | Version  	| Supported 	|
 |----------	|-----------	|
+| > 11.x   	|         ✅ 	|
 | > 10.x   	|         ✅ 	|
 | Seattle  	|         ✅ 	|
 | XE 8     	|         ✅ 	|
