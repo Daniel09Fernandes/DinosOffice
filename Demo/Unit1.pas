@@ -140,6 +140,7 @@ type
     procedure CheckBox1Click(Sender: TObject);
   private
     FontTop, fontLeft : integer;
+    SettingsChart: TSettingsChart;
     procedure CapturarNomesDeFontes;
     procedure CreateDemoSheet;
 
@@ -242,9 +243,20 @@ begin
    else
      tpGrafico := ctDefault;
 
+   //Configure the chart settings
+    SettingsChart.Height := 11000;
+    SettingsChart.Width  := 22000;
+    SettingsChart.Position_X := 1500;
+    SettingsChart.Position_Y := 12000;
+    SettingsChart.StartRow := StrToInt(edtLde.Text);
+    SettingsChart.EndRow := StrToInt(edtLAte.Text);
+    SettingsChart.PositionSheet := strToInt(edtPos.Text);
+    SettingsChart.StartColumn := uppercase(edtCde.Text);
+    SettingsChart.EndColumn := UpperCase(edtCAte.Text);
+    SettingsChart.ChartName := edtNomeGrafico.Text;
+    SettingsChart.typeChart := tpGrafico;
 
-   Openoffice_calc1.addChart(tpGrafico, StrToInt(edtLde.Text), StrToInt(edtLAte.Text)
-        ,uppercase(edtCde.Text),UpperCase(edtCAte.Text),edtNomeGrafico.Text, strToInt(edtPos.Text));
+   Openoffice_calc1.addChart(SettingsChart);
 end;
 
 procedure TForm1.Button11Click(Sender: TObject);
@@ -358,10 +370,29 @@ begin
 
     Openoffice_calc1.positionSheetByName('Planilha1');
 
-    Openoffice_calc1.addChart(ctDefault, 0,3,'A','B','MeuGrafico',0);
-    Openoffice_calc1.addChart(ctVertical, 0,3,'A','B','MeuGrafico',0);
-    Openoffice_calc1.addChart(ctPie, 0,3,'A','B','MeuGrafico',0);
-    Openoffice_calc1.addChart(ctLine, 0,3,'A','B','MeuGrafico',0);
+    //Configure the chart settings
+    SettingsChart.Height := 11000;
+    SettingsChart.Width  := 22000;
+    SettingsChart.Position_X := 1500;
+    SettingsChart.Position_Y := 5000;
+    SettingsChart.StartRow := 0;
+    SettingsChart.EndRow := 3;
+    SettingsChart.PositionSheet := 0; //first tab
+    SettingsChart.StartColumn := 'A';
+    SettingsChart.EndColumn := 'B';
+    SettingsChart.ChartName := 'TestChart';
+    SettingsChart.typeChart := ctDefault;
+
+    Openoffice_calc1.addChart(SettingsChart);
+
+    SettingsChart.typeChart := ctVertical;
+    Openoffice_calc1.addChart(SettingsChart);
+
+    SettingsChart.typeChart := ctPie;
+    Openoffice_calc1.addChart(SettingsChart);
+
+    SettingsChart.typeChart := ctLine;
+    Openoffice_calc1.addChart(SettingsChart);
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);

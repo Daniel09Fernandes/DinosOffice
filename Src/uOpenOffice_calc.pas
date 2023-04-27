@@ -112,7 +112,8 @@ end;
 procedure TOpenOffice_calc.ValidateSheetName;
 var
   LCID: LangID;
-  Language: array [0 .. 100] of char;
+  Languages: array [0 .. 100] of char;
+  Language : string;
 begin
 
   LCID := GetSystemDefaultLangID;
@@ -120,9 +121,10 @@ begin
   if SheetName.Trim.IsEmpty then
   begin
 
-    VerLanguageName(LCID, Language, 100);
+    VerLanguageName(LCID, Languages, 100);
+    Language := String(Languages);
 
-    if pos('Português', String(Language)) > 0 then
+    if pos('Português', Language) > 0 then
       SheetName := DefaultNewSheetNamePT
     else
       SheetName := DefaultNewSheetNameEn;
