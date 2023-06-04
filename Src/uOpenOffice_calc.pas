@@ -76,6 +76,7 @@ type
   published
     property ServicesManager: OleVariant read objServiceManager;
     property Cell: OleVariant read objCell write objCell;
+    property oSCalc: OleVariant read objSCalc write objSCalc;
     property Table: OleVariant read objSCalc;
     property Fields: TFieldsSheet read FFields;
     property SheetName: string read FSheetName write SetSheetName;

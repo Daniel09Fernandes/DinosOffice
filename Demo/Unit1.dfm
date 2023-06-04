@@ -3,54 +3,54 @@ object Form1: TForm1
   Top = 0
   Caption = 'Demo'
   ClientHeight = 599
-  ClientWidth = 547
+  ClientWidth = 665
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
   Position = poDesktopCenter
   OnCreate = FormCreate
-  PixelsPerInch = 96
   TextHeight = 13
   object PageControl2: TPageControl
     Left = 0
     Top = 0
-    Width = 547
+    Width = 665
     Height = 599
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 0
+    ExplicitWidth = 661
+    ExplicitHeight = 598
     object TabSheet1: TTabSheet
       Caption = 'Calc'
       OnShow = TabSheet1Show
       object Bevel1: TBevel
         Left = 0
         Top = 51
-        Width = 323
+        Width = 399
         Height = 142
         Style = bsRaised
       end
       object Bevel2: TBevel
         Left = 0
         Top = 279
-        Width = 547
+        Width = 636
         Height = 118
         Style = bsRaised
       end
       object Bevel3: TBevel
-        Left = 329
-        Top = 119
-        Width = 218
-        Height = 74
+        Left = 405
+        Top = 120
+        Width = 231
+        Height = 72
         Style = bsRaised
       end
       object Bevel4: TBevel
         Left = -270
-        Top = -1
-        Width = 593
+        Top = -5
+        Width = 669
         Height = 50
         Style = bsRaised
       end
@@ -93,6 +93,13 @@ object Form1: TForm1
         Top = 548
         Width = 3
         Height = 13
+      end
+      object Label7: TLabel
+        Left = 312
+        Top = 117
+        Width = 44
+        Height = 13
+        Caption = 'Cell Widh'
       end
       object BitBtn1: TBitBtn
         Left = 180
@@ -185,8 +192,8 @@ object Form1: TForm1
         OnClick = Button7Click
       end
       object Button8: TButton
-        Left = 332
-        Top = 161
+        Left = 413
+        Top = 166
         Width = 65
         Height = 25
         Caption = 'Adicionar'
@@ -194,8 +201,8 @@ object Form1: TForm1
         OnClick = Button8Click
       end
       object Button9: TButton
-        Left = 403
-        Top = 161
+        Left = 484
+        Top = 166
         Width = 49
         Height = 25
         Caption = 'Trocar'
@@ -252,7 +259,7 @@ object Form1: TForm1
       object cbFontes: TComboBox
         Left = 93
         Top = 21
-        Width = 215
+        Width = 294
         Height = 21
         TabOrder = 15
       end
@@ -281,14 +288,15 @@ object Form1: TForm1
         TabOrder = 18
       end
       object edtAba: TLabeledEdit
-        Left = 372
-        Top = 134
+        Left = 453
+        Top = 139
         Width = 170
         Height = 21
         EditLabel.Width = 73
         EditLabel.Height = 13
         EditLabel.Caption = 'Aba da planilha'
         TabOrder = 19
+        Text = ''
       end
       object edtArq: TLabeledEdit
         Left = 3
@@ -299,6 +307,7 @@ object Form1: TForm1
         EditLabel.Height = 13
         EditLabel.Caption = 'Carregar documento'
         TabOrder = 20
+        Text = ''
       end
       object edtCAte: TLabeledEdit
         Left = 70
@@ -309,6 +318,7 @@ object Form1: TForm1
         EditLabel.Height = 13
         EditLabel.Caption = 'Coluna Ate'
         TabOrder = 21
+        Text = ''
       end
       object edtCde: TLabeledEdit
         Left = 6
@@ -319,6 +329,7 @@ object Form1: TForm1
         EditLabel.Height = 13
         EditLabel.Caption = 'Coluna de'
         TabOrder = 22
+        Text = ''
       end
       object edtColuna: TLabeledEdit
         Left = 6
@@ -330,6 +341,7 @@ object Form1: TForm1
         EditLabel.Height = 13
         EditLabel.Caption = 'Coluna'
         TabOrder = 23
+        Text = ''
       end
       object edtLAte: TLabeledEdit
         Left = 186
@@ -341,6 +353,7 @@ object Form1: TForm1
         EditLabel.Caption = 'linha ate'
         NumbersOnly = True
         TabOrder = 24
+        Text = ''
       end
       object edtLde: TLabeledEdit
         Left = 134
@@ -352,6 +365,7 @@ object Form1: TForm1
         EditLabel.Caption = 'Linha de'
         NumbersOnly = True
         TabOrder = 25
+        Text = ''
       end
       object edtLinha: TLabeledEdit
         Left = 46
@@ -363,26 +377,29 @@ object Form1: TForm1
         EditLabel.Caption = 'Linha'
         NumbersOnly = True
         TabOrder = 26
+        Text = ''
       end
       object edtNomeGrafico: TLabeledEdit
         Left = 236
         Top = 210
-        Width = 311
+        Width = 400
         Height = 21
         EditLabel.Width = 64
         EditLabel.Height = 13
         EditLabel.Caption = 'Nome Grafico'
         TabOrder = 27
+        Text = ''
       end
       object edtPos: TLabeledEdit
-        Left = 332
-        Top = 134
+        Left = 413
+        Top = 139
         Width = 34
         Height = 21
         EditLabel.Width = 36
         EditLabel.Height = 13
         EditLabel.Caption = 'Posi'#231#227'o'
         TabOrder = 28
+        Text = ''
       end
       object edtSalvar: TLabeledEdit
         Left = 3
@@ -404,10 +421,11 @@ object Form1: TForm1
         EditLabel.Height = 13
         EditLabel.Caption = 'Valor'
         TabOrder = 30
+        Text = ''
       end
       object Graficos: TGroupBox
-        Left = 329
-        Top = 46
+        Left = 405
+        Top = 44
         Width = 123
         Height = 70
         Caption = 'Tipos de Graficos'
@@ -448,16 +466,16 @@ object Form1: TForm1
         end
       end
       object GroupBox1: TGroupBox
-        Left = 329
+        Left = 405
         Top = 3
-        Width = 218
+        Width = 231
         Height = 37
         Caption = 'Alinhamento horizontal'
         TabOrder = 33
         object RBhCenter: TRadioButton
-          Left = 79
+          Left = 87
           Top = 18
-          Width = 113
+          Width = 58
           Height = 17
           Caption = 'Centro'
           TabOrder = 0
@@ -471,7 +489,7 @@ object Form1: TForm1
           TabOrder = 1
         end
         object RBhRight: TRadioButton
-          Left = 146
+          Left = 160
           Top = 18
           Width = 113
           Height = 17
@@ -487,14 +505,14 @@ object Form1: TForm1
         end
       end
       object GroupBox2: TGroupBox
-        Left = 459
-        Top = 46
-        Width = 88
+        Left = 534
+        Top = 44
+        Width = 102
         Height = 70
         Caption = 'Alinha. Vertical'
         TabOrder = 32
         object RBvTop: TRadioButton
-          Left = 16
+          Left = 32
           Top = 15
           Width = 113
           Height = 17
@@ -502,7 +520,7 @@ object Form1: TForm1
           TabOrder = 0
         end
         object RBvBottom: TRadioButton
-          Left = 16
+          Left = 32
           Top = 51
           Width = 113
           Height = 17
@@ -510,7 +528,7 @@ object Form1: TForm1
           TabOrder = 1
         end
         object RBvCenter: TRadioButton
-          Left = 16
+          Left = 32
           Top = 33
           Width = 113
           Height = 17
@@ -529,7 +547,7 @@ object Form1: TForm1
       object DBGrid1: TDBGrid
         Left = 3
         Top = 403
-        Width = 533
+        Width = 633
         Height = 120
         DataSource = DataSource1
         PopupMenu = PopupMenu1
@@ -735,8 +753,24 @@ object Form1: TForm1
         EditLabel.Height = 13
         EditLabel.Caption = 'Carregar documento'
         TabOrder = 13
+        Text = ''
       end
     end
+  end
+  object edtWidth: TLabeledEdit
+    Left = 316
+    Top = 156
+    Width = 44
+    Height = 21
+    CharCase = ecUpperCase
+    EditLabel.Width = 48
+    EditLabel.Height = 13
+    EditLabel.Caption = 'Cel lWidth'
+    EditLabel.Color = clBackground
+    EditLabel.ParentColor = False
+    ImeName = 'Portuguese (Brazilian ABNT)'
+    TabOrder = 1
+    Text = '5000'
   end
   object ClientDataSet1: TClientDataSet
     PersistDataPacket.Data = {

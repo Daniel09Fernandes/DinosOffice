@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{661BCE98-9C56-4B84-A459-12BC3B179D92}</ProjectGuid>
         <MainSource>OpenOfficeComponent_install.dpk</MainSource>
-        <ProjectVersion>19.2</ProjectVersion>
+        <ProjectVersion>19.5</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
