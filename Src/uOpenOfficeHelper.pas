@@ -95,7 +95,7 @@ begin
   countChart := 1;
 
   if aSettingsChart.ChartName.trim.IsEmpty then
-    aSettingsChart.ChartName := 'MyChart_' + (aSettingsChart.StartColumn + aSettingsChart.StartRow.ToString) + ':' +
+    aSettingsChart.ChartName := 'MyChart_' + (aSettingsChart.StartColumn + aSettingsChart.StartRow.ToString) + '_' +
       (aSettingsChart.EndColumn + aSettingsChart.EndRow.ToString);
 
   sheet := objDocument.Sheets.getByIndex(aSettingsChart.PositionSheet);
