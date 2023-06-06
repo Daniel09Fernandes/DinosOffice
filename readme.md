@@ -1,4 +1,4 @@
-# Delphi Components for LibreOffice
+# DinosOffice: Delphi Components for LibreOffice
 
 ### Important
 
