@@ -19,7 +19,11 @@ https://pt-br.libreoffice.org/baixe-ja/libreoffice-novo/
  - 4 - install
  - 5 - tools -> options -> language -> Delphi -> Library -> Library/ADD "C:\yourLocal\Component_OpenOffice\Src" (for delphi 7 use the "C:\yourLocal\Component_OpenOffice\SrcDX7")
 
-Version compomente 19.5
+ 
+ 
+| Project {versionOficial}   	| Version 	   |
+|----------------------------	|------------ |
+| 19.5                     	  | tested ✅  |
 
 Tested Delphi version
 
