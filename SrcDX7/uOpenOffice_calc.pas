@@ -54,6 +54,20 @@ type
     arrFields: array of string;
   end;
 
+  TSettingsChart = record
+    Height,
+    Width,
+    Position_X,
+    Position_Y,
+    StartRow,
+    PositionSheet,
+    EndRow: integer;
+    StartColumn,
+    EndColumn,
+    ChartName: string;
+    typeChart: TTypeChart;
+  end;
+
   TOpenOffice_calc = class(TOpenOffice)
   private
     FFields : TFields;
@@ -79,11 +93,12 @@ type
     function SetValue(aCellNumber: integer; aCollName: string; aValue: variant; TypeValue: TTypeValue = ftString; Wrapped: boolean = false): TOpenOffice_calc;
     function GetValue(aCellNumber: integer; aCollName: String): TOpenOffice_calc;
     procedure DataSetToSheet(const aCds : TClientDataSet);
-    procedure addChart(typeChart: TTypeChart; StartRow, EndRow: Integer; StartColumn, EndColumn, ChartName: string; PositionSheet: Integer);
+    procedure addChart(aSettingsChart: TSettingsChart);
     function setBorder(borderPosition: TBoderSheet; opColor: TOpenColor; RemoveBorder: boolean = false) : TOpenOffice_calc;
     function changeFont(aNameFont: string; aHeight: Integer): TOpenOffice_calc;
     function changeJustify(aTypeHori: THoriJustify; aTypeVert: TVertJustify) : TOpenOffice_calc;
     function setColor(aFontColor, aBackgroud: TOpenColor): TOpenOffice_calc;
+    function setCellWidth(const aWidth: integer): TOpenOffice_calc;
     function setBold(aBold: boolean): TOpenOffice_calc;
     function SetUnderline(aUnderline: boolean): TOpenOffice_calc;
     function CountRow: Integer;
@@ -322,9 +337,7 @@ begin
 end;
 
  
-procedure TOpenOffice_calc.addChart(typeChart: TTypeChart;
-  StartRow, EndRow: Integer; StartColumn, EndColumn, ChartName: string;
-  PositionSheet: Integer);
+procedure TOpenOffice_calc.addChart(aSettingsChart: TSettingsChart);
 var
   Chart, Rect, sheet, cursor: OleVariant;
   RangeAddress: Variant;
@@ -332,41 +345,44 @@ var
 begin
   countChart := 1;
 
-  if Trim(ChartName) = '' then
-    ChartName := 'MyChar_' + (StartColumn + intTostr(StartRow)) + ':' +
-      (EndColumn + intTostr(EndRow));
+  if trim(aSettingsChart.ChartName) = '' then
+    aSettingsChart.ChartName := 'MyChart_' + (aSettingsChart.StartColumn + intToStr(aSettingsChart.StartRow) + '_' +
+      aSettingsChart.EndColumn + intToStr(aSettingsChart.EndRow) );
 
-  sheet := objDocument.Sheets.getByIndex(PositionSheet);
+  sheet := objDocument.Sheets.getByIndex(aSettingsChart.PositionSheet);
   // getByName(aCollName);
   Charts := sheet.Charts;
 
-  while Charts.hasByName(ChartName) do
+  while Charts.hasByName(aSettingsChart.ChartName) do
   begin
-    ChartName := ChartName + '_' + intTostr(countChart);
+    aSettingsChart.ChartName := copy(aSettingsChart.ChartName,0, ifthen( (pos('_',aSettingsChart.ChartName) > 0),
+                                               pos('_',aSettingsChart.ChartName), Length(aSettingsChart.ChartName))
+                      ) + '_' + intToStr(countChart);
     inc(countChart);
+    aSettingsChart.Position_Y := (aSettingsChart.Position_Y + aSettingsChart.Height) + 1000;
   end;
 
   Rect := objServiceManager.Bridge_GetStruct('com.sun.star.awt.Rectangle');
   RangeAddress := sheet.Bridge_GetStruct('com.sun.star.table.CellRangeAddress');
 
-  Rect.Width := 12000;
-  Rect.Height := 12000;
-  Rect.X := 8000 * countChart + 1;
-  Rect.Y := 1000;
+  Rect.Width := aSettingsChart.Width;
+  Rect.Height := aSettingsChart.Height;
+  Rect.X := aSettingsChart.Position_X;
+  Rect.Y := aSettingsChart.Position_Y;
 
-  RangeAddress.sheet := PositionSheet;
-  RangeAddress.StartColumn := getIndex(StartColumn);
-  RangeAddress.StartRow := StartRow;
-  RangeAddress.EndColumn := getIndex(EndColumn);
-  RangeAddress.EndRow := EndRow;
+  RangeAddress.sheet := aSettingsChart.PositionSheet;
+  RangeAddress.StartColumn := getIndex(aSettingsChart.StartColumn);
+  RangeAddress.StartRow := aSettingsChart.StartRow;
+  RangeAddress.EndColumn := getIndex(aSettingsChart.EndColumn);
+  RangeAddress.EndRow := aSettingsChart.EndRow;
 
-  Charts.addNewByName(ChartName, Rect, VarArrayOf(RangeAddress), true, true);
+  Charts.addNewByName(aSettingsChart.ChartName, Rect, VarArrayOf(RangeAddress), true, true);
 
-  if typeChart <> ctDefault then
+  if aSettingsChart.typeChart <> ctDefault then
   begin
-    Chart := Charts.getByName(ChartName).embeddedObject;
-    Chart.Title.String := ChartName;
-    case typeChart of
+    Chart := Charts.getByName(aSettingsChart.ChartName).embeddedObject;
+    Chart.Title.String := aSettingsChart.ChartName;
+    case aSettingsChart.typeChart of
       ctVertical:
         Chart.Diagram.Vertical := true;
       ctPie:
@@ -382,7 +398,6 @@ begin
         end;
     end;
   end;
-
 end;
 
 function TOpenOffice_calc.changeFont(aNameFont: string; aHeight: Integer)
@@ -400,6 +415,11 @@ begin
   Cell.HoriJustify := HoryJustifyToInteger(aTypeHori);
   Cell.VertJustify := VertJustifyToInteger(aTypeVert);
   result := self;
+end;
+
+function TOpenOffice_calc.setCellWidth(const aWidth: integer): TOpenOffice_calc;
+begin
+  Cell.getColumns.getByIndex(0).Width := aWidth;
 end;
 
 function TOpenOffice_calc.CountRow: Integer;

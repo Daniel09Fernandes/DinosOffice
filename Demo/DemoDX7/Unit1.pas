@@ -27,7 +27,7 @@ type
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
   private
-    { Private declarations }
+    SettingsChart: TSettingsChart;
   public
     { Public declarations }
   end;
@@ -71,7 +71,9 @@ begin
    Openoffice_calc1.SetValue(6,'A', 'Total de linhas');
    Openoffice_calc1.SetValue(6,'B', Openoffice_calc1.CountRow, ftNumeric);
 
-  Openoffice_calc1.SetValue(7,'A', 'Total de Colunas');
+  Openoffice_calc1.SetValue(7,'A', 'Total de Colunas')
+  .setCellWidth(9000);
+
   Openoffice_calc1.SetValue(7,'B', Openoffice_calc1.CountCell, ftNumeric);
 
 
@@ -126,7 +128,9 @@ begin
   Openoffice_calc1.SetValue(15,'B', 'ALUGUEL 2');
   Openoffice_calc1.SetValue(15,'C', 0, ftNumeric);
 
-  Openoffice_calc1.SetValue(17,'A', 'Total de linhas');
+  Openoffice_calc1.SetValue(17,'A', 'Total de linhas')
+  .setCellWidth(9000);
+
   Openoffice_calc1.SetValue(17,'B', Openoffice_calc1.CountRow, ftNumeric);
 
   Openoffice_calc1.SetValue(19,'A', 'Total de Colunas');
@@ -137,10 +141,29 @@ begin
 
   Openoffice_calc1.positionSheetByName('Planilha1');
 
-  Openoffice_calc1.addChart(ctDefault, 0,3,'A','B','MeuGrafico',0);
-  Openoffice_calc1.addChart(ctVertical, 0,3,'A','B','MeuGrafico',0);
-  Openoffice_calc1.addChart(ctPie, 0,3,'A','B','MeuGrafico',0);
-  Openoffice_calc1.addChart(ctLine, 0,3,'A','B','MeuGrafico',0);
+   //Configure the chart settings
+    SettingsChart.Height := 11000;
+    SettingsChart.Width  := 22000;
+    SettingsChart.Position_X := 1500;
+    SettingsChart.Position_Y := 12000;
+    SettingsChart.StartRow := 0;
+    SettingsChart.EndRow := 3;
+    SettingsChart.PositionSheet := 0;
+    SettingsChart.StartColumn := 'A';
+    SettingsChart.EndColumn := 'B';
+    SettingsChart.ChartName := ''; //Can define a name or automatically generate
+    SettingsChart.typeChart := ctDefault;
+
+  Openoffice_calc1.addChart(SettingsChart);
+
+  SettingsChart.typeChart := ctVertical;
+  Openoffice_calc1.addChart(SettingsChart);
+
+  SettingsChart.typeChart := ctPie;
+  Openoffice_calc1.addChart(SettingsChart);
+
+  SettingsChart.typeChart := ctLine;
+  Openoffice_calc1.addChart(SettingsChart);
 end;
 
 procedure TForm1.BitBtn2Click(Sender: TObject);
