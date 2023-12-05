@@ -72,6 +72,11 @@
         <DCC_UnitSearchPath>..\..\..\..\Src;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1046</VerInfo_Locale>
+        <DCC_DcpOutput>..\buildFiles\dcp</DCC_DcpOutput>
+        <DCC_ExeOutput>..\buildFiles\exe\$(Config)</DCC_ExeOutput>
+        <DCC_BplOutput>..\buildFiles\dpk</DCC_BplOutput>
+        <DCC_DcuOutput>..\buildFiles\dcu</DCC_DcuOutput>
+        <DCC_OutputDRCFile>false</DCC_OutputDRCFile>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_DebugInformation>0</DCC_DebugInformation>

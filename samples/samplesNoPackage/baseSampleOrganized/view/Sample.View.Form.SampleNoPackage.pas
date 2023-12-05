@@ -513,7 +513,7 @@ procedure TFormSampleNoPackage.FormCreate(Sender: TObject);
 begin
   LoadAuxiliarItems;
 
-  edtSalvar.Text := ExtractFileDir(GetCurrentDir) + '\SheetTest.ods';
+  edtSalvar.Text := ExtractFileDir(ParamStr(0)) + '\SheetTest.ods';
   edtArq.Text := edtSalvar.Text;
 
   FOfficeCalc := TOpenOffice_calc.Create(self);
