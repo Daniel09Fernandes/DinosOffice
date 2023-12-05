@@ -1,3 +1,13 @@
+# Fork changes
+
+----
+
+I did smalls changes to the samples projects structure, now you can test the samples project without install the packages.
+You can use the this framework without install the package too, just add the src folder in the search path project.
+Maybe in the future, i will add some fixes towards memory leaks and code improvements.
+
+**Thanks a lot Daniel Fernandes.**
+
 # DinosOffice: Delphi Components for LibreOffice
 
 ### Important
