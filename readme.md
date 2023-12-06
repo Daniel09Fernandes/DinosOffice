@@ -1,17 +1,6 @@
-# Fork changes
-
-----
-
-I did smalls changes to the samples projects structure, now you can test the samples project without install the packages.
-You can use the this framework without install the package too, just add the src folder in the search path project.
-Maybe in the future, i will add some fixes towards memory leaks and code improvements.
-
-**Thanks a lot Daniel Fernandes.**
-
 # DinosOffice: Delphi Components for LibreOffice
 
 ### Important
-
 ----
 
 In the last update, the DocVisible property was included, by default it is false, so when generating the spreadsheet it is not displayed on the screen,
@@ -59,3 +48,14 @@ To style the worksheet and documents, use the additional units: uOpenOfficeHelpe
 This software is MIT open source!
 
 Wiki: https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/wiki
+
+
+# Fork changes
+
+----
+# José Caíque L. Silva:
+I did smalls changes to the samples projects structure, now you can test the samples project without install the packages.
+You can use the this framework without install the package too, just add the src folder in the search path project.
+
+**Thanks a lot Daniel Fernandes.**
+# End Fork changes
