@@ -118,7 +118,7 @@ end;
 
 function TOpenOffice.convertFilePathToUrlFile(aFilePath: string): string;
 begin
-  if (pos('FILE', UpperCase(aFilePath)) <= 0) then
+  if (pos('FILE:///', UpperCase(aFilePath)) <= 0) then
   begin
     aFilePath := StringReplace(aFilePath, '\', '/', [rfReplaceAll]);
     aFilePath := 'file:///' + aFilePath;
