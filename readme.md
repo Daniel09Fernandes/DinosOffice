@@ -23,11 +23,11 @@ Need to install :
 
 https://pt-br.libreoffice.org/baixe-ja/libreoffice-novo/
 
- - 1 - Open project "OpenOfficeComponent_install.dproj" (for delphi 7 use the OpenOfficeComponent_install_DX7)
+ - 1 - Open project "C:\yourLocal\Component_OpenOffice\OpenOfficeComponent_install.dproj" (for delphi 7 use the C:\yourLocal\Component_OpenOffice\OpenOfficeComponent_install_Delphi7.dpk)
  - 2 - Clean
  - 3 - Build
  - 4 - install
- - 5 - tools -> options -> language -> Delphi -> Library -> Library/ADD "C:\yourLocal\Component_OpenOffice\Src" (for delphi 7 use the "C:\yourLocal\Component_OpenOffice\SrcDX7")
+ - 5 - tools -> options -> language -> Delphi -> Library -> Library/ADD "C:\yourLocal\Component_OpenOffice\Src" (for delphi 7 use the "C:\yourLocal\Component_OpenOffice\Src_dx7")
 
  
  
@@ -39,6 +39,7 @@ Tested Delphi version
 
 | Version  	| Supported 	|
 |----------	|-----------	|
+| > 12.x   	|         ✅ 	|
 | > 11.x   	|         ✅ 	|
 | > 10.x   	|         ✅ 	|
 | Seattle  	|         ✅ 	|
