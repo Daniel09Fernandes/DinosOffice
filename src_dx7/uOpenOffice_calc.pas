@@ -134,7 +134,8 @@ end;
 
 function TOpenOffice_calc.HoryJustifyToInteger(pValue:THoriJustify):Integer;
 begin
-case pValue of
+  result := 0;
+  case pValue of
     fthSTANDARD:
       result := 0;
     fthLEFT:
@@ -152,6 +153,7 @@ end;
 
 function TOpenOffice_calc.VertJustifyToInteger(pValue:TVertJustify):Integer;
 begin
+  result := 0;
   case pValue of
     ftvSTANDARD:
       result := 0;
@@ -339,7 +341,7 @@ end;
  
 procedure TOpenOffice_calc.addChart(aSettingsChart: TSettingsChart);
 var
-  Chart, Rect, sheet, cursor: OleVariant;
+  Chart, Rect, sheet: OleVariant;
   RangeAddress: Variant;
   countChart: Integer;
 begin
@@ -420,6 +422,7 @@ end;
 function TOpenOffice_calc.setCellWidth(const aWidth: integer): TOpenOffice_calc;
 begin
   Cell.getColumns.getByIndex(0).Width := aWidth;
+  result := self;
 end;
 
 function TOpenOffice_calc.CountRow: Integer;
@@ -580,6 +583,7 @@ function TOpenOffice_calc.getField(aIndex: integer): string;
 var DifIdx : double;
     Letter : String;
 begin
+   DifIdx := 0;
    with  FFields do
    begin
      if (aIndex > High(arrFields) ) and (arrFields[aIndex] = '' ) then

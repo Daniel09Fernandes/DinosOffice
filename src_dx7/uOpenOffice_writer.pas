@@ -82,7 +82,6 @@ end;
 
 
 function TOpenOffice_writer.gotoEndOfSentence: TOpenOffice_writer;
-var CursorLocal : variant;
 begin
   objTextCursor.jumpToEndOfPage;
   oText := objTextCursor.Text;

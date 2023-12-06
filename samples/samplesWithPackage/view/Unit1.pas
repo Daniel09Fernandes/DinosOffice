@@ -104,7 +104,6 @@ type
     lbl2: TLabel;
     CheckBox1: TCheckBox;
     edtWidth: TLabeledEdit;
-    Label7: TLabel;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);

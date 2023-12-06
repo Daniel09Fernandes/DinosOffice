@@ -94,13 +94,6 @@ object Form1: TForm1
         Width = 3
         Height = 13
       end
-      object Label7: TLabel
-        Left = 312
-        Top = 117
-        Width = 44
-        Height = 13
-        Caption = 'Cell Widh'
-      end
       object BitBtn1: TBitBtn
         Left = 180
         Top = 160
@@ -587,6 +580,21 @@ object Form1: TForm1
         TabOrder = 38
         OnClick = CheckBox1Click
       end
+      object edtWidth: TLabeledEdit
+        Left = 314
+        Top = 132
+        Width = 44
+        Height = 21
+        CharCase = ecUpperCase
+        EditLabel.Width = 48
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Cel lWidth'
+        EditLabel.Color = clBackground
+        EditLabel.ParentColor = False
+        ImeName = 'Portuguese (Brazilian ABNT)'
+        TabOrder = 39
+        Text = '5000'
+      end
     end
     object TabSheet2: TTabSheet
       Caption = 'Writer'
@@ -757,21 +765,6 @@ object Form1: TForm1
       end
     end
   end
-  object edtWidth: TLabeledEdit
-    Left = 316
-    Top = 156
-    Width = 44
-    Height = 21
-    CharCase = ecUpperCase
-    EditLabel.Width = 48
-    EditLabel.Height = 13
-    EditLabel.Caption = 'Cel lWidth'
-    EditLabel.Color = clBackground
-    EditLabel.ParentColor = False
-    ImeName = 'Portuguese (Brazilian ABNT)'
-    TabOrder = 1
-    Text = '5000'
-  end
   object ClientDataSet1: TClientDataSet
     PersistDataPacket.Data = {
       4C0000009619E0BD0100000018000000030000000000030000004C0002494404
@@ -780,8 +773,8 @@ object Form1: TForm1
     Active = True
     Aggregates = <>
     Params = <>
-    Left = 212
-    Top = 272
+    Left = 44
+    Top = 464
     object ClientDataSet1ID: TIntegerField
       FieldName = 'ID'
     end
@@ -794,11 +787,11 @@ object Form1: TForm1
   end
   object DataSource1: TDataSource
     DataSet = ClientDataSet1
-    Left = 300
-    Top = 296
+    Left = 124
+    Top = 464
   end
   object PopupMenu1: TPopupMenu
-    Left = 268
+    Left = 468
     Top = 480
     object Exportarplanilha1: TMenuItem
       Caption = 'Exportar planilha'
@@ -807,8 +800,8 @@ object Form1: TForm1
   end
   object DataSetProvider1: TDataSetProvider
     UpdateMode = upWhereKeyOnly
-    Left = 412
-    Top = 280
+    Left = 212
+    Top = 464
   end
   object OpenOffice_calc1: TOpenOffice_calc
     DocVisible = False
