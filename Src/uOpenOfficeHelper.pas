@@ -77,6 +77,7 @@ type
     function changeFont(aNameFont: string; aHeight: Integer): TOpenOffice_calc;
     function changeJustify(aTypeHori: THoriJustify; aTypeVert: TVertJustify) : TOpenOffice_calc;
     function setColor(aFontColor, aBackgroud: TOpenColor): TOpenOffice_calc;
+    function setCellWidth(const aWidth: integer): TOpenOffice_calc;
     function setBold(aBold: boolean): TOpenOffice_calc;
     function SetUnderline(aUnderline: boolean): TOpenOffice_calc;
     function CountRow: Integer;
@@ -94,7 +95,7 @@ begin
   countChart := 1;
 
   if aSettingsChart.ChartName.trim.IsEmpty then
-    aSettingsChart.ChartName := 'MyChart_' + (aSettingsChart.StartColumn + aSettingsChart.StartRow.ToString) + ':' +
+    aSettingsChart.ChartName := 'MyChart_' + (aSettingsChart.StartColumn + aSettingsChart.StartRow.ToString) + '_' +
       (aSettingsChart.EndColumn + aSettingsChart.EndRow.ToString);
 
   sheet := objDocument.Sheets.getByIndex(aSettingsChart.PositionSheet);
@@ -363,6 +364,11 @@ begin
     Cell.BottomBorder := settings;
 
   result := self;
+end;
+
+function THelperOpenOffice_calc.setCellWidth(const aWidth: integer): TOpenOffice_calc;
+begin
+   Cell.getColumns.getByIndex(0).Width := aWidth;
 end;
 
 function THelperOpenOffice_calc.setColor(aFontColor, aBackgroud: TOpenColor)
