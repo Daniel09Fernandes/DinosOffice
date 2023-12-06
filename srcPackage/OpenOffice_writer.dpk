@@ -1,7 +1,7 @@
 package OpenOffice_writer;
 
 {$R *.res}
-{$R 'Src\uOpenOffice.dcr'}
+{$R '..\Src\uOpenOffice_.dcr'}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
@@ -35,15 +35,8 @@ requires
   dbrtl,
   inet,
   inetdb,
-  dsnap;
-
-contains
-  uOpenOffice in 'Src\uOpenOffice.pas',
-  uOpenOffice_calc in 'Src\uOpenOffice_calc.pas',
-  uOpenOffice_writer in 'Src\uOpenOffice_writer.pas',
-  uOpenOfficeCollors in 'Src\uOpenOfficeCollors.pas',
-  uOpenOfficeEvents in 'Src\uOpenOfficeEvents.pas',
-  uOpenOfficeHelper in 'Src\uOpenOfficeHelper.pas',
-  uOpenOfficeSetPrinter in 'Src\uOpenOfficeSetPrinter.pas';
+  dsnap,
+  vclie,
+  vcledge;
 
 end.

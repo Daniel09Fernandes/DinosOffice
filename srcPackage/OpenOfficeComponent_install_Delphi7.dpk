@@ -1,0 +1,47 @@
+package OpenOfficeComponent_install_Delphi7;
+
+{$R *.res}
+{$R '..\src_dx7\uOpenOffice.dcr'}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$IMPLICITBUILD OFF}
+
+requires
+  rtl,
+  vcl,
+  inetdb,
+  dbrtl,
+  inet,
+  xmlrtl,
+  dsnap,
+  OpenOfficeComponent_install_DX7;
+
+contains
+  uOpenOffice in '..\src_dx7\uOpenOffice.pas',
+  uOpenOffice_calc in '..\src_dx7\uOpenOffice_calc.pas',
+  uOpenOffice_writer in '..\src_dx7\uOpenOffice_writer.pas',
+  uOpenOfficeCollors in '..\src_dx7\uOpenOfficeCollors.pas',
+  uOpenOfficeEvents in '..\src_dx7\uOpenOfficeEvents.pas',
+  uOpenOfficeHelper in '..\src_dx7\uOpenOfficeHelper.pas',
+  uOpenOfficeSetPrinter in '..\src_dx7\uOpenOfficeSetPrinter.pas';
+
+end.
