@@ -53,7 +53,7 @@ Wiki: https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/wiki
 # Fork changes
 
 ----
-# José Caíque L. Silva:
+### José Caíque L. Silva:
 I did smalls changes to the samples projects structure, now you can test the samples project without install the packages.
 You can use the this framework without install the package too, just add the src folder in the search path project.
 
