@@ -154,7 +154,9 @@ function THelperOpenOffice_calc.changeFont(aNameFont: string; aHeight: Integer)
   : TOpenOffice_calc;
 begin
   // Cell := Table.getCellRangeByName(aCollName+aCellNumber.ToString);
-  Cell.CharFontName := aNameFont;
+  if not aNameFont.Trim.IsEmpty then
+    Cell.CharFontName := aNameFont;
+
   Cell.CharHeight := inttostr(aHeight);
   result := self;
 end;
