@@ -7,9 +7,7 @@ In the last update, the DocVisible property was included, by default it is false
 If you want to see the spreadsheet being generated, set it to true;
 
 ----
-Necessario instalar o libreoffice : 
-Need to install :
-
+Need install:
 https://pt-br.libreoffice.org/baixe-ja/libreoffice-novo/
 
  - 1 - Open project "C:\yourLocal\Component_OpenOffice\OpenOfficeComponent_install.dproj" (for delphi 7 use the C:\yourLocal\Component_OpenOffice\OpenOfficeComponent_install_Delphi7.dpk)
@@ -28,23 +26,29 @@ Tested Delphi version
 
 | Version  	| Supported 	|
 |----------	|-----------	|
-| > 12.x   	|         ✅ 	|
-| > 11.x   	|         ✅ 	|
-| > 10.x   	|         ✅ 	|
-| Seattle  	|         ✅ 	|
-| XE 8     	|         ✅ 	|
-| Delphi 7 	|         ✅ 	|
+| > 12.x   	|    ✅ 	    |
+| > 11.x   	|    ✅    	|
+| > 10.x   	|    ✅ 	    |
+| Seattle  	|    ✅ 	    |
+| XE 8     	|    ✅ 	    |
+| Delphi 7 	|    ✅    	|
 
-Para uso básico de leitura e gravação de plhanilha, use apenas o componente
+## For Unigui 
+ You need add FDGUIxWaitCursor to your serverModule and in your serverModule checked the property AutoCoInitialize
+ 
+![image](https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/assets/29381329/d20893ff-e2c0-4e37-a823-33be3175091e)
+ 
+| Version   	              | Supported 	|
+|-------------------------	|-----------	|
+| > 1.95.0.1584 with D12 	 |    ✅ 	   |
 
+----
 For basic read and write sheet usage, just use the component
-
-
-Para estilizar a planilha e documentos, use as units adicionais: uOpenOfficeHelper.pas, uOpenOfficeCollors.pas 
-
 To style the worksheet and documents, use the additional units: uOpenOfficeHelper.pas, uOpenOfficeCollors.pas 
 
 
 This software is MIT open source!
 
 Wiki: https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/wiki
+
+## See more on Instagram https://www.instagram.com/dinosdev/
