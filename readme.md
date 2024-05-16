@@ -10,12 +10,14 @@ If you want to see the spreadsheet being generated, set it to true;
 Need install:
 https://pt-br.libreoffice.org/baixe-ja/libreoffice-novo/
 
- - 1 - Open project "C:\yourLocal\Component_OpenOffice\OpenOfficeComponent_install.dproj" (for delphi 7 use the C:\yourLocal\Component_OpenOffice\OpenOfficeComponent_install_Delphi7.dpk)
+ - 1 - Open project "C:\yourLocal\ComponentDinosOffice-OpenOffice\srcPackage\OpenOfficeComponent_install.dproj"
+         For delphi 7 use the C:\yourLocal\ComponentDinosOffice-OpenOffice\srcPackag\OpenOfficeComponent_install_Delphi7.dpk
  - 2 - Clean
  - 3 - Build
  - 4 - install
- - 5 - tools -> options -> language -> Delphi -> Library -> Library/ADD "C:\yourLocal\Component_OpenOffice\Src" (for delphi 7 use the "C:\yourLocal\Component_OpenOffice\Src_dx7")
-
+ - 5 - tools -> options -> language -> Delphi -> Library -> Library/ADD:
+        "C:\yourLocal\ComponentDinosOffice-OpenOffice\srcPackage\Src" 
+        For delphi 7 use the "C:\yourLocal\ComponentDinosOffice-OpenOffice\srcPackage\Src_dx7"
  
  
 | Project {versionOficial}   	| Version 	   |
