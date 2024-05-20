@@ -39,10 +39,17 @@ Tested Delphi version
  You need add FDGUIxWaitCursor to your serverModule and in your serverModule checked the property AutoCoInitialize
  
 ![image](https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/assets/29381329/d20893ff-e2c0-4e37-a823-33be3175091e)
+
+## For Intraweb
+ You need add FDGUIxWaitCursor to your ServerController and in your ServerController change the property ComInitialize for ciMultiThreaded
+
+ ![image](https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/assets/29381329/a164b806-ca33-4242-a183-1a62a6882e7b)
+
  
-| Version   	              | Supported 	|
+| Version Tested   	       | Supported 	|
 |-------------------------	|-----------	|
-| > 1.95.0.1584 with D12 	 |    ✅ 	   |
+| Unigui 1.95.0.1584 	     |    ✅ 	   |
+| Intraweb 14    	         |    ✅ 	   |
 
 ----
 For basic read and write sheet usage, just use the component
