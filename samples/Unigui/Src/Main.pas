@@ -46,6 +46,7 @@ begin
 end;
 
 procedure TMainForm.UniButton1Click(Sender: TObject);
+var SettingsChart: TSettingsChart;
 begin
   UniMainModule.OpenOffice_calc1.DocVisible := true;
   UniMainModule.OpenOffice_calc1.startSheet;
@@ -142,7 +143,7 @@ begin
   UniMainModule.OpenOffice_calc1.positionSheetByName('Planilha1');
 
   //Configure the chart settings
-  var SettingsChart: TSettingsChart;
+ 
   SettingsChart.Height := 11000;
   SettingsChart.Width := 22000;
   SettingsChart.Position_X := 1500;
