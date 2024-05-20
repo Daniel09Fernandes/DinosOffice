@@ -6,6 +6,15 @@
 In the last update, the DocVisible property was included, by default it is false, so when generating the spreadsheet it is not displayed on the screen,
 If you want to see the spreadsheet being generated, set it to true;
 
+## Running in: 
+### Vcl, Fmx(Win32/64), Unigui, Intraweb
+
+![image](https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/assets/29381329/ddec6e5c-ea7e-4840-a080-facc7e2384bf)
+![image](https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/assets/29381329/ec6738a6-f775-4d99-996e-5a6fdc092a73) 
+![image](https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/assets/29381329/d1509f79-eb7e-496a-9292-a2bfab710b7b) &nbsp;
+![image](https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/assets/29381329/cc66f699-1eb7-400c-9cf7-6a2132f95457) 
+
+
 ----
 Need install:
 https://pt-br.libreoffice.org/baixe-ja/libreoffice-novo/
