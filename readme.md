@@ -10,12 +10,14 @@ If you want to see the spreadsheet being generated, set it to true;
 Need install:
 https://pt-br.libreoffice.org/baixe-ja/libreoffice-novo/
 
- - 1 - Open project "C:\yourLocal\Component_OpenOffice\OpenOfficeComponent_install.dproj" (for delphi 7 use the C:\yourLocal\Component_OpenOffice\OpenOfficeComponent_install_Delphi7.dpk)
+ - 1 - Open project "C:\yourLocal\ComponentDinosOffice-OpenOffice\srcPackage\OpenOfficeComponent_install.dproj"
+         For delphi 7 use the C:\yourLocal\ComponentDinosOffice-OpenOffice\srcPackag\OpenOfficeComponent_install_Delphi7.dpk
  - 2 - Clean
  - 3 - Build
  - 4 - install
- - 5 - tools -> options -> language -> Delphi -> Library -> Library/ADD "C:\yourLocal\Component_OpenOffice\Src" (for delphi 7 use the "C:\yourLocal\Component_OpenOffice\Src_dx7")
-
+ - 5 - tools -> options -> language -> Delphi -> Library -> Library/ADD:
+        "C:\yourLocal\ComponentDinosOffice-OpenOffice\srcPackage\Src" 
+        For delphi 7 use the "C:\yourLocal\ComponentDinosOffice-OpenOffice\srcPackage\Src_dx7"
  
  
 | Project {versionOficial}   	| Version 	   |
@@ -37,10 +39,17 @@ Tested Delphi version
  You need add FDGUIxWaitCursor to your serverModule and in your serverModule checked the property AutoCoInitialize
  
 ![image](https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/assets/29381329/d20893ff-e2c0-4e37-a823-33be3175091e)
+
+## For Intraweb
+ You need add FDGUIxWaitCursor to your ServerController and in your ServerController change the property ComInitialize for ciMultiThreaded
+
+ ![image](https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/assets/29381329/a164b806-ca33-4242-a183-1a62a6882e7b)
+
  
-| Version   	              | Supported 	|
+| Version Tested   	       | Supported 	|
 |-------------------------	|-----------	|
-| > 1.95.0.1584 with D12 	 |    ✅ 	   |
+| Unigui 1.95.0.1584 	     |    ✅ 	   |
+| Intraweb 14    	         |    ✅ 	   |
 
 ----
 For basic read and write sheet usage, just use the component
