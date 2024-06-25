@@ -86,6 +86,9 @@ type
 
 implementation
 
+uses
+  System.Win.ComObj;
+
 procedure THelperOpenOffice_calc.addChart(aSettingsChart: TSettingsChart);
 var
   Chart, Rect, sheet : OleVariant;
@@ -323,11 +326,9 @@ end;
 
 function THelperOpenOffice_calc.seTBorder(borderPosition: TBoderSheet; opColor: TOpenColor; RemoveBorder: boolean): TOpenOffice_calc;
 var
-  border: Variant;
   settings: Variant;
 begin
-  border := ServicesManager.createInstance('com.sun.star.reflection.CoreReflection');
-  border.forName('com.sun.star.table.BorderLine2').createObject(settings);
+ CoreReflection.forName('com.sun.star.table.BorderLine2').createObject(settings);
 
  if not RemoveBorder then
   begin
