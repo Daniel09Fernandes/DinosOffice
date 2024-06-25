@@ -79,6 +79,7 @@ type
     property oSCalc: OleVariant read objSCalc write objSCalc;
     property Table: OleVariant read objSCalc;
     property Fields: TFieldsSheet read FFields;
+    property CoreReflection :OleVariant read objCoreReflection;
     property SheetName: string read FSheetName write SetSheetName;
 
     //---------events-----------//
