@@ -61,7 +61,7 @@ Tested Delphi version
 | Intraweb 14    	         |    ✅ 	   |
 
 ----
-For basic read and write sheet usage, just use the component
+For basic read and write sheet usage, just use the component 
 To style the worksheet and documents, use the additional units: uOpenOfficeHelper.pas, uOpenOfficeCollors.pas 
 
 
@@ -70,3 +70,9 @@ This software is MIT open source!
 Wiki: https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/wiki
 
 ## See more on Instagram https://www.instagram.com/dinosdev/
+
+### O componente é totalmente free, se ele foi muito útil para você, que tal me pagar um café para incentivar o projeto?
+
+PIX:
+
+<img src="https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/assets/29381329/00dcc168-df75-4228-b80d-7262c7b4c478" width="300" height="300">
