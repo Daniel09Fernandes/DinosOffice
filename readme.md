@@ -76,3 +76,8 @@ Wiki: https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/wiki
 PIX:
 
 <img src="https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/assets/29381329/00dcc168-df75-4228-b80d-7262c7b4c478" width="300" height="300">
+
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Daniel09Fernandes/DinosOffice&type=Date)](https://star-history.com/#Daniel09Fernandes/DinosOffice&Date)
