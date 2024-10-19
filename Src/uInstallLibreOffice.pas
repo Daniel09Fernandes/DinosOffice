@@ -2,25 +2,25 @@ unit uInstallLibreOffice;
 
 interface
 
-uses  SysUtils, Variants, Classes, Vcl.OleCtrls, SHDocVw, Vcl.StdCtrls, Vcl.ExtCtrls;
+uses
+  SysUtils, Variants, Classes, Vcl.OleCtrls, SHDocVw, Vcl.StdCtrls, Vcl.ExtCtrls;
 
 type
   TInstallLibreOffice = class(TComponent)
   private
     const
-      DonwloadClickJS = ' document.getElementsByClassName("dl_download_link")[0].click(); ';
-      URL = 'https://www.libreoffice.org/download/download-libreoffice/';
+      DownloadJS = 'document.getElementsByClassName("dl_download_link")[0].href;';
+      URL = 'https://pt-br.libreoffice.org/baixe-ja/libreoffice-novo/';
     var
-      URL_download :string;
-      FWebBrowser : TWebBrowser;
-    procedure download;
-    procedure  WhenDocIsCompleted(ASender: TObject; const pDisp: IDispatch; const URL: OleVariant);
+      URL_download: string;
+      FWebBrowser: TWebBrowser;
+    procedure Download;
+    procedure WhenDocIsCompleted(ASender: TObject; const pDisp: IDispatch; const URL: OleVariant);
   public
-     procedure DownloadLibreOffice;
-     constructor Create(AOwner: TComponent); override;
-     destructor Destroy; override;
+    procedure DownloadLibreOffice;
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
   end;
-
 
 implementation
 
@@ -32,54 +32,77 @@ uses
 constructor TInstallLibreOffice.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  URL_download := 'https://www.libreoffice.org/donate/dl/win-x86_64/versao/pt-BR/LibreOffice_versao_Win_x64.msi';
-
-  if not assigned(FWebBrowser) then
+  URL_download := '';
+  if not Assigned(FWebBrowser) then
     FWebBrowser := TWebBrowser.Create(self);
 end;
 
 destructor TInstallLibreOffice.Destroy;
 begin
-  FreeAndNil(FWebBrowser);
+  if assigned(FWebBrowser) then
+    FreeAndNil(FWebBrowser);
   inherited;
 end;
 
-procedure TInstallLibreOffice.download;
+procedure TInstallLibreOffice.Download;
 begin
-   FWebBrowser.Navigate(URL_download);
-   FWebBrowser.OnDocumentComplete := nil;
+  if URL_download <> '' then
+  begin
+    FWebBrowser.Navigate(URL_download);
+    FWebBrowser.OnDocumentComplete := nil; // Reset the event after download
+  end
+  else
+  begin
+    writeLn('Erro: URL de download não encontrada!');
+  end;
 end;
 
 procedure TInstallLibreOffice.DownloadLibreOffice;
 begin
-  TWinControl(FWebBrowser).Name   := 'WebBrowser';
-  FWebBrowser.Silent := true;  //don't show JS errors
-  FWebBrowser.Visible:= false;  //visible...by default true
+  TWinControl(FWebBrowser).Name := 'WebBrowser';
+  FWebBrowser.Silent := True; // Don't show JS errors
+  FWebBrowser.Visible := false; // Make it visible
   FWebBrowser.HandleNeeded;
-
   FWebBrowser.Navigate(URL);
-  FWebBrowser.RegisterAsBrowser:= True;
-  FWebBrowser.OnDocumentComplete :=  WhenDocIsCompleted;
-  FWebBrowser.Top    := 0;
-  FWebBrowser.Left   := 0;
+  FWebBrowser.RegisterAsBrowser := True;
+  FWebBrowser.OnDocumentComplete := WhenDocIsCompleted;
+  FWebBrowser.Top := 0;
+  FWebBrowser.Left := 0;
   FWebBrowser.Height := 0;
-  FWebBrowser.Width  := 0;
+  FWebBrowser.Width := 0;
 end;
 
 procedure TInstallLibreOffice.WhenDocIsCompleted(ASender: TObject; const pDisp: IDispatch; const URL: OleVariant);
 var
- Doc: IHTMLDocument2;
- body : string;
- versao : string;
- UrlDownload: string;
+  Doc: IHTMLDocument2;
+  ElementCollection: IHTMLElementCollection;
+  Element: IHTMLElement;
+  I: Integer;
 begin
-  Doc := FWebBrowser.Document as IHTMLDocument2;
-  body :=   doc.body.innerText;
-  versao := Copy(body,pos('is available for the following operating systems/architectures',body)-6,6).Trim;
-  UrlDownload := URL_download;
-  UrlDownload := UrlDownload.Replace('versao',versao);
-  URL_download :=  UrlDownload;
-  download;
+  try
+    Doc := FWebBrowser.Document as IHTMLDocument2;
+    ElementCollection := Doc.all.tags('A') as IHTMLElementCollection;
+
+    for I := 0 to ElementCollection.length - 1 do
+    begin
+      Element := ElementCollection.item(I, 0) as IHTMLElement;
+      if (Element._className = 'dl_download_link') then
+      begin
+        URL_download := Element.getAttribute('href', 0);
+        Break;
+      end;
+    end;
+
+    if URL_download <> '' then
+      Download
+    else
+      writeLn('Erro: URL de download não encontrada!');
+
+  except
+    on E: Exception do
+      writeLn('Erro ao obter a URL de download: ' + E.Message);
+  end;
 end;
 
 end.
+
