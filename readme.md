@@ -46,6 +46,12 @@ Tested Delphi version
 
 ## For Unigui 
  You need add FDGUIxWaitCursor to your serverModule and in your serverModule checked the property AutoCoInitialize
+
+## For IIS 
+need give permission to user IIS
+![image](https://github.com/user-attachments/assets/5b32db4d-b648-442d-ace4-08c6dce829dd)
+![image](https://github.com/user-attachments/assets/edbdaec3-6d92-433d-9d35-8fa055bb1de1)
+
  
 ![image](https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/assets/29381329/d20893ff-e2c0-4e37-a823-33be3175091e)
 
