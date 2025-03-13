@@ -95,7 +95,7 @@ type
     function GetValue(aCellNumber: integer; const aCollName: String) : TOpenOffice_calc;
     procedure DataSetToSheet(const aCds : TClientDataSet);
     procedure CallConversorPDFTOSheet;
-    function  SheetToDataSet(const TabSheetName: String; TabSheetIndex: Integer = 0): TClientDataSet;
+    function  SheetToDataSet(const TabSheetName: String; TabSheetIndex: Integer = 0; IndexOfHeaderToFieldCds: Integer = 1): TClientDataSet;
     procedure ExeThread(pProc : Tproc);
   published
     property ServicesManager: OleVariant read objServiceManager;
@@ -319,8 +319,10 @@ begin
      FOnAfterStartFile(self);
 end;
 
-function TOpenOffice_calc.SheetToDataSet(const TabSheetName: String; TabSheetIndex: Integer = 0): TClientDataSet;
-var I, IdxField : Integer;
+function TOpenOffice_calc.SheetToDataSet(const TabSheetName: String; TabSheetIndex: Integer = 0; IndexOfHeaderToFieldCds: Integer = 1): TClientDataSet;
+var
+  I, IdxField : Integer;
+  lFieldName: string;
 begin
   Result := TClientDataSet.Create(nil);
   try
@@ -330,11 +332,17 @@ begin
        positionSheetByIndex(TabSheetindex);
 
      for I := 0 to CountCell -1 do
-       Result.FieldDefs.Add(GetValue(1,Fields.getField(I)).Value,TFieldType.ftString,3000);
+     begin
+       lFieldName := GetValue(IndexOfHeaderToFieldCds, Fields.getField(I)).Value;
+       if lFieldName.Trim.IsEmpty then
+         Continue;
+
+       Result.FieldDefs.Add(lFieldName, TFieldType.ftString, 3000);
+     end;
      Result.CreateDataSet;
      Result.DisableControls;
      Result.LogChanges := false;
-     for I := 2 to CountRow do
+     for I := (IndexOfHeaderToFieldCds+1) to CountRow do
      begin
        Result.Append;
        for IdxField := 0 to pred(Result.FieldCount) do
