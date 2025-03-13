@@ -49,8 +49,23 @@ Tested Delphi version
  
 ![image](https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/assets/29381329/d20893ff-e2c0-4e37-a823-33be3175091e)
 
+
+## For Run on IIS 
+Need give permission to users IIS
+
+![image](https://github.com/user-attachments/assets/5b32db4d-b648-442d-ace4-08c6dce829dd)
+
+![image](https://github.com/user-attachments/assets/edbdaec3-6d92-433d-9d35-8fa055bb1de1)
+
+To Unigui on IIS, use this path to access your spreadsheet
+
+![image](https://github.com/user-attachments/assets/50d70568-95d8-4e32-ad6c-a1829e71f055)
+
+
+
 ## For Intraweb
  You need add FDGUIxWaitCursor to your ServerController and in your ServerController change the property ComInitialize for ciMultiThreaded
+ 
 
  ![image](https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/assets/29381329/a164b806-ca33-4242-a183-1a62a6882e7b)
 
