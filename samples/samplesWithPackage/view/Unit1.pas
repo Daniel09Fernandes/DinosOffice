@@ -5,12 +5,15 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, math, Vcl.Dialogs, Vcl.StdCtrls,  Vcl.ExtCtrls, Vcl.Buttons, Vcl.Mask,
+  Vcl.ComCtrls, Data.DB, Datasnap.DBClient, Vcl.Grids, Vcl.DBGrids, Vcl.Menus, Datasnap.Provider,
 
   uOpenOffice_calc,
   UOpenOffice_writer,
   uOpenOfficeCollors,
   uOpenOfficeHelper,
-  uOpenOfficeSetPrinter, Vcl.ComCtrls, Data.DB, Datasnap.DBClient, Vcl.Grids, Vcl.DBGrids, Vcl.Menus, Datasnap.Provider, uOpenOffice;
+  uOpenOfficeSetPrinter,
+  uOpenOffice,
+  uOpenOffice.DrawImage;
 
 type
   TForm1 = class(TForm)
@@ -105,6 +108,8 @@ type
     CheckBox1: TCheckBox;
     edtWidth: TLabeledEdit;
     Button13: TButton;
+    BtnAddImage: TButton;
+    DlgImage: TOpenDialog;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -141,6 +146,7 @@ type
     procedure Button12Click(Sender: TObject);
     procedure CheckBox1Click(Sender: TObject);
     procedure Button13Click(Sender: TObject);
+    procedure BtnAddImageClick(Sender: TObject);
   private
     FontTop, fontLeft : integer;
     SettingsChart: TSettingsChart;
@@ -232,19 +238,37 @@ begin
      Openoffice_writer1.gotoEndOfSentence;
 end;
 
+procedure TForm1.BtnAddImageClick(Sender: TObject);
+begin
+ if DlgImage.Execute() then
+ begin
+   var lImage := TOpenOfficeDrawImage.Create(nil);
+   try
+     lImage.URLImage := DlgImage.FileName;
+     lImage.PositionX := 5000;  // 5 cm
+     lImage.PositionY := 5000;  // 5 cm
+     lImage.Width := 10000;  // 10 cm
+     lImage.Height := 5000;  // 5 cm
+     Openoffice_calc1.DrawImage(lImage);
+   finally
+     lImage.Free;
+   end;
+ end;
+end;
+
 procedure TForm1.Button10Click(Sender: TObject);
 var tpGrafico : TTypeChart;
 begin
    if RBDefault.Checked then
-     tpGrafico := ctDefault
+     tpGrafico := TTypeChart.ctDefault
    else if RBLine.Checked then
-     tpGrafico := ctLine
+     tpGrafico := TTypeChart.ctLine
    else if RBPie.Checked then
-     tpGrafico := ctPie
+     tpGrafico := TTypeChart.ctPie
    else if RBVertical.Checked then
-     tpGrafico := ctVertical
+     tpGrafico := TTypeChart.ctVertical
    else
-     tpGrafico := ctDefault;
+     tpGrafico := TTypeChart.ctDefault;
 
    //Configure the chart settings
     SettingsChart.Height := 11000;
@@ -389,17 +413,17 @@ begin
     SettingsChart.StartColumn := 'A';
     SettingsChart.EndColumn := 'B';
     SettingsChart.ChartName := 'TestChart';
-    SettingsChart.typeChart := ctDefault;
+    SettingsChart.typeChart := TTypeChart.ctDefault;
 
     Openoffice_calc1.addChart(SettingsChart);
 
-    SettingsChart.typeChart := ctVertical;
+    SettingsChart.typeChart := TTypeChart.ctVertical;
     Openoffice_calc1.addChart(SettingsChart);
 
-    SettingsChart.typeChart := ctPie;
+    SettingsChart.typeChart := TTypeChart.ctPie;
     Openoffice_calc1.addChart(SettingsChart);
 
-    SettingsChart.typeChart := ctLine;
+    SettingsChart.typeChart := TTypeChart.ctLine;
     Openoffice_calc1.addChart(SettingsChart);
 end;
 

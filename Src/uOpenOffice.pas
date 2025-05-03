@@ -65,8 +65,19 @@ Type
     procedure setParamsInicialization;
   protected
     { Protected declarations }
-    objCoreReflection, objDesktop, objServiceManager, objDocument, oValMacro,
-    objSCalc, objWriter, objDispatcher, objCell, Charts: OleVariant;
+    objCoreReflection,
+    objDesktop,
+    objServiceManager,
+    objDocument,
+    oValMacro,
+
+    objSCalc,
+    objWriter,
+    objDispatcher,
+    objCell,
+    objImage,
+    Charts: OleVariant;
+
     oInicializationProperties : array [0 .. 1] of variant;
     NewFile: array [0 .. 1] of string;
     function convertFilePathToUrlFile(aFilePath: string): string;
@@ -180,7 +191,13 @@ begin
   objSCalc := Unassigned;
   objCell := Unassigned;
 
-  freeAndNil(FOpenOfficeHungThread);
+  oValMacro := Unassigned;
+  objWriter := Unassigned;
+  objDispatcher := Unassigned;
+  objImage := Unassigned;
+  Charts := Unassigned;
+
+  FreeAndNil(FOpenOfficeHungThread);
   if assigned(InstallLibreOffice) then
     freeAndNil(InstallLibreOffice);
 end;
@@ -222,7 +239,7 @@ begin
   if not DocVisible then
     setParamsInicialization;
 
-  objDocument := objDesktop.loadComponentFromURL(URlFile, FileName, 0,VarArrayOf(oInicializationProperties));
+  objDocument := objDesktop.LoadComponentFromURL(URlFile, FileName, 0,VarArrayOf(oInicializationProperties));
 end;
 
 procedure TOpenOffice.setParamsInicialization;

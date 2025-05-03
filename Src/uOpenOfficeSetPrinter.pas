@@ -6,17 +6,20 @@
 { Developer: Daniel Fernandes Rodrigures }
 { Email    : danielfernandesroddrigues@gmail.com }
 { this unit is a part of the Open Source. }
-{ licensed under a MIT - see LICENSE.md}
+{ licensed under a MIT - see LICENSE.md }
 
 { ******************************************************* }
 
 unit uOpenOfficeSetPrinter;
 
 interface
- uses classes;
 
-type TSetPrinter = class(TCollectionItem)
-   private
+uses
+  classes;
+
+type
+  TSetPrinter = class(TCollectionItem)
+  private
     FPaperSize_Height: integer;
     FPages: string;
     FPaperSize_Width: integer;
@@ -26,13 +29,15 @@ type TSetPrinter = class(TCollectionItem)
     procedure SetPaperSize_Width(const Value: integer);
     procedure SetPrinterName(const Value: string);
 
-   public
+  public
     constructor Create(AOwner: TCollection); override;
-    property     PaperSize_Width: integer read FPaperSize_Width write SetPaperSize_Width; //20000   ' corresponds to 20 cm
-    property     PaperSize_Height: integer read FPaperSize_Height write SetPaperSize_Height;
-    property     PrinterName: string read FPrinterName write SetPrinterName;
-    property     Pages : string read FPages write SetPages; //1-3; 7; 9;
- end;
+    property PaperSize_Width: integer read FPaperSize_Width
+      write SetPaperSize_Width; // 20000   ' corresponds to 20 cm
+    property PaperSize_Height: integer read FPaperSize_Height
+      write SetPaperSize_Height;
+    property PrinterName: string read FPrinterName write SetPrinterName;
+    property Pages: string read FPages write SetPages; // 1-3; 7; 9;
+  end;
 
 implementation
 
@@ -43,7 +48,7 @@ begin
   inherited;
   FPaperSize_Height := 20000;
   FPaperSize_Width := 20000;
-  FPages :=  '1-10;';
+  FPages := '1-10;';
   FPrinterName := 'Microsoft Print to PDF';
 end;
 

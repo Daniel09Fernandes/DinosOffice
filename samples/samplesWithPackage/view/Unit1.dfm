@@ -2,8 +2,8 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'Demo'
-  ClientHeight = 599
-  ClientWidth = 665
+  ClientHeight = 672
+  ClientWidth = 651
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,11 +16,13 @@ object Form1: TForm1
   object PageControl2: TPageControl
     Left = 0
     Top = 0
-    Width = 665
-    Height = 599
+    Width = 651
+    Height = 672
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 0
+    ExplicitWidth = 665
+    ExplicitHeight = 599
     object TabSheet1: TTabSheet
       Caption = 'Calc'
       OnShow = TabSheet1Show
@@ -33,9 +35,9 @@ object Form1: TForm1
       end
       object Bevel2: TBevel
         Left = 0
-        Top = 279
+        Top = 305
         Width = 636
-        Height = 118
+        Height = 101
         Style = bsRaised
       end
       object Bevel3: TBevel
@@ -112,7 +114,7 @@ object Form1: TForm1
       end
       object Button1: TButton
         Left = 3
-        Top = 363
+        Top = 410
         Width = 121
         Height = 30
         Caption = 'Criar nova planilha'
@@ -121,16 +123,16 @@ object Form1: TForm1
       end
       object Button10: TButton
         Left = 6
-        Top = 235
+        Top = 242
         Width = 75
         Height = 21
-        Caption = 'Add grafico'
+        Caption = 'Add Chart'
         TabOrder = 3
         OnClick = Button10Click
       end
       object Button2: TButton
         Left = 263
-        Top = 363
+        Top = 410
         Width = 81
         Height = 30
         Caption = 'Imprimir '
@@ -139,7 +141,7 @@ object Form1: TForm1
       end
       object Button3: TButton
         Left = 352
-        Top = 363
+        Top = 410
         Width = 121
         Height = 30
         Caption = 'Salvar'
@@ -148,7 +150,7 @@ object Form1: TForm1
       end
       object Button4: TButton
         Left = 480
-        Top = 363
+        Top = 410
         Width = 67
         Height = 30
         Caption = 'Fechar'
@@ -157,7 +159,7 @@ object Form1: TForm1
       end
       object Button5: TButton
         Left = 134
-        Top = 363
+        Top = 410
         Width = 121
         Height = 30
         Caption = 'Carregar documeto'
@@ -291,7 +293,7 @@ object Form1: TForm1
       end
       object edtArq: TLabeledEdit
         Left = 3
-        Top = 337
+        Top = 373
         Width = 537
         Height = 21
         EditLabel.Width = 99
@@ -302,7 +304,7 @@ object Form1: TForm1
       end
       object edtCAte: TLabeledEdit
         Left = 70
-        Top = 210
+        Top = 215
         Width = 53
         Height = 21
         EditLabel.Width = 53
@@ -313,7 +315,7 @@ object Form1: TForm1
       end
       object edtCde: TLabeledEdit
         Left = 6
-        Top = 210
+        Top = 215
         Width = 52
         Height = 21
         EditLabel.Width = 48
@@ -336,7 +338,7 @@ object Form1: TForm1
       end
       object edtLAte: TLabeledEdit
         Left = 186
-        Top = 210
+        Top = 215
         Width = 40
         Height = 21
         EditLabel.Width = 41
@@ -348,7 +350,7 @@ object Form1: TForm1
       end
       object edtLde: TLabeledEdit
         Left = 134
-        Top = 210
+        Top = 215
         Width = 42
         Height = 21
         EditLabel.Width = 40
@@ -372,7 +374,7 @@ object Form1: TForm1
       end
       object edtNomeGrafico: TLabeledEdit
         Left = 236
-        Top = 210
+        Top = 215
         Width = 400
         Height = 21
         EditLabel.Width = 64
@@ -394,7 +396,7 @@ object Form1: TForm1
       end
       object edtSalvar: TLabeledEdit
         Left = 3
-        Top = 296
+        Top = 332
         Width = 537
         Height = 21
         EditLabel.Width = 47
@@ -537,7 +539,7 @@ object Form1: TForm1
       end
       object DBGrid1: TDBGrid
         Left = 3
-        Top = 403
+        Top = 448
         Width = 633
         Height = 120
         DataSource = DataSource1
@@ -550,8 +552,8 @@ object Form1: TForm1
         TitleFont.Style = []
       end
       object Button11: TButton
-        Left = 6
-        Top = 256
+        Left = 123
+        Top = 574
         Width = 97
         Height = 25
         Caption = 'Pdf para planilha'
@@ -559,8 +561,8 @@ object Form1: TForm1
         OnClick = Button11Click
       end
       object Button12: TButton
-        Left = 109
-        Top = 256
+        Left = 0
+        Top = 574
         Width = 117
         Height = 25
         Caption = 'Planilha para DataSet'
@@ -569,7 +571,7 @@ object Form1: TForm1
       end
       object CheckBox1: TCheckBox
         Left = 236
-        Top = 235
+        Top = 240
         Width = 181
         Height = 17
         Caption = 'Visualizar gera'#231#227'o do documento? '
@@ -601,6 +603,15 @@ object Form1: TForm1
         Caption = 'Trocar - Index'
         TabOrder = 40
         OnClick = Button13Click
+      end
+      object BtnAddImage: TButton
+        Left = 6
+        Top = 269
+        Width = 75
+        Height = 21
+        Caption = 'Add Image'
+        TabOrder = 41
+        OnClick = BtnAddImageClick
       end
     end
     object TabSheet2: TTabSheet
@@ -810,7 +821,7 @@ object Form1: TForm1
     Left = 212
     Top = 464
   end
-  object OpenOffice_calc1: TOpenOffice_calc
+  object OpenOffice_calc1: TOpenOffice_Calc
     DocVisible = False
     Left = 296
     Top = 232
@@ -819,5 +830,9 @@ object Form1: TForm1
     DocVisible = False
     Left = 420
     Top = 224
+  end
+  object DlgImage: TOpenDialog
+    Left = 176
+    Top = 280
   end
 end

@@ -23,6 +23,8 @@ uses
   uOpenOfficeCollors,
   uOpenOfficeHelper,
   uOpenOfficeSetPrinter,
+  uOpenOffice.DrawImage,
+  uOpenOffice,
 
   Vcl.ComCtrls,
   Data.DB,
@@ -30,8 +32,7 @@ uses
   Vcl.Grids,
   Vcl.DBGrids,
   Vcl.Menus,
-  Datasnap.Provider,
-  uOpenOffice;
+  Datasnap.Provider;
 
 type
   TFormSampleNoPackage = class(TForm)
@@ -124,6 +125,8 @@ type
     edtWidth: TLabeledEdit;
     Label7: TLabel;
     Button6: TButton;
+    BtnAddImage: TButton;
+    DlgImage: TOpenDialog;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -160,6 +163,7 @@ type
     procedure Button12Click(Sender: TObject);
     procedure CheckBox1Click(Sender: TObject);
     procedure Button6Click(Sender: TObject);
+    procedure BtnAddImageClick(Sender: TObject);
   private
     FFontTop, FFontLeft: integer;
     FSettingsChart: TSettingsChart;
@@ -256,20 +260,39 @@ begin
   FOfficeWriter.gotoEndOfSentence;
 end;
 
+procedure TFormSampleNoPackage.BtnAddImageClick(Sender: TObject);
+begin
+ if DlgImage.Execute() then
+ begin
+   var lImage := TOpenOfficeDrawImage.Create(nil);
+   try
+     lImage.URLImage := DlgImage.FileName;
+     lImage.PositionX := 5000;  // 5 cm
+     lImage.PositionY := 5000;  // 5 cm
+     lImage.Width := 10000;  // 10 cm
+     lImage.Height := 5000;  // 5 cm
+
+     FOfficeCalc.DrawImage(lImage);
+   finally
+     lImage.Free;
+   end;
+ end;
+end;
+
 procedure TFormSampleNoPackage.Button10Click(Sender: TObject);
 var
   tpGrafico: TTypeChart;
 begin
   if RBDefault.Checked then
-    tpGrafico := ctDefault
+    tpGrafico := TTypeChart.ctDefault
   else if RBLine.Checked then
-    tpGrafico := ctLine
+    tpGrafico := TTypeChart.ctLine
   else if RBPie.Checked then
-    tpGrafico := ctPie
+    tpGrafico := TTypeChart.ctPie
   else if RBVertical.Checked then
-    tpGrafico := ctVertical
+    tpGrafico := TTypeChart.ctVertical
   else
-    tpGrafico := ctDefault;
+    tpGrafico := TTypeChart.ctDefault;
 
    //Configure the chart settings
   FSettingsChart.Height := 11000;
@@ -407,17 +430,17 @@ begin
   FSettingsChart.StartColumn := 'A';
   FSettingsChart.EndColumn := 'B';
   FSettingsChart.ChartName := 'TestChart';
-  FSettingsChart.typeChart := ctDefault;
+  FSettingsChart.typeChart := TTypeChart.ctDefault;
 
   FOfficeCalc.addChart(FSettingsChart);
 
-  FSettingsChart.typeChart := ctVertical;
+  FSettingsChart.typeChart := TTypeChart.ctVertical;
   FOfficeCalc.addChart(FSettingsChart);
 
-  FSettingsChart.typeChart := ctPie;
+  FSettingsChart.typeChart := TTypeChart.ctPie;
   FOfficeCalc.addChart(FSettingsChart);
 
-  FSettingsChart.typeChart := ctLine;
+  FSettingsChart.typeChart := TTypeChart.ctLine;
   FOfficeCalc.addChart(FSettingsChart);
 end;
 

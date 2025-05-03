@@ -14,8 +14,15 @@ unit uOpenOfficeHelper;
 
 interface
 
-uses vcl.stdCtrls, System.SysUtils, uOpenOffice_calc, uOpenOffice_writer, uOpenOfficeCollors, math,
-  System.Variants;
+uses
+  Vcl.stdCtrls,
+  System.SysUtils,
+  math,
+  System.Variants,
+  uOpenOffice_calc,
+  uOpenOfficeCollors,
+  uOpenOffice.Chart,
+  uOpenOffice.DrawImage;
 
 type
 
@@ -37,49 +44,29 @@ type
     BOTTOM : o conteúdo da célula é alinhado pela base. }
   TVertJustify = (ftvSTANDARD, ftvTOP, ftvCENTER, ftvBOTTOM);
 
-  TTypeChart = (ctDefault, ctVertical, ctPie, ctLine);
+  TTypeChart = TypeChart;
+  TSettingsChart = TChart;
 
   THelperHoriJustify = record helper for THoriJustify
   public
-    function toInteger: Integer;
+    function ToInteger: Integer;
   end;
 
   THelperVertJustify = record helper for TVertJustify
   public
-    function toInteger: Integer;
+    function ToInteger: Integer;
   end;
 
-  TSettingsChart = record
-    Height,
-    Width,
-    Position_X,
-    Position_Y,
-    StartRow,
-    PositionSheet,
-    EndRow: integer;
-    StartColumn,
-    EndColumn,
-    ChartName: string;
-    typeChart: TTypeChart;
-  end;
-
-  THelperOpenOffice_writer = class helper for TOpenOffice_writer
-    function setUnderline(aUnderline: boolean): TOpenOffice_writer;
-    function setBold(aBold: boolean): TOpenOffice_writer;
-    function setFontHeight(aFontHeight: integer): TOpenOffice_writer;
-    function setColorText(aColor: TOpenColor) : TOpenOffice_writer;
-    function setFontName(aFont : string): TOpenOffice_writer;
-  end;
-
-  THelperOpenOffice_calc = class helper for TOpenOffice_calc
-    procedure addChart(aSettingsChart: TSettingsChart);
-    function setBorder(borderPosition: TBoderSheet; opColor: TOpenColor; RemoveBorder: boolean = false) : TOpenOffice_calc;
-    function changeFont(aNameFont: string; aHeight: Integer): TOpenOffice_calc;
-    function changeJustify(aTypeHori: THoriJustify; aTypeVert: TVertJustify) : TOpenOffice_calc;
-    function setColor(aFontColor, aBackgroud: TOpenColor): TOpenOffice_calc;
-    function setCellWidth(const aWidth: integer): TOpenOffice_calc;
-    function setBold(aBold: boolean): TOpenOffice_calc;
-    function SetUnderline(aUnderline: boolean): TOpenOffice_calc;
+  THelperOpenOffice_calc = class helper for TOpenOffice_Calc
+    procedure AddChart(aSettingsChart: TSettingsChart);
+    function SetBorder(borderPosition: TBoderSheet; opColor: TOpenColor; RemoveBorder: boolean = false) : TOpenOffice_Calc;
+    function ChangeFont(aNameFont: string; aHeight: Integer): TOpenOffice_Calc;
+    function ChangeJustify(aTypeHori: THoriJustify; aTypeVert: TVertJustify) : TOpenOffice_Calc;
+    function SetColor(aFontColor, aBackgroud: TOpenColor): TOpenOffice_Calc;
+    function SetCellWidth(const aWidth: integer): TOpenOffice_Calc;
+    function SetBold(aBold: boolean): TOpenOffice_Calc;
+    function SetUnderline(aUnderline: boolean): TOpenOffice_Calc;
+    function DrawImage(aImage : TOpenOfficeDrawImage) :TOpenOffice_Calc;
     function CountRow: Integer;
     function CountCell: Integer;
     function SheetToBase64(aPathFile:string):string;
@@ -90,15 +77,15 @@ implementation
 uses
   System.Win.ComObj, System.Classes, Soap.EncdDecd;
 
-procedure THelperOpenOffice_calc.addChart(aSettingsChart: TSettingsChart);
+procedure THelperOpenOffice_calc.AddChart(aSettingsChart: TSettingsChart);
 var
-  Chart, Rect, sheet : OleVariant;
+  Chart, Rect, Sheet : OleVariant;
   RangeAddress: Variant;
-  countChart: Integer;
+  CountChart: Integer;
 begin
   countChart := 1;
 
-  if aSettingsChart.ChartName.trim.IsEmpty then
+  if aSettingsChart.ChartName.Trim.IsEmpty then
     aSettingsChart.ChartName := 'MyChart_' + (aSettingsChart.StartColumn + aSettingsChart.StartRow.ToString) + '_' +
       (aSettingsChart.EndColumn + aSettingsChart.EndRow.ToString);
 
@@ -106,7 +93,7 @@ begin
   // getByName(aCollName);
   Charts := sheet.Charts;
 
-  while Charts.hasByName(aSettingsChart.ChartName) do
+  while Charts.HasByName(aSettingsChart.ChartName) do
   begin
     aSettingsChart.ChartName := copy(aSettingsChart.ChartName,0, ifthen( (pos('_',aSettingsChart.ChartName) > 0),
                                                pos('_',aSettingsChart.ChartName), aSettingsChart.ChartName.Length)
@@ -135,6 +122,7 @@ begin
   begin
     Chart := Charts.getByName(aSettingsChart.ChartName).embeddedObject;
     Chart.Title.String := aSettingsChart.ChartName;
+
     case aSettingsChart.typeChart of
       ctVertical:
         Chart.Diagram.Vertical := true;
@@ -151,13 +139,10 @@ begin
         end;
     end;
   end;
-
 end;
 
-function THelperOpenOffice_calc.changeFont(aNameFont: string; aHeight: Integer)
-  : TOpenOffice_calc;
+function THelperOpenOffice_Calc.ChangeFont(aNameFont: string; aHeight: Integer): TOpenOffice_calc;
 begin
-  // Cell := Table.getCellRangeByName(aCollName+aCellNumber.ToString);
   if not aNameFont.Trim.IsEmpty then
     Cell.CharFontName := aNameFont;
 
@@ -165,7 +150,7 @@ begin
   result := self;
 end;
 
-function THelperOpenOffice_calc.changeJustify(aTypeHori: THoriJustify;
+function THelperOpenOffice_Calc.ChangeJustify(aTypeHori: THoriJustify;
   aTypeVert: TVertJustify): TOpenOffice_calc;
 begin
   Cell.HoriJustify := aTypeHori.toInteger;
@@ -173,7 +158,7 @@ begin
   result := self;
 end;
 
-function THelperOpenOffice_calc.CountRow: Integer;
+function THelperOpenOffice_Calc.CountRow: Integer;
 var
   FRow, FCountRow: Integer;
   FCountBlank: Integer;
@@ -217,73 +202,28 @@ begin
   result := FCountRow;
 end;
 
-function THelperOpenOffice_writer.setBold(aBold: boolean): TOpenOffice_writer;
-var CtrlBold: boolean;
+function THelperOpenOffice_calc.DrawImage(aImage: TOpenOfficeDrawImage): TOpenOffice_Calc;
+var
+  DrawPage: OleVariant;
 begin
-  CtrlBold := false;
-  propsText[0].Name := 'bold';
-  propsText[0].Value := aBold;
-  //Funcionando, porém rever
-  if BoldActive and (not aBold) then
-  begin
-    BoldActive   := false;
-    CtrlBold     := true;
-    aBold        := true;
+  if not Assigned(aImage) then
+    raise Exception.Create('Error, the object is not created');
+
+  DrawPage := oSCalc.getDrawPage;
+  Image := ServicesManager.CreateInstance('com.sun.star.drawing.GraphicObjectShape');
+  try
+    Image.GraphicURL := 'file:///' + StringReplace(aImage.URLImage, '\', '/', [rfReplaceAll]);
+    Image.setPosition(Int(aImage.PositionX), Int(aImage.PositionY));
+    Image.setSize(Int(aImage.Width), Int(aImage.Height));
+
+    DrawPage.add(Image);
+  finally
+    Image := Unassigned;
+    Result := Self;
   end;
-
-  if ( not BoldActive) and (aBold) then
-  begin
-    objDispatcher.executeDispatch(objWriter, '.uno:Bold', '', 0,  VarArrayOf(propsText));
-
-    if not CtrlBold then
-      BoldActive := true;
-  end;
-
-  Result := self;
 end;
 
-function THelperOpenOffice_writer.setFontName(aFont: string): TOpenOffice_writer;
-begin
-  if not ValueText.trim.IsEmpty then
-  begin
-    Cursor.CharFontName := aFont;
-    setValue(ValueText);
-  end;
-  Result := self;
-end;
-
-function THelperOpenOffice_writer.setColorText(aColor: TOpenColor): TOpenOffice_writer;
-begin
-  if not ValueText.Trim.IsEmpty then
-  begin
-     Cursor.SetPropertyValue('CharColor', aColor);
-     setValue(ValueText);
-  end;
-
-  Result := self;
-end;
-
-function THelperOpenOffice_writer.setFontHeight(aFontHeight: integer) : TOpenOffice_writer;
-begin
-  propsText[1].Name := 'FontHeight.Height';
-  propsText[1].Value := aFontHeight;
-  objDispatcher.executeDispatch(objWriter, '.uno:FontHeight', '', 0, VarArrayOf(propsText));
-
-  Result := self;
-end;
-
-function THelperOpenOffice_writer.setUnderline(aUnderline: boolean): TOpenOffice_writer;
-begin
-  if not ValueText.Trim.IsEmpty then
-  begin
-    Cursor.CharUnderline := ifthen(aUnderline,1,0);
-    setValue(ValueText);
-  end;
-
-  Result := self;
-end;
-
-function THelperOpenOffice_calc.CountCell: Integer;
+function THelperOpenOffice_Calc.CountCell: Integer;
 var
   FCell, FCountCell, FCountBlank: Integer;
   I: Integer;
@@ -325,7 +265,7 @@ begin
   result := FCountCell;
 end;
 
-function THelperOpenOffice_calc.seTBorder(borderPosition: TBoderSheet; opColor: TOpenColor; RemoveBorder: boolean): TOpenOffice_calc;
+function THelperOpenOffice_Calc.SetBorder(borderPosition: TBoderSheet; opColor: TOpenColor; RemoveBorder: boolean): TOpenOffice_calc;
 var
   settings: Variant;
 begin
@@ -370,20 +310,19 @@ begin
   result := self;
 end;
 
-function THelperOpenOffice_calc.setCellWidth(const aWidth: integer): TOpenOffice_calc;
+function THelperOpenOffice_calc.SetCellWidth(const aWidth: integer): TOpenOffice_calc;
 begin
    Cell.getColumns.getByIndex(0).Width := aWidth;
 end;
 
-function THelperOpenOffice_calc.setColor(aFontColor, aBackgroud: TOpenColor)
-  : TOpenOffice_calc;
+function THelperOpenOffice_calc.SetColor(aFontColor, aBackgroud: TOpenColor): TOpenOffice_calc;
 begin
   Cell.CharColor := aFontColor;
   Cell.CellBackColor := aBackgroud;
   result := self;
 end;
 
-function THelperOpenOffice_calc.setBold(aBold: boolean): TOpenOffice_calc;
+function THelperOpenOffice_calc.SetBold(aBold: boolean): TOpenOffice_calc;
 begin
   Cell.CharWeight := ifthen(aBold, 150, 0);
   result := self;
@@ -410,7 +349,7 @@ end;
 
 { THelperOpenOffice_calc }
 
-function THelperHoriJustify.toInteger: Integer;
+function THelperHoriJustify.ToInteger: Integer;
 begin
   case self of
     fthSTANDARD:
@@ -432,7 +371,7 @@ end;
 
 { THelperVertJustify }
 
-function THelperVertJustify.toInteger: Integer;
+function THelperVertJustify.ToInteger: Integer;
 begin
   case self of
     ftvSTANDARD:

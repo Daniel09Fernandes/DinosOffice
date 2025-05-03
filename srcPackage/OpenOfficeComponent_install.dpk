@@ -49,6 +49,8 @@ contains
   uOpenOfficeSetPrinter in '..\Src\uOpenOfficeSetPrinter.pas',
   UConvertPDFToSheet in '..\Src\UConvertPDFToSheet.pas',
   uInstallLibreOffice in '..\Src\uInstallLibreOffice.pas',
-  uOpenOfficeHungThread in '..\Src\uOpenOfficeHungThread.pas';
+  uOpenOfficeHungThread in '..\Src\uOpenOfficeHungThread.pas',
+  uOpenOffice.DrawImage in '..\Src\uOpenOffice.DrawImage.pas',
+  uOpenOffice.Chart in '..\Src\uOpenOffice.Chart.pas';
 
 end.

@@ -32,7 +32,7 @@ type
   public
   var
     Value: string;
-    propsText: array [0 .. 4] of variant;
+    PropsText: array [0 .. 4] of variant;
     destructor Destroy; override;
     constructor Create(AOwner: TComponent); override;
     procedure startDoc;
@@ -42,6 +42,12 @@ type
     property BoldActive : boolean read FBoldActive write FBoldActive;
     property Cursor : variant read oCursor;
     property ValueText : string read FValueText;
+
+    function SetUnderline(aUnderline: boolean): TOpenOffice_writer;
+    function SetBold(aBold: boolean): TOpenOffice_writer;
+    function SetFontHeight(aFontHeight: integer): TOpenOffice_writer;
+    function SetColorText(aColor: TOpenColor) : TOpenOffice_writer;
+    function SetFontName(aFont : string): TOpenOffice_writer;
   published
     property ServicesManager: OleVariant read objServiceManager;
     property DocName: string read FDocName write SetDocName;
@@ -86,7 +92,6 @@ begin
   if assigned(onAfterGetValue) then
     onAfterGetValue(self);
 end;
-
 
 function TOpenOffice_writer.gotoEndOfSentence: TOpenOffice_writer;
 begin
@@ -149,5 +154,72 @@ procedure TOpenOffice_writer.SetDocName(const Value: string);
 begin
   FDocName := Value;
 end;
+
+function TOpenOffice_writer.SetUnderline(aUnderline: boolean): TOpenOffice_writer;
+begin
+  if not ValueText.Trim.IsEmpty then
+  begin
+    Cursor.CharUnderline := ifthen(aUnderline,1,0);
+    setValue(ValueText);
+  end;
+
+  Result := self;
+end;
+
+function TOpenOffice_writer.SetBold(aBold: boolean): TOpenOffice_writer;
+var CtrlBold: boolean;
+begin
+  CtrlBold := false;
+  propsText[0].Name := 'bold';
+  propsText[0].Value := aBold;
+  //Funcionando, porém rever
+  if BoldActive and (not aBold) then
+  begin
+    BoldActive   := false;
+    CtrlBold     := true;
+    aBold        := true;
+  end;
+
+  if ( not BoldActive) and (aBold) then
+  begin
+    objDispatcher.executeDispatch(objWriter, '.uno:Bold', '', 0,  VarArrayOf(propsText));
+
+    if not CtrlBold then
+      BoldActive := true;
+  end;
+
+  Result := self;
+end;
+
+function TOpenOffice_writer.SetColorText(aColor: TOpenColor): TOpenOffice_writer;
+begin
+  if not ValueText.Trim.IsEmpty then
+  begin
+     Cursor.SetPropertyValue('CharColor', aColor);
+     setValue(ValueText);
+  end;
+
+  Result := self;
+end;
+
+function TOpenOffice_writer.SetFontHeight(aFontHeight: integer) : TOpenOffice_writer;
+begin
+  propsText[1].Name := 'FontHeight.Height';
+  propsText[1].Value := aFontHeight;
+  objDispatcher.executeDispatch(objWriter, '.uno:FontHeight', '', 0, VarArrayOf(propsText));
+
+  Result := self;
+end;
+
+function TOpenOffice_writer.SetFontName(aFont: string): TOpenOffice_writer;
+begin
+  if not ValueText.trim.IsEmpty then
+  begin
+    Cursor.CharFontName := aFont;
+    setValue(ValueText);
+  end;
+  Result := self;
+end;
+
 
 end.

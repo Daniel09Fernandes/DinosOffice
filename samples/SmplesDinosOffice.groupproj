@@ -18,6 +18,9 @@
         <Projects Include="FMX\FMX.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="samplesNoPackage\baseSampleOrganized\src\SampleNoPackageOpenOffice.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -71,14 +74,23 @@
     <Target Name="FMX:Make">
         <MSBuild Projects="FMX\FMX.dproj" Targets="Make"/>
     </Target>
+    <Target Name="SampleNoPackageOpenOffice">
+        <MSBuild Projects="samplesNoPackage\baseSampleOrganized\src\SampleNoPackageOpenOffice.dproj"/>
+    </Target>
+    <Target Name="SampleNoPackageOpenOffice:Clean">
+        <MSBuild Projects="samplesNoPackage\baseSampleOrganized\src\SampleNoPackageOpenOffice.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SampleNoPackageOpenOffice:Make">
+        <MSBuild Projects="samplesNoPackage\baseSampleOrganized\src\SampleNoPackageOpenOffice.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="API;Console;DemoDinoOpenOffice;AppDinosOffice;FMX"/>
+        <CallTarget Targets="API;Console;DemoDinoOpenOffice;AppDinosOffice;FMX;SampleNoPackageOpenOffice"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="API:Clean;Console:Clean;DemoDinoOpenOffice:Clean;AppDinosOffice:Clean;FMX:Clean"/>
+        <CallTarget Targets="API:Clean;Console:Clean;DemoDinoOpenOffice:Clean;AppDinosOffice:Clean;FMX:Clean;SampleNoPackageOpenOffice:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="API:Make;Console:Make;DemoDinoOpenOffice:Make;AppDinosOffice:Make;FMX:Make"/>
+        <CallTarget Targets="API:Make;Console:Make;DemoDinoOpenOffice:Make;AppDinosOffice:Make;FMX:Make;SampleNoPackageOpenOffice:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

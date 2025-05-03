@@ -19,7 +19,7 @@
 }
 { ******************************************************* }
 
-unit uOpenOffice_calc;
+unit uOpenOffice_Calc;
 
 interface
 
@@ -58,14 +58,14 @@ type
   private
   var
     arrFields: array of string;
-    procedure setArrayFieldsSheet;
+    procedure SetArrayFieldsSheet;
 
   public
-    function getField(aIndex: integer): String;
-    function getIndex(aNameField: String): integer;
+    function GetField(aIndex: integer): String;
+    function GetIndex(aNameField: String): integer;
   end;
 
-  TOpenOffice_calc = class(TOpenOffice)
+  TOpenOffice_Calc = class(TOpenOffice)
   private
     const
     DefaultNewSheetNamePT = 'Planilha1';
@@ -105,6 +105,7 @@ type
     property CoreReflection :OleVariant read objCoreReflection;
     property SheetName: string read FSheetName write SetSheetName;
     property NumberMask: TNumberMask read FNumberMask write FNumberMask;
+    property Image: OleVariant read objImage write objImage;
     //---------events-----------//
     property OnBeforeStartFile: TBeforeStartFile read FOnBeforeStartFile write FOnBeforeStartFile;
     property OnAfterStartFile : TAfterStartFile  read FOnAfterStartFile  write FOnAfterStartFile;
@@ -272,31 +273,30 @@ begin
   Result := self;
 end;
 
-function TOpenOffice_calc.positionSheetByIndex(const aSheetIndex: integer) :TOpenOffice_calc;
+function TOpenOffice_calc.PositionSheetByIndex(const aSheetIndex: integer) :TOpenOffice_calc;
 begin
   objSCalc := objDocument.Sheets.getByIndex(aSheetIndex);
   Result := self;
 end;
 
-procedure TOpenOffice_calc.addNewSheet(const aSheetName: string; aPosition: integer);
+procedure TOpenOffice_calc.AddNewSheet(const aSheetName: string; aPosition: integer);
 begin
   objDocument.Sheets.insertNewByName(aSheetName, aPosition);
   objSCalc := objDocument.Sheets.getByName(aSheetName);
 end;
 
-function TOpenOffice_calc.setFormula(aCellNumber: integer; const aCollName: string;
+function TOpenOffice_calc.SetFormula(aCellNumber: integer; const aCollName: string;
   const aFormula: string): TOpenOffice_calc;
 var
   map: string;
 begin
   map := aCollName + aCellNumber.ToString;
   objCell := objSCalc.getCellByPosition(Fields.getIndex(aCollName), aCellNumber);
-  //objCell.Formula := aFormula;
   objCell.FormulaLocal  := aFormula;
   Result := self;
 end;
 
-procedure TOpenOffice_calc.startSheet;
+procedure TOpenOffice_calc.StartSheet;
 begin
   if Assigned( FOnBeforeStartFile) then
     FOnBeforeStartFile(self);
@@ -357,7 +357,7 @@ end;
 
 { TFieldsSheet }
 
-function TFieldsSheet.getField(aIndex: integer): string;
+function TFieldsSheet.GetField(aIndex: integer): string;
 var DifIdx : double;
     Letter : String;
 begin
@@ -387,7 +387,7 @@ begin
   Result := arrFields[aIndex];
 end;
 
-function TFieldsSheet.getIndex(aNameField: String): integer;
+function TFieldsSheet.GetIndex(aNameField: String): integer;
 var
   i, idx: integer;
   rep,aux, firstIdx,
@@ -431,7 +431,7 @@ begin
   end;
 end;
 
-procedure TFieldsSheet.setArrayFieldsSheet;
+procedure TFieldsSheet.SetArrayFieldsSheet;
 begin
   SetLength(arrFields, 26);
 

@@ -2,7 +2,7 @@ object FormSampleNoPackage: TFormSampleNoPackage
   Left = 0
   Top = 0
   Caption = 'Sample without package'
-  ClientHeight = 599
+  ClientHeight = 667
   ClientWidth = 665
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -17,10 +17,11 @@ object FormSampleNoPackage: TFormSampleNoPackage
     Left = 0
     Top = 0
     Width = 665
-    Height = 599
+    Height = 667
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 0
+    ExplicitHeight = 599
     object TabSheet1: TTabSheet
       Caption = 'Calc'
       OnShow = TabSheet1Show
@@ -33,9 +34,9 @@ object FormSampleNoPackage: TFormSampleNoPackage
       end
       object Bevel2: TBevel
         Left = 0
-        Top = 279
+        Top = 305
         Width = 636
-        Height = 118
+        Height = 128
         Style = bsRaised
       end
       object Bevel3: TBevel
@@ -119,7 +120,7 @@ object FormSampleNoPackage: TFormSampleNoPackage
       end
       object Button1: TButton
         Left = 3
-        Top = 363
+        Top = 394
         Width = 121
         Height = 30
         Caption = 'Criar nova planilha'
@@ -128,7 +129,7 @@ object FormSampleNoPackage: TFormSampleNoPackage
       end
       object Button10: TButton
         Left = 6
-        Top = 235
+        Top = 242
         Width = 75
         Height = 21
         Caption = 'Add grafico'
@@ -137,7 +138,7 @@ object FormSampleNoPackage: TFormSampleNoPackage
       end
       object Button2: TButton
         Left = 263
-        Top = 363
+        Top = 394
         Width = 81
         Height = 30
         Caption = 'Imprimir '
@@ -146,7 +147,7 @@ object FormSampleNoPackage: TFormSampleNoPackage
       end
       object Button3: TButton
         Left = 352
-        Top = 363
+        Top = 394
         Width = 121
         Height = 30
         Caption = 'Salvar'
@@ -155,7 +156,7 @@ object FormSampleNoPackage: TFormSampleNoPackage
       end
       object Button4: TButton
         Left = 480
-        Top = 363
+        Top = 394
         Width = 67
         Height = 30
         Caption = 'Fechar'
@@ -164,7 +165,7 @@ object FormSampleNoPackage: TFormSampleNoPackage
       end
       object Button5: TButton
         Left = 134
-        Top = 363
+        Top = 394
         Width = 121
         Height = 30
         Caption = 'Carregar documeto'
@@ -298,7 +299,7 @@ object FormSampleNoPackage: TFormSampleNoPackage
       end
       object edtArq: TLabeledEdit
         Left = 3
-        Top = 337
+        Top = 368
         Width = 537
         Height = 21
         EditLabel.Width = 99
@@ -309,7 +310,7 @@ object FormSampleNoPackage: TFormSampleNoPackage
       end
       object edtCAte: TLabeledEdit
         Left = 70
-        Top = 210
+        Top = 213
         Width = 53
         Height = 21
         EditLabel.Width = 53
@@ -320,7 +321,7 @@ object FormSampleNoPackage: TFormSampleNoPackage
       end
       object edtCde: TLabeledEdit
         Left = 6
-        Top = 210
+        Top = 213
         Width = 52
         Height = 21
         EditLabel.Width = 48
@@ -343,7 +344,7 @@ object FormSampleNoPackage: TFormSampleNoPackage
       end
       object edtLAte: TLabeledEdit
         Left = 186
-        Top = 210
+        Top = 213
         Width = 40
         Height = 21
         EditLabel.Width = 41
@@ -355,7 +356,7 @@ object FormSampleNoPackage: TFormSampleNoPackage
       end
       object edtLde: TLabeledEdit
         Left = 134
-        Top = 210
+        Top = 213
         Width = 42
         Height = 21
         EditLabel.Width = 40
@@ -379,7 +380,7 @@ object FormSampleNoPackage: TFormSampleNoPackage
       end
       object edtNomeGrafico: TLabeledEdit
         Left = 236
-        Top = 210
+        Top = 213
         Width = 400
         Height = 21
         EditLabel.Width = 64
@@ -401,7 +402,7 @@ object FormSampleNoPackage: TFormSampleNoPackage
       end
       object edtSalvar: TLabeledEdit
         Left = 3
-        Top = 296
+        Top = 327
         Width = 537
         Height = 21
         EditLabel.Width = 47
@@ -544,9 +545,9 @@ object FormSampleNoPackage: TFormSampleNoPackage
       end
       object DBGrid1: TDBGrid
         Left = 3
-        Top = 403
+        Top = 453
         Width = 633
-        Height = 120
+        Height = 140
         DataSource = dsSampleValues
         PopupMenu = PopupMenu1
         TabOrder = 35
@@ -557,8 +558,8 @@ object FormSampleNoPackage: TFormSampleNoPackage
         TitleFont.Style = []
       end
       object Button11: TButton
-        Left = 6
-        Top = 256
+        Left = 3
+        Top = 599
         Width = 97
         Height = 25
         Caption = 'Pdf para planilha'
@@ -566,8 +567,8 @@ object FormSampleNoPackage: TFormSampleNoPackage
         OnClick = Button11Click
       end
       object Button12: TButton
-        Left = 109
-        Top = 256
+        Left = 106
+        Top = 599
         Width = 117
         Height = 25
         Caption = 'Planilha para DataSet'
@@ -593,6 +594,15 @@ object FormSampleNoPackage: TFormSampleNoPackage
         Caption = 'Trocar Index'
         TabOrder = 39
         OnClick = Button6Click
+      end
+      object BtnAddImage: TButton
+        Left = 6
+        Top = 270
+        Width = 75
+        Height = 21
+        Caption = 'Add Image'
+        TabOrder = 40
+        OnClick = BtnAddImageClick
       end
     end
     object TabSheet2: TTabSheet
@@ -806,5 +816,9 @@ object FormSampleNoPackage: TFormSampleNoPackage
       Caption = 'Exportar planilha'
       OnClick = Exportarplanilha1Click
     end
+  end
+  object DlgImage: TOpenDialog
+    Left = 176
+    Top = 280
   end
 end
