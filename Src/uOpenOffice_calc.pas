@@ -84,19 +84,21 @@ type
   public
   var
     Value: string;
-    destructor Destroy; override;
-    constructor Create(AOwner: TComponent); override;
+	
     procedure StartSheet;
     procedure AddNewSheet(const aSheetName: string; aPosition: integer);
+	procedure DataSetToSheet(const aCds : TClientDataSet);
+    procedure CallConversorPDFTOSheet;
+	procedure ExeThread(pProc : Tproc);
     function PositionSheetByIndex(const aSheetIndex: integer): TOpenOffice_calc;
     function PositionSheetByName(const aSheetName: string):TOpenOffice_calc;
     function SetFormula(aCellNumber: integer; const aCollName: string; const aFormula: string): TOpenOffice_calc;
     function SetValue(aCellNumber: integer; const aCollName: string; aValue: variant; TypeValue: TTypeValue = ftString; Wrapped: boolean = false): TOpenOffice_calc;
-    function GetValue(aCellNumber: integer; const aCollName: String) : TOpenOffice_calc;
-    procedure DataSetToSheet(const aCds : TClientDataSet);
-    procedure CallConversorPDFTOSheet;
-    function  SheetToDataSet(const TabSheetName: String; TabSheetIndex: Integer = 0; IndexOfHeaderToFieldCds: Integer = 1): TClientDataSet;
-    procedure ExeThread(pProc : Tproc);
+    function GetValue(aCellNumber: integer; const aCollName: String) : TOpenOffice_calc;    
+    function  SheetToDataSet(const TabSheetName: String; TabSheetIndex: Integer = 0; IndexOfHeaderToFieldCds: Integer = 1): TClientDataSet; 
+    function TabSheetExists(ATabSheetName: string):Boolean;
+    destructor Destroy; override;
+    constructor Create(AOwner: TComponent); override;	
   published
     property ServicesManager: OleVariant read objServiceManager;
     property Cell: OleVariant read objCell write objCell;
@@ -317,6 +319,11 @@ begin
 
   if Assigned( FOnAfterStartFile) then
      FOnAfterStartFile(self);
+end;
+
+function TOpenOffice_calc.TabSheetExists(ATabSheetName: string):Boolean;
+begin
+  Result := objDocument.Sheets.hasByName(ATabSheetName); 
 end;
 
 function TOpenOffice_calc.SheetToDataSet(const TabSheetName: String; TabSheetIndex: Integer = 0; IndexOfHeaderToFieldCds: Integer = 1): TClientDataSet;

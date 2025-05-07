@@ -107,6 +107,7 @@ type
     function VertJustifyToInteger(pValue:TVertJustify):integer;
     function getField(aIndex: integer): string;
     function getIndex(aNameField: String): integer;
+	function TabSheetExists(ATabSheetName: string):Boolean;
   published
     property ServicesManager: OleVariant read objServiceManager;
     property Cell: OleVariant read objCell write objCell;
@@ -164,6 +165,11 @@ begin
     ftvBOTTOM:
       result := 3;
   end;
+end;
+
+function TOpenOffice_calc.TabSheetExists(ATabSheetName: string):Boolean;
+begin
+  Result := objDocument.Sheets.hasByName(ATabSheetName); 
 end;
 
 procedure TOpenOffice_calc.ValidateSheetName;
