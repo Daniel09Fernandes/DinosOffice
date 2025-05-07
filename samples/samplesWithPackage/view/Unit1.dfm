@@ -2,8 +2,8 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'Demo'
-  ClientHeight = 599
-  ClientWidth = 665
+  ClientHeight = 672
+  ClientWidth = 699
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,14 +16,18 @@ object Form1: TForm1
   object PageControl2: TPageControl
     Left = 0
     Top = 0
-    Width = 665
-    Height = 599
+    Width = 699
+    Height = 672
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 0
+    ExplicitWidth = 651
     object TabSheet1: TTabSheet
       Caption = 'Calc'
       OnShow = TabSheet1Show
+      DesignSize = (
+        691
+        644)
       object Bevel1: TBevel
         Left = 0
         Top = 51
@@ -34,16 +38,20 @@ object Form1: TForm1
       object Bevel2: TBevel
         Left = 0
         Top = 279
-        Width = 636
+        Width = 687
         Height = 118
+        Anchors = [akLeft, akTop, akRight]
         Style = bsRaised
+        ExplicitWidth = 636
       end
       object Bevel3: TBevel
         Left = 405
         Top = 120
-        Width = 231
+        Width = 282
         Height = 72
+        Anchors = [akLeft, akTop, akRight]
         Style = bsRaised
+        ExplicitWidth = 231
       end
       object Bevel4: TBevel
         Left = -270
@@ -292,13 +300,15 @@ object Form1: TForm1
       object edtArq: TLabeledEdit
         Left = 3
         Top = 337
-        Width = 537
+        Width = 588
         Height = 21
+        Anchors = [akLeft, akTop, akRight]
         EditLabel.Width = 99
         EditLabel.Height = 13
         EditLabel.Caption = 'Carregar documento'
         TabOrder = 20
         Text = ''
+        ExplicitWidth = 537
       end
       object edtCAte: TLabeledEdit
         Left = 70
@@ -395,13 +405,15 @@ object Form1: TForm1
       object edtSalvar: TLabeledEdit
         Left = 3
         Top = 296
-        Width = 537
+        Width = 588
         Height = 21
+        Anchors = [akLeft, akTop, akRight]
         EditLabel.Width = 47
         EditLabel.Height = 13
         EditLabel.Caption = 'Salvar em'
         TabOrder = 29
         Text = 'c:\'
+        ExplicitWidth = 537
       end
       object edtValor: TLabeledEdit
         Left = 87
@@ -459,10 +471,12 @@ object Form1: TForm1
       object GroupBox1: TGroupBox
         Left = 405
         Top = 3
-        Width = 231
+        Width = 282
         Height = 37
+        Anchors = [akLeft, akTop, akRight]
         Caption = 'Alinhamento horizontal'
         TabOrder = 33
+        ExplicitWidth = 231
         object RBhCenter: TRadioButton
           Left = 87
           Top = 18
@@ -502,11 +516,15 @@ object Form1: TForm1
         Height = 70
         Caption = 'Alinha. Vertical'
         TabOrder = 32
+        DesignSize = (
+          102
+          70)
         object RBvTop: TRadioButton
           Left = 32
           Top = 15
           Width = 113
           Height = 17
+          Anchors = [akLeft, akTop, akRight]
           Caption = 'Cima'
           TabOrder = 0
         end
@@ -538,8 +556,9 @@ object Form1: TForm1
       object DBGrid1: TDBGrid
         Left = 3
         Top = 403
-        Width = 633
+        Width = 684
         Height = 120
+        Anchors = [akLeft, akTop, akRight]
         DataSource = DataSource1
         PopupMenu = PopupMenu1
         TabOrder = 35
@@ -601,6 +620,15 @@ object Form1: TForm1
         Caption = 'Trocar - Index'
         TabOrder = 40
         OnClick = Button13Click
+      end
+      object Button14: TButton
+        Left = 630
+        Top = 166
+        Width = 48
+        Height = 25
+        Caption = 'Exists'
+        TabOrder = 42
+        OnClick = Button14Click
       end
     end
     object TabSheet2: TTabSheet

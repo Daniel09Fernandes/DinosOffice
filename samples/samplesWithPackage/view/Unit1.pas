@@ -105,6 +105,7 @@ type
     CheckBox1: TCheckBox;
     edtWidth: TLabeledEdit;
     Button13: TButton;
+    Button14: TButton;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -141,6 +142,7 @@ type
     procedure Button12Click(Sender: TObject);
     procedure CheckBox1Click(Sender: TObject);
     procedure Button13Click(Sender: TObject);
+    procedure Button14Click(Sender: TObject);
   private
     FontTop, fontLeft : integer;
     SettingsChart: TSettingsChart;
@@ -278,6 +280,14 @@ end;
 procedure TForm1.Button13Click(Sender: TObject);
 begin
   OpenOffice_calc1.positionSheetByIndex(StrToIntDef(edtAba.Text,0));
+end;
+
+procedure TForm1.Button14Click(Sender: TObject);
+begin
+ if OpenOffice_calc1.TabSheetExists(edtAba.Text) then
+   ShowMessage('Exists')
+ else
+   ShowMessage('Not Exists');
 end;
 
 procedure TForm1.CreateDemoSheet;
