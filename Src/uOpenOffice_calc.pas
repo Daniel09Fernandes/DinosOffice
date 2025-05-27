@@ -26,7 +26,8 @@ interface
 uses
   System.Classes, data.DB, ActiveX, uOpenOffice,
   dbWeb, ComObj, XMLDoc, XMLIntf, Vcl.Dialogs, System.Variants,
-  Windows, uOpenOfficeEvents, Datasnap.DBClient, System.SysUtils;
+  Windows, uOpenOfficeEvents, Datasnap.DBClient, System.SysUtils,
+  FireDAC.Comp.Client;
 
 type
 
@@ -70,7 +71,6 @@ type
     const
     DefaultNewSheetNamePT = 'Planilha1';
     DefaultNewSheetNameEn = 'Sheet1';
-    procedure ValidateSheetName;
    var
     //--------events------//
     FOnBeforeStartFile: TBeforeStartFile;
@@ -79,17 +79,17 @@ type
     FFields: TFieldsSheet;
     FSheetName: string;
     FNumberMask: TNumberMask;
+    FValue: string;
 
+    procedure ValidateSheetName;
     procedure SetSheetName(const Value: string);
   public
-  var
-    Value: string;
-	
     procedure StartSheet;
     procedure AddNewSheet(const aSheetName: string; aPosition: integer);
-	procedure DataSetToSheet(const aCds : TClientDataSet);
+   	procedure DataSetToSheet(const aCds : TClientDataSet); overload;
+    procedure DataSetToSheet(const aCds : TFDMemTable); overload;
     procedure CallConversorPDFTOSheet;
-	procedure ExeThread(pProc : Tproc);
+	  procedure ExeThread(pProc : Tproc);
     function PositionSheetByIndex(const aSheetIndex: integer): TOpenOffice_calc;
     function PositionSheetByName(const aSheetName: string):TOpenOffice_calc;
     function SetFormula(aCellNumber: integer; const aCollName: string; const aFormula: string): TOpenOffice_calc;
@@ -97,6 +97,8 @@ type
     function GetValue(aCellNumber: integer; const aCollName: String) : TOpenOffice_calc;    
     function  SheetToDataSet(const TabSheetName: String; TabSheetIndex: Integer = 0; IndexOfHeaderToFieldCds: Integer = 1): TClientDataSet; 
     function TabSheetExists(ATabSheetName: string):Boolean;
+	function RemoveSheet(const aSheetName: string):TOpenOffice_calc; overload;
+    function RemoveSheet(aSheetIndex: Integer):TOpenOffice_calc; overload;
     destructor Destroy; override;
     constructor Create(AOwner: TComponent); override;	
   published
@@ -110,7 +112,7 @@ type
     //---------events-----------//
     property OnBeforeStartFile: TBeforeStartFile read FOnBeforeStartFile write FOnBeforeStartFile;
     property OnAfterStartFile : TAfterStartFile  read FOnAfterStartFile  write FOnAfterStartFile;
-
+    property Value: string read FValue write FValue;
   end;
 
 procedure Register;
@@ -134,6 +136,27 @@ begin
   finally
     freeAndNil(PdfToSheet);
   end;
+end;
+
+function TOpenOffice_calc.RemoveSheet(const aSheetName: string):TOpenOffice_calc;
+begin
+  if objDocument.Sheets.hasByName(aSheetName) then
+    objDocument.Sheets.removeByName(aSheetName)
+  else
+    raise Exception.CreateFmt('A aba "%s" não existe no documento', [aSheetName]);
+end;
+
+function TOpenOffice_calc.RemoveSheet(aSheetIndex: Integer):TOpenOffice_calc;
+var
+  lSheetName: string;
+begin
+  if (aSheetIndex >= 0) and (aSheetIndex < objDocument.Sheets.getCount) then
+  begin
+    lSheetName := objDocument.Sheets.getByIndex(aSheetIndex).getString;
+    objDocument.Sheets.removeByIndex(aSheetIndex);
+  end
+  else
+    raise Exception.CreateFmt('Índice de aba inválido: %d', [aSheetIndex]);
 end;
 
 procedure TOpenOffice_calc.ValidateSheetName;
@@ -201,6 +224,42 @@ end;
 procedure TOpenOffice_calc.SetSheetName(const Value: string);
 begin
   FSheetName := Value;
+end;
+
+procedure TOpenOffice_calc.DataSetToSheet(const aCds: TFDMemTable);
+var idx,idxFields : integer;
+    lTypeVl : TTypeValue;
+begin
+  aCds.DisableControls;
+  try
+    //Create header
+    for idx := 0 to pred(aCds.Fields.Count) do
+      SetValue(0,Fields.arrFields[idx],aCds.Fields[idx].DisplayName)
+      .setBold(true)
+      .setBorder([bAll], opBlack)
+      .setColor(opBlack,opSoftGray);
+
+      aCds.First;
+      while not aCds.Eof do
+      begin
+        for idxFields := 0 to pred(aCds.Fields.Count) do
+        begin
+          if (aCds.Fields[idxFields] is TCurrencyField) or
+             (aCds.Fields[idxFields] is TIntegerField)  or
+             (aCds.Fields[idxFields] is TFloatField)    or
+             (aCds.Fields[idxFields] is TNumericField)  then
+            lTypeVl := ftNumeric
+           else
+             lTypeVl := ftString;
+
+          SetValue(aCds.RecNo +1, Fields.arrFields[idxFields],aCds.Fields[idxFields].Value, lTypeVl)
+          .setBorder([bAll], opBlack);
+        end;
+        aCds.Next;
+      end;
+  finally
+     aCds.EnableControls;
+  end;
 end;
 
 procedure TOpenOffice_calc.DataSetToSheet(const aCds: TClientDataSet);
