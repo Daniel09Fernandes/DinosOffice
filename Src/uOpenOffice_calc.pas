@@ -24,7 +24,7 @@ unit uOpenOffice_calc;
 interface
 
 uses
-  System.Classes, data.DB, ActiveX, uOpenOffice,
+  System.Classes, data.DB, ActiveX, uOpenOffice, System.Generics.Collections,
   dbWeb, ComObj, XMLDoc, XMLIntf, Vcl.Dialogs, System.Variants,
   Windows, uOpenOfficeEvents, Datasnap.DBClient, System.SysUtils,
   FireDAC.Comp.Client;
@@ -68,9 +68,10 @@ type
 
   TOpenOffice_calc = class(TOpenOffice)
   private
-    const
+   const
     DefaultNewSheetNamePT = 'Planilha1';
     DefaultNewSheetNameEn = 'Sheet1';
+
    var
     //--------events------//
     FOnBeforeStartFile: TBeforeStartFile;
@@ -86,8 +87,8 @@ type
   public
     procedure StartSheet;
     procedure AddNewSheet(const aSheetName: string; aPosition: integer);
-   	procedure DataSetToSheet(const aCds : TClientDataSet); overload;
-    procedure DataSetToSheet(const aCds : TFDMemTable); overload;
+   	procedure DatasetToSheet(const aCds : TClientDataSet); overload;
+    procedure DatasetToSheet(const aCds : TFDMemTable); overload;
     procedure CallConversorPDFTOSheet;
 	  procedure ExeThread(pProc : Tproc);
     function PositionSheetByIndex(const aSheetIndex: integer): TOpenOffice_calc;
@@ -95,12 +96,14 @@ type
     function SetFormula(aCellNumber: integer; const aCollName: string; const aFormula: string): TOpenOffice_calc;
     function SetValue(aCellNumber: integer; const aCollName: string; aValue: variant; TypeValue: TTypeValue = ftString; Wrapped: boolean = false): TOpenOffice_calc;
     function GetValue(aCellNumber: integer; const aCollName: String) : TOpenOffice_calc;    
-    function  SheetToDataSet(const TabSheetName: String; TabSheetIndex: Integer = 0; IndexOfHeaderToFieldCds: Integer = 1): TClientDataSet; 
+    function SheetToDataSet(const TabSheetName: String; TabSheetIndex: Integer = 0; IndexOfHeaderToFieldCds: Integer = 1): TClientDataSet;
     function TabSheetExists(ATabSheetName: string):Boolean;
-	function RemoveSheet(const aSheetName: string):TOpenOffice_calc; overload;
+  	function RemoveSheet(const aSheetName: string):TOpenOffice_calc; overload;
     function RemoveSheet(aSheetIndex: Integer):TOpenOffice_calc; overload;
+    function GetSheetList: TDictionary<integer, string>;
+
     destructor Destroy; override;
-    constructor Create(AOwner: TComponent); override;	
+    constructor Create(AOwner: TComponent); override;
   published
     property ServicesManager: OleVariant read objServiceManager;
     property Cell: OleVariant read objCell write objCell;
@@ -120,7 +123,10 @@ procedure Register;
 implementation
 
 uses
-  math,uOpenOfficeHelper, uOpenOfficeCollors, uConvertPDFToSheet;
+  math,
+  uOpenOfficeHelper,
+  uOpenOfficeCollors,
+  uConvertPDFToSheet;
 
 procedure Register;
 begin
@@ -136,6 +142,19 @@ begin
   finally
     freeAndNil(PdfToSheet);
   end;
+end;
+
+function TOpenOffice_calc.GetSheetList: TDictionary<integer, string>;
+var
+  I: Integer;
+  lSheets: OleVariant;
+begin
+  Result := TDictionary<integer, string>.Create;
+
+  lSheets := objDocument.Sheets;
+
+  for I := 0 to lSheets.getCount - 1 do
+    Result.Add(I, lSheets.getByIndex(I).getName);
 end;
 
 function TOpenOffice_calc.RemoveSheet(const aSheetName: string):TOpenOffice_calc;
@@ -226,7 +245,7 @@ begin
   FSheetName := Value;
 end;
 
-procedure TOpenOffice_calc.DataSetToSheet(const aCds: TFDMemTable);
+procedure TOpenOffice_calc.DatasetToSheet(const aCds: TFDMemTable);
 var idx,idxFields : integer;
     lTypeVl : TTypeValue;
 begin
@@ -262,7 +281,7 @@ begin
   end;
 end;
 
-procedure TOpenOffice_calc.DataSetToSheet(const aCds: TClientDataSet);
+procedure TOpenOffice_calc.DatasetToSheet(const aCds: TClientDataSet);
 var idx,idxFields : integer;
     lTypeVl : TTypeValue;
 begin
@@ -316,7 +335,6 @@ begin
   if assigned(onBeforeGetValue) then
     onBeforeGetValue(self);
 
-
   map := aCollName + aCellNumber.ToString;
   objCell := objSCalc.getCellRangeByName(map);
   Value := VarToStr(objCell.String);
@@ -352,7 +370,6 @@ var
 begin
   map := aCollName + aCellNumber.ToString;
   objCell := objSCalc.getCellByPosition(Fields.getIndex(aCollName), aCellNumber);
-  //objCell.Formula := aFormula;
   objCell.FormulaLocal  := aFormula;
   Result := self;
 end;
@@ -387,35 +404,40 @@ end;
 
 function TOpenOffice_calc.SheetToDataSet(const TabSheetName: String; TabSheetIndex: Integer = 0; IndexOfHeaderToFieldCds: Integer = 1): TClientDataSet;
 var
-  I, IdxField : Integer;
+  I, IdxField, lCountRow,
+  lCountCell : Integer;
   lFieldName: string;
 begin
   Result := TClientDataSet.Create(nil);
   try
-     if not TabSheetName.trim.IsEmpty then
-       positionSheetByName(TabSheetName)
-     else
-       positionSheetByIndex(TabSheetindex);
+    if not TabSheetName.trim.IsEmpty then
+      positionSheetByName(TabSheetName)
+    else
+      positionSheetByIndex(TabSheetindex);
 
-     for I := 0 to CountCell -1 do
-     begin
-       lFieldName := GetValue(IndexOfHeaderToFieldCds, Fields.getField(I)).Value;
-       if lFieldName.Trim.IsEmpty then
-         Continue;
+	  lCountCell := CountCell;
+    for I := 0 to lCountCell -1 do
+    begin
+      lFieldName := GetValue(IndexOfHeaderToFieldCds, Fields.getField(I)).Value;
+      if lFieldName.Trim.IsEmpty then
+        Continue;
 
-       Result.FieldDefs.Add(lFieldName, TFieldType.ftString, 3000);
-     end;
-     Result.CreateDataSet;
-     Result.DisableControls;
-     Result.LogChanges := false;
-     for I := (IndexOfHeaderToFieldCds+1) to CountRow do
-     begin
-       Result.Append;
-       for IdxField := 0 to pred(Result.FieldCount) do
-         Result.Fields[IdxField] .AsString := GetValue(I,Fields.getField(IdxField)).Value;
+      Result.FieldDefs.Add(lFieldName, TFieldType.ftString, 30);
+    end;
 
-       Result.Post;
-      end;
+    Result.CreateDataSet;
+    Result.DisableControls;
+    Result.LogChanges := false;
+	  lCountRow := CountRow;
+
+    for I := (IndexOfHeaderToFieldCds+1) to lCountRow do
+    begin
+      Result.Append;
+      for IdxField := 0 to pred(Result.FieldCount) do
+        Result.Fields[IdxField] .AsString := GetValue(I,Fields.getField(IdxField)).Value;
+
+      Result.Post;
+    end;
   finally
     Result.EnableControls;   
   end;
@@ -424,31 +446,34 @@ end;
 { TFieldsSheet }
 
 function TFieldsSheet.getField(aIndex: integer): string;
-var DifIdx : double;
-    Letter : String;
+var DifIdx: double;
+    Letter: String;
+    Idx: Int64;
 begin
 
-  if (aIndex > High(arrFields) ) and (arrFields[aIndex].Trim.IsEmpty ) then
+  if (aIndex > 25) then //Multiplica as letras EX AA, AB, AAA, AAB...
   begin
      DifIdx := aIndex / 26;
-     DifIdx := round(DifIdx - 1);
+     DifIdx := Trunc(DifIdx);
 
-     SetLength(arrFields,aIndex);
-  end;
+     SetLength(arrFields, aIndex+1);
+     arrFields[aIndex] := '';
 
-  if arrFields[aIndex].Trim.IsEmpty then
-  begin
-     Letter := arrFields[trunc(DifIdx)]; //First Letter
+     Letter := arrFields[trunc(DifIdx)];
 
      if DifIdx = 0 then
        DifIdx := 1;
 
      DifIdx := DifIdx * 26;
-     Letter := Letter + arrFields[trunc(aIndex  - DifIdx)]; //Other letter of collumn
+
+     Idx := (aIndex - Trunc(DifIdx - Trunc(aIndex / 26) )) - Trunc(aIndex / 26);  //Reseta o alfabeto para cada range A, AA, AAA
+     if Idx < 0 then
+      Idx := Idx *-1;
+
+     Letter := Letter + arrFields[Idx];
 
     arrFields[aIndex] := Letter;
   end;
-
 
   Result := arrFields[aIndex];
 end;

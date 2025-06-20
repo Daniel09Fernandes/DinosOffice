@@ -285,45 +285,53 @@ end;
 
 function THelperOpenOffice_calc.CountCell: Integer;
 var
-  FCell, FCountCell, FCountBlank: Integer;
-  I: Integer;
-  allBlank: boolean;
+  FColIndex: Integer;
+  FRowToCheck: Integer;
+  FBlankStreak: Integer;
+  FMaxBlankAllowed: Integer;
+  FCellValue: string;
+  FMaxCols: Integer;
+  lFiedStr: string;
 begin
-  FCell := 1;
-  FCountCell := 0;
-  FCountBlank := 0;
+  Result := 0;
+  FBlankStreak := 0;
+  FRowToCheck := 1;
+  FMaxBlankAllowed := 10;
+  FMaxCols := 3064;
 
-  for I := 0 to 21 do
+  for FColIndex := 0 to FMaxCols - 1 do
   begin
-    for FCell := 1 to 10 do
-    begin
-      if not GetValue(FCell, Fields.getField(I)).Value.trim.IsEmpty then
+    try
+      lFiedStr := Fields.getField(FColIndex);
+
+      if lFiedStr.trim.IsEmpty then
+        Continue;
+
+      FCellValue := GetValue(FRowToCheck, lFiedStr).Value.Trim;
+
+      if not FCellValue.IsEmpty then
       begin
-
-        if FCountBlank > 0 then
-          FCountCell := FCountCell + FCountBlank;
-
-        allBlank := false;
-
-        inc(FCountCell);
-        break;
+        Inc(Result);
+        FBlankStreak := 0;
       end
       else
-        allBlank := true;
+      begin
+        Inc(FBlankStreak);
+        if FBlankStreak > FMaxBlankAllowed then
+          Break;
+      end;
+    except
+      on E: Exception do
+      begin
+        if Pos('IndexOutOfBounds', E.Message) > 0 then
+          Break // Assume que chegou ao fim das colunas
+        else
+          raise Exception.Create('Calc.CountCell: '+ E.Message);
+      end;
     end;
-
-    if FCountBlank = 10 then
-    begin
-      FCountBlank := 0;
-      break;
-    end;
-
-    if allBlank then
-      inc(FCountBlank);
   end;
-
-  result := FCountCell;
 end;
+
 
 function THelperOpenOffice_calc.seTBorder(borderPosition: TBoderSheet; opColor: TOpenColor; RemoveBorder: boolean): TOpenOffice_calc;
 var

@@ -37,7 +37,10 @@ requires
   dsnap,
   inetdb,
   vclie,
-  soaprtl;
+  soaprtl,
+  FireDAC,
+  FireDACCommonDriver,
+  FireDACCommon;
 
 contains
   uOpenOffice in '..\Src\uOpenOffice.pas',
@@ -49,6 +52,7 @@ contains
   uOpenOfficeSetPrinter in '..\Src\uOpenOfficeSetPrinter.pas',
   UConvertPDFToSheet in '..\Src\UConvertPDFToSheet.pas',
   uInstallLibreOffice in '..\Src\uInstallLibreOffice.pas',
-  uOpenOfficeHungThread in '..\Src\uOpenOfficeHungThread.pas';
+  uOpenOfficeHungThread in '..\Src\uOpenOfficeHungThread.pas',
+  uOpenOffice.Writer.Table.Model in '..\Src\uOpenOffice.Writer.Table.Model.pas';
 
 end.
