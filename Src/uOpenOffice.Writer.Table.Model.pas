@@ -77,12 +77,6 @@ begin
   if Assigned(FLines) then
   begin
     FLines.Line.Clear;
-
-   {$IF CompilerVersion >= 29.0}
-    if Assigned(Lines.Line) then
-      FreeAndNil(Lines.Line);
-    {$endif}
-
     FreeAndNil(FLines);
   end;
 
