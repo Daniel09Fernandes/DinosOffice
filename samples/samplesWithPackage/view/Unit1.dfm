@@ -18,10 +18,9 @@ object Form1: TForm1
     Top = 0
     Width = 779
     Height = 712
-    ActivePage = TabSheet2
+    ActivePage = TabSheet1
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 723
     object TabSheet1: TTabSheet
       Caption = 'Calc'
       OnShow = TabSheet1Show
@@ -308,7 +307,6 @@ object Form1: TForm1
         EditLabel.Caption = 'Carregar documento'
         TabOrder = 20
         Text = ''
-        ExplicitWidth = 612
       end
       object edtCAte: TLabeledEdit
         Left = 70
@@ -413,7 +411,6 @@ object Form1: TForm1
         EditLabel.Caption = 'Salvar em'
         TabOrder = 29
         Text = 'c:\'
-        ExplicitWidth = 612
       end
       object edtValor: TLabeledEdit
         Left = 87
@@ -476,7 +473,6 @@ object Form1: TForm1
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Alinhamento horizontal'
         TabOrder = 33
-        ExplicitWidth = 306
         object RBhCenter: TRadioButton
           Left = 87
           Top = 18
@@ -653,7 +649,6 @@ object Form1: TForm1
         Caption = '...'
         TabOrder = 43
         OnClick = Button16Click
-        ExplicitLeft = 617
       end
       object Button17: TButton
         Left = 673
@@ -664,7 +659,6 @@ object Form1: TForm1
         Caption = '...'
         TabOrder = 44
         OnClick = Button17Click
-        ExplicitLeft = 617
       end
       object mListSheet: TMemo
         Left = 566

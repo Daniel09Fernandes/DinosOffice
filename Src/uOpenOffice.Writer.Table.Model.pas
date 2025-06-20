@@ -78,8 +78,10 @@ begin
   begin
     FLines.Line.Clear;
 
-    if Assigned(FLines.Line) then
-      FreeAndNil(FLines.Line);
+   {$IF CompilerVersion >= 29.0}
+    if Assigned(Lines.Line) then
+      FreeAndNil(Lines.Line);
+    {$endif}
 
     FreeAndNil(FLines);
   end;
