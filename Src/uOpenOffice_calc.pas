@@ -171,8 +171,8 @@ var
 begin
   if (aSheetIndex >= 0) and (aSheetIndex < objDocument.Sheets.getCount) then
   begin
-    lSheetName := objDocument.Sheets.getByIndex(aSheetIndex).getString;
-    objDocument.Sheets.removeByIndex(aSheetIndex);
+    lSheetName := objDocument.Sheets.getByIndex(aSheetIndex).getName;
+    objDocument.Sheets.removeByName(lSheetName);
   end
   else
     raise Exception.CreateFmt('Índice de aba inválido: %d', [aSheetIndex]);

@@ -676,6 +676,15 @@ object Form1: TForm1
         TabOrder = 46
         OnClick = BtnListSheetClick
       end
+      object BtnDelete: TButton
+        Left = 687
+        Top = 164
+        Width = 59
+        Height = 25
+        Caption = 'Delete'
+        TabOrder = 47
+        OnClick = BtnDeleteClick
+      end
     end
     object TabSheet2: TTabSheet
       Caption = 'Writer'

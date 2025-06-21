@@ -129,6 +129,7 @@ type
     Odlg: TOpenDialog;
     mListSheet: TMemo;
     BtnListSheet: TButton;
+    BtnDelete: TButton;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -171,6 +172,7 @@ type
     procedure Button16Click(Sender: TObject);
     procedure Button17Click(Sender: TObject);
     procedure BtnListSheetClick(Sender: TObject);
+    procedure BtnDeleteClick(Sender: TObject);
   private
     FontTop, fontLeft: integer;
     SettingsChart: TSettingsChart;
@@ -320,7 +322,11 @@ begin
   if edtAba.Text = '' then
     edtAba.Text := 'Planilha 1';
 
-  CdsDados.Data := OpenOffice_calc1.SheetToDataSet('Planilha1').Data;
+
+  if EdtPos.Text <> '' then
+    CdsDados.Data := OpenOffice_calc1.SheetToDataSet('', StrToIntDef(EdtPos.Text, 0)).Data
+  else
+    CdsDados.Data := OpenOffice_calc1.SheetToDataSet(edtAba.Text).Data
 end;
 
 procedure TForm1.Button13Click(Sender: TObject);
@@ -352,6 +358,14 @@ procedure TForm1.Button17Click(Sender: TObject);
 begin
   Odlg.Execute;
   EdtSalvar.Text := Odlg.FileName;
+end;
+
+procedure TForm1.BtnDeleteClick(Sender: TObject);
+begin
+  if EdtPos.Text <> '' then
+     OpenOffice_calc1.RemoveSheet(StrToIntDef(EdtPos.Text, 0))
+  else if edtAba.Text <> '' then
+    OpenOffice_calc1.RemoveSheet(edtAba.Text)
 end;
 
 procedure TForm1.BtnListSheetClick(Sender: TObject);
