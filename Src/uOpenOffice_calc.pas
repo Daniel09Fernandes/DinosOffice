@@ -459,7 +459,7 @@ begin
      SetLength(arrFields, aIndex+1);
      arrFields[aIndex] := '';
 
-     Letter := arrFields[trunc(DifIdx)];
+     Letter := arrFields[trunc(DifIdx-1)];
 
      if DifIdx = 0 then
        DifIdx := 1;
