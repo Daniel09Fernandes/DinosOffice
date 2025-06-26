@@ -68,7 +68,7 @@ type
 
   TOpenOffice_calc = class(TOpenOffice)
   private
-   const
+  const
     DefaultNewSheetNamePT = 'Planilha1';
     DefaultNewSheetNameEn = 'Sheet1';
 
@@ -85,12 +85,12 @@ type
     procedure ValidateSheetName;
     procedure SetSheetName(const Value: string);
   public
-    procedure StartSheet;
-    procedure AddNewSheet(const aSheetName: string; aPosition: integer);
-   	procedure DatasetToSheet(const aCds : TClientDataSet); overload;
-    procedure DatasetToSheet(const aCds : TFDMemTable); overload;
-    procedure CallConversorPDFTOSheet;
-	  procedure ExeThread(pProc : Tproc);
+    function StartSheet: TOpenOffice_calc;
+    function AddNewSheet(const aSheetName: string; aPosition: integer): TOpenOffice_calc;
+   	function DatasetToSheet(const aCds : TClientDataSet): TOpenOffice_calc; overload;
+    function DatasetToSheet(const aCds : TFDMemTable): TOpenOffice_calc; overload;
+    function CallConversorPDFTOSheet: TOpenOffice_calc;
+	function ExeThread(pProc : Tproc): TOpenOffice_calc;
     function PositionSheetByIndex(const aSheetIndex: integer): TOpenOffice_calc;
     function PositionSheetByName(const aSheetName: string):TOpenOffice_calc;
     function SetFormula(aCellNumber: integer; const aCollName: string; const aFormula: string): TOpenOffice_calc;
@@ -105,17 +105,14 @@ type
     destructor Destroy; override;
     constructor Create(AOwner: TComponent); override;
   published
-    property ServicesManager: OleVariant read objServiceManager;
-    property Cell: OleVariant read objCell write objCell;
-    property oSCalc: OleVariant read objSCalc write objSCalc;
-    property Fields: TFieldsSheet read FFields;
-    property CoreReflection :OleVariant read objCoreReflection;
     property SheetName: string read FSheetName write SetSheetName;
     property NumberMask: TNumberMask read FNumberMask write FNumberMask;
+    property Fields: TFieldsSheet read FFields;
+    property Value: string read FValue write FValue;
+
     //---------events-----------//
     property OnBeforeStartFile: TBeforeStartFile read FOnBeforeStartFile write FOnBeforeStartFile;
     property OnAfterStartFile : TAfterStartFile  read FOnAfterStartFile  write FOnAfterStartFile;
-    property Value: string read FValue write FValue;
   end;
 
 procedure Register;
@@ -133,7 +130,7 @@ begin
   RegisterComponents('DinosOffice', [TOpenOffice_calc]);
 end;
 
-procedure TOpenOffice_calc.CallConversorPDFTOSheet;
+function TOpenOffice_calc.CallConversorPDFTOSheet: TOpenOffice_calc;
 var PdfToSheet : TConvertPDFToSheet;
 begin
   PdfToSheet := TConvertPDFToSheet.create;
@@ -141,6 +138,7 @@ begin
     PdfToSheet.callConversor;
   finally
     freeAndNil(PdfToSheet);
+    Result := Self;
   end;
 end;
 
@@ -151,7 +149,7 @@ var
 begin
   Result := TDictionary<integer, string>.Create;
 
-  lSheets := objDocument.Sheets;
+  lSheets := FobjDocument.Sheets;
 
   for I := 0 to lSheets.getCount - 1 do
     Result.Add(I, lSheets.getByIndex(I).getName);
@@ -159,8 +157,8 @@ end;
 
 function TOpenOffice_calc.RemoveSheet(const aSheetName: string):TOpenOffice_calc;
 begin
-  if objDocument.Sheets.hasByName(aSheetName) then
-    objDocument.Sheets.removeByName(aSheetName)
+  if FobjDocument.Sheets.hasByName(aSheetName) then
+    FobjDocument.Sheets.removeByName(aSheetName)
   else
     raise Exception.CreateFmt('A aba "%s" não existe no documento', [aSheetName]);
 end;
@@ -169,10 +167,10 @@ function TOpenOffice_calc.RemoveSheet(aSheetIndex: Integer):TOpenOffice_calc;
 var
   lSheetName: string;
 begin
-  if (aSheetIndex >= 0) and (aSheetIndex < objDocument.Sheets.getCount) then
+  if (aSheetIndex >= 0) and (aSheetIndex < FobjDocument.Sheets.getCount) then
   begin
-    lSheetName := objDocument.Sheets.getByIndex(aSheetIndex).getName;
-    objDocument.Sheets.removeByName(lSheetName);
+    lSheetName := FobjDocument.Sheets.getByIndex(aSheetIndex).getName;
+    FobjDocument.Sheets.removeByName(lSheetName);
   end
   else
     raise Exception.CreateFmt('Índice de aba inválido: %d', [aSheetIndex]);
@@ -208,24 +206,24 @@ begin
     aCellNumber := 1;
 
   map := aCollName + aCellNumber.ToString;
-  objCell := objSCalc.getCellRangeByName(map);
+  FobjCell := FobjSCalc.getCellRangeByName(map);
 
   if  assigned(OnBeforeSetValue) then
     OnBeforeSetValue(self);
 
   if TypeValue = ftString then
   begin
-    objCell.IsTextWrapped := false;
+    FobjCell.IsTextWrapped := false;
 
     if Wrapped then
-      objCell.IsTextWrapped := True;
+      FobjCell.IsTextWrapped := True;
 
-    objCell.setString(aValue);
+    FobjCell.setString(aValue);
   end
   else
   begin
-    objCell.NumberFormat := Integer(NumberMask);
-    objCell.SetValue(aValue);
+    FobjCell.NumberFormat := Integer(NumberMask);
+    FobjCell.SetValue(aValue);
   end;
 
   Result := self;
@@ -245,7 +243,7 @@ begin
   FSheetName := Value;
 end;
 
-procedure TOpenOffice_calc.DatasetToSheet(const aCds: TFDMemTable);
+function TOpenOffice_calc.DatasetToSheet(const aCds: TFDMemTable): TOpenOffice_calc;
 var idx,idxFields : integer;
     lTypeVl : TTypeValue;
 begin
@@ -278,10 +276,11 @@ begin
       end;
   finally
      aCds.EnableControls;
+     Result := Self
   end;
 end;
 
-procedure TOpenOffice_calc.DatasetToSheet(const aCds: TClientDataSet);
+function TOpenOffice_calc.DatasetToSheet(const aCds: TClientDataSet): TOpenOffice_calc;
 var idx,idxFields : integer;
     lTypeVl : TTypeValue;
 begin
@@ -314,6 +313,7 @@ begin
       end;
   finally
      aCds.EnableControls;
+     Result := Self;
   end;
 end;
 
@@ -322,10 +322,11 @@ begin
   inherited;
 end;
 
-procedure TOpenOffice_calc.ExeThread(pProc: Tproc);
+function TOpenOffice_calc.ExeThread(pProc: Tproc): TOpenOffice_calc;
 begin
   HungThread.ExecProc := pProc;
   HungThread.Start;
+  Result := Self;
 end;
 
 function TOpenOffice_calc.GetValue(aCellNumber: integer; const aCollName: String) : TOpenOffice_calc;
@@ -336,8 +337,8 @@ begin
     onBeforeGetValue(self);
 
   map := aCollName + aCellNumber.ToString;
-  objCell := objSCalc.getCellRangeByName(map);
-  Value := VarToStr(objCell.String);
+  FobjCell := FobjSCalc.getCellRangeByName(map);
+  Value := VarToStr(FobjCell.String);
 
   Result := self;
 
@@ -347,20 +348,21 @@ end;
 
 function TOpenOffice_calc.positionSheetByName(const aSheetName: string):TOpenOffice_calc;
 begin
-  objSCalc := objDocument.Sheets.getByName(aSheetName);
+  FobjSCalc := FobjDocument.Sheets.getByName(aSheetName);
   Result := self;
 end;
 
 function TOpenOffice_calc.positionSheetByIndex(const aSheetIndex: integer) :TOpenOffice_calc;
 begin
-  objSCalc := objDocument.Sheets.getByIndex(aSheetIndex);
+  FobjSCalc := FobjDocument.Sheets.getByIndex(aSheetIndex);
   Result := self;
 end;
 
-procedure TOpenOffice_calc.addNewSheet(const aSheetName: string; aPosition: integer);
+function TOpenOffice_calc.addNewSheet(const aSheetName: string; aPosition: integer): TOpenOffice_calc;
 begin
-  objDocument.Sheets.insertNewByName(aSheetName, aPosition);
-  objSCalc := objDocument.Sheets.getByName(aSheetName);
+  FobjDocument.Sheets.insertNewByName(aSheetName, aPosition);
+  FobjSCalc := FobjDocument.Sheets.getByName(aSheetName);
+  Result := Self;
 end;
 
 function TOpenOffice_calc.setFormula(aCellNumber: integer; const aCollName: string;
@@ -369,37 +371,39 @@ var
   map: string;
 begin
   map := aCollName + aCellNumber.ToString;
-  objCell := objSCalc.getCellByPosition(Fields.getIndex(aCollName), aCellNumber);
-  objCell.FormulaLocal  := aFormula;
+  FobjCell := FobjSCalc.getCellByPosition(Fields.getIndex(aCollName), aCellNumber);
+  FobjCell.FormulaLocal  := aFormula;
   Result := self;
 end;
 
-procedure TOpenOffice_calc.startSheet;
+function TOpenOffice_calc.startSheet: TOpenOffice_calc;
 begin
   if Assigned( FOnBeforeStartFile) then
     FOnBeforeStartFile(self);
 
   if URlFile.Trim.IsEmpty then
-    URlFile := NewFile[integer(TpCalc)];
+    URlFile := FNewFile[integer(TpCalc)];
 
   ValidateSheetName;
   LoadDocument(SheetName);
 
-  if objDocument.Sheets.hasByName(SheetName) then
-    objSCalc := objDocument.Sheets.getByName(SheetName)
+  if FobjDocument.Sheets.hasByName(SheetName) then
+    FobjSCalc := FobjDocument.Sheets.getByName(SheetName)
   else
   begin
-    objSCalc := objDocument.createInstance('com.sun.star.sheet.Spreadsheet');
-    objDocument.Sheets.insertByName(SheetName, objSCalc);
+    FobjSCalc := FobjDocument.createInstance('com.sun.star.sheet.Spreadsheet');
+    FobjDocument.Sheets.insertByName(SheetName, FobjSCalc);
   end;
 
   if Assigned( FOnAfterStartFile) then
      FOnAfterStartFile(self);
+
+  Result := Self;
 end;
 
 function TOpenOffice_calc.TabSheetExists(ATabSheetName: string):Boolean;
 begin
-  Result := objDocument.Sheets.hasByName(ATabSheetName); 
+  Result := FobjDocument.Sheets.hasByName(ATabSheetName); 
 end;
 
 function TOpenOffice_calc.SheetToDataSet(const TabSheetName: String; TabSheetIndex: Integer = 0; IndexOfHeaderToFieldCds: Integer = 1): TClientDataSet;

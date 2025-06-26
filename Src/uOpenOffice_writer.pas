@@ -29,33 +29,34 @@ type
   TLineFieldValue = TLineFieldValue_;
   TOpenOffice_writer = class(TOpenOffice)
   private
-    objTextCursor, oText, oCursor: variant;
+    FobjTextCursor, FoText, FoCursor: variant;
     FDocName,
     FValueText: string;
     FBoldActive,
     changeForDispatcher: boolean;
     Alphabet: array [0..25] of string;
-    FValue: string;
     procedure SetDocName(const Value: string);
   public
   var
     PropsText: array [0 .. 4] of variant;
-    destructor Destroy; override;
-    constructor Create(AOwner: TComponent); override;
-    procedure startDoc;
+
+    function startDoc: TOpenOffice_writer;
     function gotoEndOfSentence : TOpenOffice_writer;
+    function gotoStartOfSentence : TOpenOffice_writer;
     function setValue(const aText: string): TOpenOffice_writer;
-    function getValue: string;
+    function getValue: TOpenOffice_writer;
+    function SelectAllText: TOpenOffice_writer;
     function CreateTable(ATable: TTableWriter): TOpenOffice_writer; overload;
     function CreateTable(ATable: TFdMemTable): TOpenOffice_writer; overload;
     function CreateTable(ATable: TClientDataset): TOpenOffice_writer; overload;
 
     property BoldActive : boolean read FBoldActive write FBoldActive;
-    property Cursor : variant read oCursor;
-    property ValueText : string read FValueText;
-    property Value: string read FValue write FValue;
+    property Cursor : variant read FoCursor;
+    property Value : string read FValueText;
+
+    destructor Destroy; override;
+    constructor Create(AOwner: TComponent); override;
   published
-    property ServicesManager: OleVariant read objServiceManager;
     property DocName: string read FDocName write SetDocName;
   end;
 
@@ -107,7 +108,7 @@ end;
 function TOpenOffice_writer.CreateTable(ATable: TTableWriter): TOpenOffice_writer;
 var
   oTextTable: Variant;
-  oCursor: Variant;
+  FoCursor: Variant;
   key, line, linesCol, numRows, numCols: Integer;
   lColl, lOutVal: string;
   lPair: TPair<TTableRowFields, TTableLinesValues>;
@@ -122,12 +123,12 @@ begin
   numRows := ATable.TableLines.Count +1;
   numCols := ATable.TableFields.Count;
 
-  oCursor := objDocument.getCurrentController.getViewCursor;
+  FoCursor := FobjDocument.getCurrentController.getViewCursor;
 
-  oTextTable := objDocument.createInstance('com.sun.star.text.TextTable');
+  oTextTable := FobjDocument.createInstance('com.sun.star.text.TextTable');
   oTextTable.initialize(numRows, numCols);
   linesCol := 0;
-  objDocument.getText.insertTextContent(oCursor, oTextTable, False);
+  FobjDocument.getText.insertTextContent(FoCursor, oTextTable, False);
   for lPair in ATable.Table do
   begin
     for key := 0 to lPair.Key.Count -1 do //Header
@@ -248,12 +249,27 @@ begin
   inherited;
 end;
 
-function TOpenOffice_writer.getValue: string;
+function TOpenOffice_writer.getValue: TOpenOffice_writer;
 begin
   if assigned(onBeforeGetValue) then
     onBeforeGetValue(self);
 
-  Result := VarToStr(oText.String);
+  try
+    FoText :=  FobjTextCursor.Text;
+    FoCursor := FoText.createTextCursor;
+    FoCursor.gotoStart(False);
+    FoCursor.gotoEnd(True);
+
+    FValueText := FoCursor.getString;
+
+    Result := Self;
+  except
+    on E: Exception do
+    begin
+      FValueText := '';
+      raise Exception.Create('Erro ao obter texto do documento: ' + E.Message);
+    end;
+  end;
 
   if assigned(onAfterGetValue) then
     onAfterGetValue(self);
@@ -262,27 +278,36 @@ end;
 
 function TOpenOffice_writer.gotoEndOfSentence: TOpenOffice_writer;
 begin
-  objTextCursor.jumpToEndOfPage;
-  oText := objTextCursor.Text;
-  oCursor := oText.CreateTextCursor;
-  oCursor.gotoEnd(true);
+  FobjTextCursor.jumpToEndOfPage;
+  FoText := FobjTextCursor.Text;
+  FoCursor := FoText.CreateTextCursor;
+  FoCursor.gotoEnd(true);
+  Result := self;
+end;
+
+function TOpenOffice_writer.gotoStartOfSentence: TOpenOffice_writer;
+begin
+  FoText := FobjTextCursor.Text;
+  FoCursor := FoText.CreateTextCursor;
+  FoCursor.gotoStart(False);
+
   Result := self;
 end;
 
 function TOpenOffice_writer.setValue(const aText: string): TOpenOffice_writer;
 begin
-  if assigned(onBeforeSetValue) then
+  if Assigned(onBeforeSetValue) then
     onBeforeSetValue(self);
 
-  oText := objTextCursor.Text;
-  oText.InsertString(objTextCursor, '', true);
+  FoText := FobjTextCursor.Text;
+  FoText.InsertString(FobjTextCursor, '', true);
 
-  oCursor := oText.CreateTextCursor;
+  FoCursor := FoText.CreateTextCursor;
 
   changeForDispatcher := true;
 
-  oText.InsertString(objTextCursor, aText, true);
-  oText.InsertControlCharacter(oCursor, 10, true);
+  FoText.InsertString(FobjTextCursor, aText, true);
+  FoText.InsertControlCharacter(FoCursor, 10, true);
 
   FValueText  := aText;
   Result      := self;
@@ -291,28 +316,55 @@ begin
     onAfterSetValue(self);
 end;
 
-procedure TOpenOffice_writer.startDoc;
+function TOpenOffice_writer.startDoc: TOpenOffice_writer;
 begin
   if URlFile.Trim.IsEmpty then
-    URlFile := NewFile[integer(TpWriter)];
+    URlFile := FNewFile[integer(TpWriter)];
 
-  LoadDocument(DocName); // cria a instancia do objDocument
-  objTextCursor := objDocument.getCurrentController.getViewCursor;
+  LoadDocument(DocName); // cria a instancia do FobjDocument
+  FobjTextCursor := FobjDocument.getCurrentController.getViewCursor;
 
-  propsText[0] := objServiceManager.Bridge_GetStruct
+  propsText[0] := FobjServiceManager.Bridge_GetStruct
     ('com.sun.star.beans.PropertyValue');
-  propsText[1] := objServiceManager.Bridge_GetStruct
+  propsText[1] := FobjServiceManager.Bridge_GetStruct
     ('com.sun.star.beans.PropertyValue');
-  propsText[2] := objServiceManager.Bridge_GetStruct
+  propsText[2] := FobjServiceManager.Bridge_GetStruct
     ('com.sun.star.beans.PropertyValue');
-  propsText[3] := objServiceManager.Bridge_GetStruct
+  propsText[3] := FobjServiceManager.Bridge_GetStruct
     ('com.sun.star.beans.PropertyValue');
-  propsText[4] := objServiceManager.Bridge_GetStruct
+  propsText[4] := FobjServiceManager.Bridge_GetStruct
     ('com.sun.star.beans.PropertyValue');
 
-  objWriter := objDocument.getCurrentController.getFrame;
-  objDispatcher := objServiceManager.createInstance
+  FobjWriter := FobjDocument.getCurrentController.getFrame;
+  FobjDispatcher := FobjServiceManager.createInstance
     ('com.sun.star.frame.DispatchHelper');
+
+  Result := Self;
+end;
+
+function TOpenOffice_writer.SelectAllText: TOpenOffice_writer;
+var
+  loController, loViewCursor: Variant;
+  largs: array[0..0] of Variant;
+begin
+  try
+    loController := FobjDocument.getCurrentController;
+    loViewCursor := loController.getViewCursor;
+
+    FoText := FobjDocument.getText;
+    FoCursor := FoText.createTextCursor;
+
+    FoCursor.gotoStart(False);
+    FoCursor.gotoEnd(True);
+
+    loViewCursor.gotoRange(FoCursor.getStart, False);
+    loViewCursor.gotoRange(FoCursor.getEnd, True);
+
+    Result := Self;
+  except
+    on E: Exception do
+      raise Exception.Create('Erro ao selecionar texto: ' + E.Message);
+  end;
 end;
 
 procedure TOpenOffice_writer.SetDocName(const Value: string);

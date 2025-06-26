@@ -72,7 +72,7 @@ type
   end;
 
   THelperOpenOffice_calc = class helper for TOpenOffice_calc
-    procedure addChart(aSettingsChart: TSettingsChart);
+    function addChart(aSettingsChart: TSettingsChart): TOpenOffice_calc;
     function setBorder(borderPosition: TBoderSheet; opColor: TOpenColor; RemoveBorder: boolean = false) : TOpenOffice_calc;
     function changeFont(aNameFont: string; aHeight: Integer): TOpenOffice_calc;
     function changeJustify(aTypeHori: THoriJustify; aTypeVert: TVertJustify) : TOpenOffice_calc;
@@ -90,7 +90,7 @@ implementation
 uses
   System.Win.ComObj, System.Classes, Soap.EncdDecd;
 
-procedure THelperOpenOffice_calc.addChart(aSettingsChart: TSettingsChart);
+function THelperOpenOffice_calc.addChart(aSettingsChart: TSettingsChart): TOpenOffice_calc;
 var
   Chart, Rect, sheet : OleVariant;
   RangeAddress: Variant;
@@ -102,11 +102,11 @@ begin
     aSettingsChart.ChartName := 'MyChart_' + (aSettingsChart.StartColumn + aSettingsChart.StartRow.ToString) + '_' +
       (aSettingsChart.EndColumn + aSettingsChart.EndRow.ToString);
 
-  sheet := objDocument.Sheets.getByIndex(aSettingsChart.PositionSheet);
+  sheet := FobjDocument.Sheets.getByIndex(aSettingsChart.PositionSheet);
   // getByName(aCollName);
-  Charts := sheet.Charts;
+  FCharts := sheet.Charts;
 
-  while Charts.hasByName(aSettingsChart.ChartName) do
+  while FCharts.hasByName(aSettingsChart.ChartName) do
   begin
     aSettingsChart.ChartName := copy(aSettingsChart.ChartName,0, ifthen( (pos('_',aSettingsChart.ChartName) > 0),
                                                pos('_',aSettingsChart.ChartName), aSettingsChart.ChartName.Length)
@@ -115,7 +115,7 @@ begin
     aSettingsChart.Position_Y := (aSettingsChart.Position_Y + aSettingsChart.Height) + 1000;
   end;
 
-  Rect := objServiceManager.Bridge_GetStruct('com.sun.star.awt.Rectangle');
+  Rect := FobjServiceManager.Bridge_GetStruct('com.sun.star.awt.Rectangle');
   RangeAddress := sheet.Bridge_GetStruct('com.sun.star.table.CellRangeAddress');
 
   Rect.Width := aSettingsChart.Width;
@@ -129,11 +129,11 @@ begin
   RangeAddress.EndColumn := Fields.getIndex(aSettingsChart.EndColumn);
   RangeAddress.EndRow := aSettingsChart.EndRow;
 
-  Charts.addNewByName(aSettingsChart.ChartName, Rect, VarArrayOf(RangeAddress), true, true);
+  FCharts.addNewByName(aSettingsChart.ChartName, Rect, VarArrayOf(RangeAddress), true, true);
 
   if aSettingsChart.typeChart <> ctDefault then
   begin
-    Chart := Charts.getByName(aSettingsChart.ChartName).embeddedObject;
+    Chart := FCharts.getByName(aSettingsChart.ChartName).embeddedObject;
     Chart.Title.String := aSettingsChart.ChartName;
     case aSettingsChart.typeChart of
       ctVertical:
@@ -151,7 +151,7 @@ begin
         end;
     end;
   end;
-
+  Result := Self;
 end;
 
 function THelperOpenOffice_calc.changeFont(aNameFont: string; aHeight: Integer)
@@ -233,7 +233,7 @@ begin
 
   if ( not BoldActive) and (aBold) then
   begin
-    objDispatcher.executeDispatch(objWriter, '.uno:Bold', '', 0,  VarArrayOf(propsText));
+    FobjDispatcher.executeDispatch(FobjWriter, '.uno:Bold', '', 0,  VarArrayOf(propsText));
 
     if not CtrlBold then
       BoldActive := true;
@@ -244,20 +244,20 @@ end;
 
 function THelperOpenOffice_writer.setFontName(aFont: string): TOpenOffice_writer;
 begin
-  if not ValueText.trim.IsEmpty then
+  if not Value.trim.IsEmpty then
   begin
     Cursor.CharFontName := aFont;
-    setValue(ValueText);
+    setValue(Value);
   end;
   Result := self;
 end;
 
 function THelperOpenOffice_writer.setColorText(aColor: TOpenColor): TOpenOffice_writer;
 begin
-  if not ValueText.Trim.IsEmpty then
+  if not Value.Trim.IsEmpty then
   begin
      Cursor.SetPropertyValue('CharColor', aColor);
-     setValue(ValueText);
+     setValue(Value);
   end;
 
   Result := self;
@@ -267,17 +267,17 @@ function THelperOpenOffice_writer.setFontHeight(aFontHeight: integer) : TOpenOff
 begin
   propsText[1].Name := 'FontHeight.Height';
   propsText[1].Value := aFontHeight;
-  objDispatcher.executeDispatch(objWriter, '.uno:FontHeight', '', 0, VarArrayOf(propsText));
+  FobjDispatcher.executeDispatch(FobjWriter, '.uno:FontHeight', '', 0, VarArrayOf(propsText));
 
   Result := self;
 end;
 
 function THelperOpenOffice_writer.setUnderline(aUnderline: boolean): TOpenOffice_writer;
 begin
-  if not ValueText.Trim.IsEmpty then
+  if not Value.Trim.IsEmpty then
   begin
     Cursor.CharUnderline := ifthen(aUnderline,1,0);
-    setValue(ValueText);
+    setValue(Value);
   end;
 
   Result := self;

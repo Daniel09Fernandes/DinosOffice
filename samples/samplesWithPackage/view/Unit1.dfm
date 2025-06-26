@@ -685,11 +685,31 @@ object Form1: TForm1
         TabOrder = 47
         OnClick = BtnDeleteClick
       end
+      object mBase64: TMemo
+        Left = 343
+        Top = 529
+        Width = 425
+        Height = 33
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 48
+      end
+      object Button22: TButton
+        Left = 180
+        Top = 532
+        Width = 157
+        Height = 25
+        Caption = 'Convert Sheet to Base64'
+        TabOrder = 49
+        OnClick = Button22Click
+      end
     end
     object TabSheet2: TTabSheet
       Caption = 'Writer'
       ImageIndex = 1
       OnShow = TabSheet2Show
+      DesignSize = (
+        771
+        684)
       object Label5: TLabel
         Left = 132
         Top = 31
@@ -743,7 +763,7 @@ object Form1: TForm1
       object mmo: TMemo
         Left = 48
         Top = 160
-        Width = 457
+        Width = 635
         Height = 210
         Lines.Strings = (
           'Ol'#225' mundo')
@@ -834,7 +854,7 @@ object Form1: TForm1
           'opBordo = 16777164')
       end
       object BitBtn10: TBitBtn
-        Left = 195
+        Left = 179
         Top = 376
         Width = 198
         Height = 25
@@ -874,6 +894,43 @@ object Form1: TForm1
         Caption = 'Grid to Doc Table'
         TabOrder = 15
         OnClick = Button15Click
+      end
+      object Button18: TButton
+        Left = 464
+        Top = 376
+        Width = 75
+        Height = 25
+        Caption = 'Get Text'
+        TabOrder = 16
+        OnClick = Button18Click
+      end
+      object Button19: TButton
+        Left = 545
+        Top = 376
+        Width = 75
+        Height = 25
+        Caption = 'Replace'
+        TabOrder = 17
+        OnClick = Button19Click
+      end
+      object Button20: TButton
+        Left = 383
+        Top = 376
+        Width = 75
+        Height = 25
+        Caption = 'Select All'
+        TabOrder = 18
+        OnClick = Button20Click
+      end
+      object Button21: TButton
+        Left = 511
+        Top = 434
+        Width = 20
+        Height = 21
+        Anchors = [akTop, akRight]
+        Caption = '...'
+        TabOrder = 19
+        OnClick = Button21Click
       end
     end
   end
