@@ -90,14 +90,15 @@ type
    	function DatasetToSheet(const aCds : TClientDataSet): TOpenOffice_calc; overload;
     function DatasetToSheet(const aCds : TFDMemTable): TOpenOffice_calc; overload;
     function CallConversorPDFTOSheet: TOpenOffice_calc;
-	function ExeThread(pProc : Tproc): TOpenOffice_calc;
+   	function ExeThread(pProc : Tproc): TOpenOffice_calc;
     function PositionSheetByIndex(const aSheetIndex: integer): TOpenOffice_calc;
     function PositionSheetByName(const aSheetName: string):TOpenOffice_calc;
     function SetFormula(aCellNumber: integer; const aCollName: string; const aFormula: string): TOpenOffice_calc;
     function SetValue(aCellNumber: integer; const aCollName: string; aValue: variant; TypeValue: TTypeValue = ftString; Wrapped: boolean = false): TOpenOffice_calc;
     function GetValue(aCellNumber: integer; const aCollName: String) : TOpenOffice_calc;    
     function SheetToDataSet(const TabSheetName: String; TabSheetIndex: Integer = 0; IndexOfHeaderToFieldCds: Integer = 1): TClientDataSet;
-    function TabSheetExists(ATabSheetName: string):Boolean;
+    function TabSheetExists(ATabSheetName: string):Boolean; overload;
+    function TabSheetExists(ATabSheetIndex: integer):Boolean; overload;
   	function RemoveSheet(const aSheetName: string):TOpenOffice_calc; overload;
     function RemoveSheet(aSheetIndex: Integer):TOpenOffice_calc; overload;
     function GetSheetList: TDictionary<integer, string>;
@@ -367,16 +368,18 @@ end;
 
 function TOpenOffice_calc.setFormula(aCellNumber: integer; const aCollName: string;
   const aFormula: string): TOpenOffice_calc;
-var
-  map: string;
 begin
-  map := aCollName + aCellNumber.ToString;
+  aCellNumber := aCellNumber -1;
+
+  if aCellNumber <= 0 then
+    aCellNumber := 1;
+
   FobjCell := FobjSCalc.getCellByPosition(Fields.getIndex(aCollName), aCellNumber);
   FobjCell.FormulaLocal  := aFormula;
   Result := self;
 end;
 
-function TOpenOffice_calc.startSheet: TOpenOffice_calc;
+function TOpenOffice_calc.StartSheet: TOpenOffice_calc;
 begin
   if Assigned( FOnBeforeStartFile) then
     FOnBeforeStartFile(self);
@@ -399,6 +402,11 @@ begin
      FOnAfterStartFile(self);
 
   Result := Self;
+end;
+
+function TOpenOffice_calc.TabSheetExists(ATabSheetIndex: integer): Boolean;
+begin
+  Result := (ATabSheetIndex >= 0) and (ATabSheetIndex < FobjDocument.Sheets.getCount);
 end;
 
 function TOpenOffice_calc.TabSheetExists(ATabSheetName: string):Boolean;

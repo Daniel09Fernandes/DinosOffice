@@ -29,26 +29,34 @@ type
   TLineFieldValue = TLineFieldValue_;
   TOpenOffice_writer = class(TOpenOffice)
   private
-    FobjTextCursor, FoText, FoCursor: variant;
-    FDocName,
+    FobjTextCursor: Variant;
+    FoText: Variant;
+    FoCursor: Variant;
+    FDocName: string;
     FValueText: string;
-    FBoldActive,
+    FBoldActive: boolean;
     changeForDispatcher: boolean;
     Alphabet: array [0..25] of string;
     procedure SetDocName(const Value: string);
+    function GetTextCursor: Variant;
+    function EnsureTextCursor: Boolean;
+    function EnsureDocument: Boolean;
   public
   var
     PropsText: array [0 .. 4] of variant;
 
-    function startDoc: TOpenOffice_writer;
-    function gotoEndOfSentence : TOpenOffice_writer;
-    function gotoStartOfSentence : TOpenOffice_writer;
-    function setValue(const aText: string): TOpenOffice_writer;
-    function getValue: TOpenOffice_writer;
+    function StartDoc: TOpenOffice_writer;
+    function GotoEndOfSentence : TOpenOffice_writer;
+    function GotoStartOfSentence : TOpenOffice_writer;
+    function SetValue(const aText: string): TOpenOffice_writer;
+    function GetValue: TOpenOffice_writer;
     function SelectAllText: TOpenOffice_writer;
+    function ClearSelection: TOpenOffice_writer;
     function CreateTable(ATable: TTableWriter): TOpenOffice_writer; overload;
     function CreateTable(ATable: TFdMemTable): TOpenOffice_writer; overload;
     function CreateTable(ATable: TClientDataset): TOpenOffice_writer; overload;
+    function SelectBetweenText(AStartText, AEndText: string): TOpenOffice_writer;
+    function SelectTextRange(AStartPos, AEndPos: Integer): TOpenOffice_writer;
 
     property BoldActive : boolean read FBoldActive write FBoldActive;
     property Cursor : variant read FoCursor;
@@ -66,7 +74,8 @@ implementation
 
 { TOpenOffice_writer }
 uses
-  System.SysUtils, System.Math;
+  System.SysUtils, System.Math, StrUtils,
+  uOpenOfficeHelper;
 
 procedure Register;
 begin
@@ -103,6 +112,21 @@ begin
   Alphabet[23]:= 'W';
   Alphabet[24]:= 'Y';
   Alphabet[25]:= 'Z';
+end;
+
+function TOpenOffice_writer.EnsureTextCursor: Boolean;
+begin
+  if VarIsEmpty(FobjTextCursor) or VarIsNull(FobjTextCursor) then
+    FobjTextCursor := GetTextCursor;
+
+  Result := (not (VarIsEmpty(FobjTextCursor) or VarIsNull(FobjTextCursor)));
+end;
+
+function TOpenOffice_writer.EnsureDocument: Boolean;
+begin
+  Result := (not (VarIsEmpty(FobjDocument) or VarIsNull(FobjDocument)));
+  if not Result then
+    raise Exception.Create('Documento não está aberto ou foi fechado');
 end;
 
 function TOpenOffice_writer.CreateTable(ATable: TTableWriter): TOpenOffice_writer;
@@ -155,6 +179,22 @@ begin
   Result := Self;
 end;
 
+function TOpenOffice_writer.ClearSelection: TOpenOffice_writer;
+begin
+  if not EnsureDocument then Exit;
+  try
+    FoCursor := FobjDocument.getCurrentController.getViewCursor;
+    if not (VarIsEmpty(FoCursor) or VarIsNull(FoCursor)) then
+      FoCursor.collapseToStart;
+
+    SetBold(False);
+    Result := Self;
+  except
+    on E: Exception do
+      raise Exception.Create('Erro ao limpar seleção: ' + E.Message);
+  end;
+end;
+
 function TOpenOffice_writer.CreateTable(ATable: TFdMemTable): TOpenOffice_writer;
 var
   lFieldIdx,
@@ -188,6 +228,7 @@ begin
     end;
 
     CreateTable(lTable);
+    Result := Self;
   finally
     ATable.EnableControls;
     ATable.LogChanges := lLog;
@@ -231,6 +272,7 @@ begin
     end;
 
     CreateTable(lTable);
+    Result := Self;
   finally
     ATable.EnableControls;
     ATable.LogChanges := lLog;
@@ -287,6 +329,7 @@ end;
 
 function TOpenOffice_writer.gotoStartOfSentence: TOpenOffice_writer;
 begin
+  FobjTextCursor := GetTextCursor;
   FoText := FobjTextCursor.Text;
   FoCursor := FoText.CreateTextCursor;
   FoCursor.gotoStart(False);
@@ -296,6 +339,8 @@ end;
 
 function TOpenOffice_writer.setValue(const aText: string): TOpenOffice_writer;
 begin
+  if not EnsureDocument or not EnsureTextCursor then Exit;
+
   if Assigned(onBeforeSetValue) then
     onBeforeSetValue(self);
 
@@ -316,13 +361,87 @@ begin
     onAfterSetValue(self);
 end;
 
+function TOpenOffice_writer.SelectTextRange(AStartPos, AEndPos: Integer): TOpenOffice_writer;
+var
+  oText: Variant;
+  oCursorStart, oCursorEnd: Variant;
+begin
+  if not EnsureDocument then
+    Exit(Self);
+
+  try
+    oText := FobjDocument.getText;
+    oCursorStart := oText.createTextCursorByRange(oText.getStart);
+    oCursorEnd := oText.createTextCursorByRange(oText.getStart);
+    oCursorStart.goRight(AStartPos, False);
+    oCursorEnd.goRight(AEndPos, False);
+
+    FobjDocument.getCurrentController.getViewCursor.gotoRange(oCursorStart.getStart, False);
+    FobjDocument.getCurrentController.getViewCursor.gotoRange(oCursorEnd.getEnd, True);
+
+    Result := Self;
+  except
+    on E: Exception do
+      raise Exception.CreateFmt('Erro ao selecionar texto (posições %d a %d): %s',
+        [AStartPos, AEndPos, E.Message]);
+  end;
+end;
+
+function TOpenOffice_writer.SelectBetweenText(AStartText, AEndText: string): TOpenOffice_writer;
+var
+  oText: Variant;
+  oCursor: Variant;
+  lFullText: string;
+  lStartPos, lEndPos: Integer;
+begin
+  if not EnsureDocument then
+    Exit(Self);
+
+  try
+    SelectAllText;
+    lFullText := GetValue.Value;
+
+    lStartPos := Pos(AStartText, lFullText) - Length(AStartText);
+
+    if lStartPos <= 0 then
+      lStartPos := 0;
+
+    lEndPos := Pos(AEndText, lFullText) + Length(AEndText)-1;
+    if lEndPos = 0 then
+      raise Exception.Create('Texto final não encontrado: ' + AEndText);
+
+    SelectTextRange(lStartPos, lEndPos);
+    Result := Self;
+  except
+    on E: Exception do
+      raise Exception.Create('Erro ao selecionar entre textos: ' + E.Message);
+  end;
+end;
+
+function TOpenOffice_writer.GetTextCursor: Variant;
+begin
+ if not EnsureDocument then
+    Exit(Unassigned);
+
+  try
+    Result := FobjDocument.getCurrentController.getViewCursor;
+    FobjTextCursor := Result;
+  except
+    on E: Exception do
+    begin
+      Result := Unassigned;
+      raise Exception.Create('Erro ao obter cursor de texto: ' + E.Message);
+    end;
+  end;
+end;
+
 function TOpenOffice_writer.startDoc: TOpenOffice_writer;
 begin
   if URlFile.Trim.IsEmpty then
     URlFile := FNewFile[integer(TpWriter)];
 
   LoadDocument(DocName); // cria a instancia do FobjDocument
-  FobjTextCursor := FobjDocument.getCurrentController.getViewCursor;
+  FobjTextCursor := GetTextCursor;
 
   propsText[0] := FobjServiceManager.Bridge_GetStruct
     ('com.sun.star.beans.PropertyValue');

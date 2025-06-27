@@ -64,24 +64,31 @@ type
   end;
 
   THelperOpenOffice_writer = class helper for TOpenOffice_writer
-    function setUnderline(aUnderline: boolean): TOpenOffice_writer;
-    function setBold(aBold: boolean): TOpenOffice_writer;
-    function setFontHeight(aFontHeight: integer): TOpenOffice_writer;
-    function setColorText(aColor: TOpenColor) : TOpenOffice_writer;
-    function setFontName(aFont : string): TOpenOffice_writer;
+    function SetUnderline(aUnderline: boolean): TOpenOffice_writer;
+    function SetBold(aBold: boolean): TOpenOffice_writer;
+    function SetFontHeight(aFontHeight: integer): TOpenOffice_writer;
+    function SetColorText(aColor: TOpenColor) : TOpenOffice_writer;
+    function SetFontName(aFont : string): TOpenOffice_writer;
   end;
 
   THelperOpenOffice_calc = class helper for TOpenOffice_calc
-    function addChart(aSettingsChart: TSettingsChart): TOpenOffice_calc;
-    function setBorder(borderPosition: TBoderSheet; opColor: TOpenColor; RemoveBorder: boolean = false) : TOpenOffice_calc;
-    function changeFont(aNameFont: string; aHeight: Integer): TOpenOffice_calc;
-    function changeJustify(aTypeHori: THoriJustify; aTypeVert: TVertJustify) : TOpenOffice_calc;
-    function setColor(aFontColor, aBackgroud: TOpenColor): TOpenOffice_calc;
-    function setCellWidth(const aWidth: integer): TOpenOffice_calc;
-    function setBold(aBold: boolean): TOpenOffice_calc;
+  public
+    function AddChart(aSettingsChart: TSettingsChart): TOpenOffice_calc;
+    function SetBorder(borderPosition: TBoderSheet; opColor: TOpenColor; RemoveBorder: boolean = false) : TOpenOffice_calc;
+    function ChangeFont(aNameFont: string; aHeight: Integer): TOpenOffice_calc;
+    function ChangeJustify(aTypeHori: THoriJustify; aTypeVert: TVertJustify) : TOpenOffice_calc;
+    function SetColor(aFontColor, aBackgroud: TOpenColor): TOpenOffice_calc;
+    function SetCellWidth(const aWidth: integer): TOpenOffice_calc;
+    function SetBold(aBold: boolean): TOpenOffice_calc;
     function SetUnderline(aUnderline: boolean): TOpenOffice_calc;
+    function GetCountRow(out aCountRow: Integer): TOpenOffice_calc;
+    function GetCountCell(out aCountCel: Integer): TOpenOffice_calc;
+
+    {Just compability CountRow and CountCell, prefere use GetCountRow and GetCountCell }
     function CountRow: Integer;
     function CountCell: Integer;
+    {************************************}
+
     function SheetToBase64(aPathFile:string):string;
   end;
 
@@ -173,6 +180,18 @@ begin
   result := self;
 end;
 
+function THelperOpenOffice_calc.GetCountCell(out aCountCel: Integer): TOpenOffice_calc;
+begin
+  aCountCel := Self.CountCell;
+  Result := Self;
+end;
+
+function THelperOpenOffice_calc.GetCountRow(out aCountRow: Integer): TOpenOffice_calc;
+begin
+  aCountRow := Self.CountRow;
+  Result := Self;
+end;
+
 function THelperOpenOffice_calc.CountRow: Integer;
 var
   FRow, FCountRow: Integer;
@@ -217,7 +236,7 @@ begin
   result := FCountRow;
 end;
 
-function THelperOpenOffice_writer.setBold(aBold: boolean): TOpenOffice_writer;
+function THelperOpenOffice_writer.SetBold(aBold: boolean): TOpenOffice_writer;
 var CtrlBold: boolean;
 begin
   CtrlBold := false;
@@ -238,7 +257,6 @@ begin
     if not CtrlBold then
       BoldActive := true;
   end;
-
   Result := self;
 end;
 

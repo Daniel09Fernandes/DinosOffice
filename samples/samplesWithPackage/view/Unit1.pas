@@ -136,6 +136,11 @@ type
     Button21: TButton;
     mBase64: TMemo;
     Button22: TButton;
+    EdtTextIniSelect: TEdit;
+    EdtTextFimSelect: TEdit;
+    Label7: TLabel;
+    Label8: TLabel;
+    Button23: TButton;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -184,6 +189,7 @@ type
     procedure Button18Click(Sender: TObject);
     procedure Button21Click(Sender: TObject);
     procedure Button22Click(Sender: TObject);
+    procedure Button23Click(Sender: TObject);
   private
     FontTop, fontLeft: integer;
     SettingsChart: TSettingsChart;
@@ -347,10 +353,20 @@ end;
 
 procedure TForm1.Button14Click(Sender: TObject);
 begin
-  if OpenOffice_calc1.TabSheetExists(edtAba.Text) then
-    ShowMessage('Exists')
-  else
-    ShowMessage('Not Exists');
+  if edtAba.Text <> '' then
+  begin
+    if OpenOffice_calc1.TabSheetExists(edtAba.Text) then
+      ShowMessage('Exists')
+    else
+      ShowMessage('Not Exists');
+  end
+  else if edtPos.Text <> '' then
+  begin
+    if OpenOffice_calc1.TabSheetExists( StrToInt(edtPos.Text)) then
+      ShowMessage('Exists')
+    else
+      ShowMessage('Not Exists');
+  end;
 end;
 
 procedure TForm1.Button15Click(Sender: TObject);
@@ -378,8 +394,30 @@ end;
 
 procedure TForm1.Button19Click(Sender: TObject);
 var
-  lTextToReplace: string;
+  lData:string;
 begin
+  lData :=  DateToStr(Now);
+
+//    OpenOffice_writer1
+//      .SelectAllText  //Seleciona o texto para replace
+//	    .SetFontHeight(14)
+//	    .SetFontName('Arial')
+//      .setValue(OpenOffice_writer1
+//                                  .getValue
+//                                    .Value //Pega o texto
+//                                      .Replace('[NOMEEDIFICIO]', 'NEW YORK')
+//                                      .Replace('[DATA]', lData))
+//      .ClearSelection
+//      .gotoStartOfSentence
+//      .setValue(' Assembleia Geral '+#13#13) // Titulo incluso depois
+//        .SetBold(True)
+//      .ClearSelection
+//      .SelectBetweenText('NEW','YORK')
+//        .SetBold(True)
+//      .ClearSelection
+//      .SelectBetweenText(Copy(lData,0,3),Copy(lData,4))
+//        .SetBold(True);
+
   OpenOffice_writer1
       .SelectAllText
       .setValue(mmo.text);
@@ -409,61 +447,88 @@ begin
 end;
 
 procedure TForm1.CreateDemoSheet;
+var
+  lOutCountRow, lOutCountCell: integer;
 begin
   OpenOffice_calc1.DocVisible := CheckBox1.Checked;
-  OpenOffice_calc1.startSheet
-    .setValue(1, 'A', 'STATUS').SetBorder([bAll], opBrown)
-      .changeJustify(fthRIGHT, ftvTOP).setBold(true).changeFont('Arial', 12)
-       .setUnderline(true).setColor(opWhite, opMagenta)
-    .setValue(1, 'B', 'VALOR').changeJustify(fthRIGHT, ftvTOP)
-       .SetBorder([bAll], opBrown).setBold(true).changeFont('Arial', 12)
-       .setUnderline(true).setColor(opWhite, opMagenta)
+  OpenOffice_calc1.StartSheet
+    .SetValue(1, 'A', 'STATUS')
+       .SetBorder([bAll], opBrown)
+       .changeJustify(fthRIGHT, ftvTOP)
+       .SetBold(true)
+       .changeFont('Arial', 12)
+       .SetUnderline(true)
+       .SetColor(opWhite, opMagenta)
+    .setValue(1, 'B', 'VALOR')
+       .changeJustify(fthRIGHT, ftvTOP)
+       .SetBorder([bAll], opBrown)
+       .SetBold(true)
+       .ChangeFont('Arial', 12)
+       .SetUnderline(true)
+       .SetColor(opWhite, opMagenta)
     .setValue(2, 'B', 109, ftNumeric)
-        .SetBorder([bAll], opBrown)
+       .SetBorder([bAll], opBrown)
     .setValue(2, 'A', 'AGUA')
-      .SetBorder([bAll], opBrown)
+       .SetBorder([bAll], opBrown)
     .setValue(3, 'B', 105.55, ftNumeric)
-      .SetBorder([bAll], opBrown)
+       .SetBorder([bAll], opBrown)
     .setValue(3, 'A', 'LUZ')
-      .SetBorder([bAll], opBrown)
+       .SetBorder([bAll], opBrown)
     .setValue(4, 'B', 1005.22, ftNumeric)
     .setValue(4, 'A', 'ALUGUEL')
-    .setValue(6, 'A', 'Total de linhas')
-    .setValue(6, 'B', OpenOffice_calc1.CountRow, ftNumeric)
-    .setValue(7, 'A', 'Total de Colunas')
-    .setValue(7, 'B', OpenOffice_calc1.CountCell, ftNumeric)
+    .setValue(6, 'A', 'Total de linhas');
+
+  OpenOffice_calc1.GetCountRow(lOutCountRow); //Precisa usar a parte, para atualizar o Doc antes de contar
+
+  OpenOffice_calc1
+    .setValue(6, 'B', lOutCountRow, ftNumeric)
+    .setValue(7, 'A', 'Total de Colunas');
+
+   OpenOffice_calc1.GetCountCell(lOutCountCell);
+
+   OpenOffice_calc1
+    .setValue(7, 'B', lOutCountCell, ftNumeric)
     .addNewSheet('A Receber', 1)
-    .setValue(1, 'A', 'VALOR').SetBorder([bAll], opBrown)
-      .changeJustify(fthRIGHT, ftvTOP).setBold(true)
-    .setValue(1, 'B', 'DESC').SetBorder([bAll], opBrown)
-      .changeJustify(fthRIGHT, ftvTOP).setBold(true).changeFont('Arial', 12)
-      .setUnderline(true).setColor(opWhite, opCiano)
-    .setValue(1, 'C', 'SOMA').SetBorder([bAll], opBrown)
-      .changeJustify(fthRIGHT, ftvTOP).setBold(true).changeFont('Arial', 12)
-      .setUnderline(true).setColor(opWhite, opSoftRed)
-    .setValue(1, 'H', 'SOMA').SetBorder([bAll], opBrown)
-      .changeJustify(fthRIGHT, ftvTOP).setBold(true).changeFont('Arial', 12)
-      .setUnderline(true).setColor(opWhite, opSoftRed)
-    .setValue(2, 'A', 200, ftNumeric)
-    .setValue(2, 'B', 'Emprestimo')
-    .setValue(2, 'C', 0, ftNumeric)
-    .setValue(3, 'A', 369.55, ftNumeric)
-    .setValue(3, 'B', 'Dividendos')
-    .setValue(3, 'C', 0, ftNumeric)
-    .setValue(4, 'A', 1585.22, ftNumeric)
-    .setValue(4, 'B', 'ALUGUEL')
-    .setValue(4, 'C', 0, ftNumeric)
-    .setValue(8, 'A', 1585.22, ftNumeric)
-    .setValue(8, 'B', 'Renda extra')
-    .setValue(8, 'C', 0, ftNumeric)
-    .setValue(15, 'A', 1585.22, ftNumeric)
-    .setValue(15, 'B', 'ALUGUEL 2')
-    .setValue(15, 'C', 0, ftNumeric)
-    .setValue(17, 'A', 'Total de linhas')
-    .setValue(17, 'B', OpenOffice_calc1.CountRow, ftNumeric)
-    .setValue(19, 'A', 'Total de Colunas')
-    .setValue(19, 'B', OpenOffice_calc1.CountCell, ftNumeric)
-    .setFormula(20, 'A', '=A2+A3+A4+A15').setBold(true)
+    .setValue(1, 'A', 'VALOR')
+      .SetBorder([bAll], opBrown)
+      .changeJustify(fthRIGHT, ftvTOP)
+      .setBold(true)
+    .setValue(1, 'B', 'DESC')
+      .SetBorder([bAll], opBrown)
+      .changeJustify(fthRIGHT, ftvTOP)
+      .setBold(true)
+      .changeFont('Arial', 12)
+      .setUnderline(true)
+      .setColor(opWhite, opCiano)
+    .setValue(2, 'B', 200, ftNumeric)
+    .setValue(2, 'A', 'Emprestimo')
+    .setValue(3, 'B', 369.55, ftNumeric)
+    .setValue(3, 'A', 'Dividendos')
+    .setValue(4, 'B', 1585.22, ftNumeric)
+    .setValue(4, 'A', 'ALUGUEL')
+    .setValue(5, 'B', 1585.22, ftNumeric)
+    .setValue(5, 'A', 'Renda extra')
+    .setValue(6, 'B', 1585.22, ftNumeric)
+    .setValue(6, 'A', 'ALUGUEL 2')
+    .setValue(9, 'A', 'Total de linhas')
+      .SetBold(True)
+      .SetCellWidth(5000);
+
+   OpenOffice_calc1.GetCountRow(lOutCountRow);
+
+   OpenOffice_calc1
+    .setValue(9, 'B', lOutCountRow, ftNumeric)
+    .setValue(10, 'A', 'Total de Colunas')
+    .SetBold(True);
+
+   OpenOffice_calc1.GetCountCell(lOutCountCell);
+
+   OpenOffice_calc1
+    .setValue(10, 'B', lOutCountCell, ftNumeric)
+    .setValue(8, 'A', 'Total')
+      .setBold(true)
+    .setFormula(8, 'B', '=B2+B3+B4+B5+B6')
+      .setBold(true)
     .positionSheetByName('Planilha1');
 
   // Configure the chart settings
@@ -495,7 +560,8 @@ procedure TForm1.Button1Click(Sender: TObject);
 begin
   // Dica: para desenvolver é mais facil uitilizar a propriedade OpenOffice_calc1.DocVisible := true;
   // Após desenv, alterar para false; em false, ganha desempenho e segurança, poís não ha risco do cliente fechar a planilha e perder o ponteiro
-  OpenOffice_calc1.ExeThread(CreateDemoSheet);
+  CreateDemoSheet;
+//  OpenOffice_calc1.ExeThread(CreateDemoSheet);
 end;
 
 procedure TForm1.Button20Click(Sender: TObject);
@@ -515,6 +581,13 @@ begin
     mBase64.Lines.Add(OpenOffice_calc1.SheetToBase64(edtArq.Text))
   else
     raise Exception.Create('Informe o caminho do arquivo para carregar');
+end;
+
+procedure TForm1.Button23Click(Sender: TObject);
+begin
+  OpenOffice_writer1
+    .ClearSelection
+    .SelectBetweenText(EdtTextIniSelect.text, EdtTextFimSelect.Text);
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);

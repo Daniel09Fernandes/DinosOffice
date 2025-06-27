@@ -18,7 +18,7 @@ object Form1: TForm1
     Top = 0
     Width = 779
     Height = 712
-    ActivePage = TabSheet1
+    ActivePage = TabSheet2
     Align = alClient
     TabOrder = 0
     object TabSheet1: TTabSheet
@@ -724,6 +724,20 @@ object Form1: TForm1
         Height = 13
         Caption = 'Cor'
       end
+      object Label7: TLabel
+        Left = 48
+        Top = 81
+        Width = 54
+        Height = 13
+        Caption = 'Inicio texto'
+      end
+      object Label8: TLabel
+        Left = 119
+        Top = 81
+        Width = 47
+        Height = 13
+        Caption = 'Fim Texto'
+      end
       object BitBtn3: TBitBtn
         Left = 48
         Top = 129
@@ -806,7 +820,7 @@ object Form1: TForm1
         TabOrder = 8
       end
       object BitBtn8: TBitBtn
-        Left = 401
+        Left = 386
         Top = 129
         Width = 104
         Height = 25
@@ -932,6 +946,31 @@ object Form1: TForm1
         TabOrder = 19
         OnClick = Button21Click
       end
+      object EdtTextIniSelect: TEdit
+        Left = 48
+        Top = 96
+        Width = 65
+        Height = 21
+        TabOrder = 20
+        Text = 'Ola'
+      end
+      object EdtTextFimSelect: TEdit
+        Left = 119
+        Top = 96
+        Width = 65
+        Height = 21
+        TabOrder = 21
+        Text = 'Mundo'
+      end
+      object Button23: TButton
+        Left = 200
+        Top = 96
+        Width = 137
+        Height = 25
+        Caption = 'Selecionar texto'
+        TabOrder = 22
+        OnClick = Button23Click
+      end
     end
   end
   object ClientDataSet1: TClientDataSet
@@ -974,8 +1013,8 @@ object Form1: TForm1
   end
   object OpenOffice_calc1: TOpenOffice_calc
     DocVisible = True
-    Left = 560
-    Top = 280
+    Left = 616
+    Top = 232
   end
   object OpenOffice_writer1: TOpenOffice_writer
     DocVisible = True
