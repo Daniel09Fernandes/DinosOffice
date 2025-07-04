@@ -122,30 +122,34 @@ var
   SearchDescriptor, Found: OleVariant;
 begin
   try
-    SearchDescriptor := FobjDocument.createSearchDescriptor;
-    SearchDescriptor.setSearchString(ASearch);
+    try
+      SearchDescriptor := FobjDocument.createSearchDescriptor;
+      SearchDescriptor.setSearchString(ASearch);
 
-    SearchDescriptor.SearchCaseSensitive := false;
-    SearchDescriptor.SearchWords := false;
-    SearchDescriptor.SearchRegularExpression := false;
+      SearchDescriptor.SearchCaseSensitive := false;
+      SearchDescriptor.SearchWords := false;
+      SearchDescriptor.SearchRegularExpression := false;
 
-    Found := FobjDocument.findFirst(SearchDescriptor);
+      Found := FobjDocument.findFirst(SearchDescriptor);
 
-    while not VarIsEmpty(Found) and not VarIsNull(Found) do
-    begin
-      try
-        Found.setString(AReplace);
-      except
-        on E: Exception do
-          OutputDebugString(PChar('Erro ao substituir texto: ' + E.Message));
+      while not VarIsEmpty(Found) and not VarIsNull(Found) do
+      begin
+        try
+          Found.setString(AReplace);
+        except
+          on E: Exception do
+            OutputDebugString(PChar('Erro ao substituir texto: ' + E.Message));
+        end;
+
+        // Encontra a próxima ocorrência
+        Found := FobjDocument.findNext(Found.End, SearchDescriptor);
       end;
-
-      // Encontra a próxima ocorrência
-      Found := FobjDocument.findNext(Found.End, SearchDescriptor);
+    Except
+      On E: Exception do
+        OutputDebugString(PChar('Erro no ReplaceText: ' + E.Message));
     end;
-  Except
-    On E: Exception do
-      OutputDebugString(PChar('Erro no ReplaceText: ' + E.Message));
+  finally
+    Result := Self;
   end;
 end;
 
