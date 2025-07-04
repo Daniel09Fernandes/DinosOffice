@@ -29,20 +29,20 @@ https://pt-br.libreoffice.org/baixe-ja/libreoffice-novo/
         For delphi 7 use the "C:\yourLocal\ComponentDinosOffice-OpenOffice\srcPackage\Src_dx7"
  
  
-| Project {versionOficial}   	| Version 	   |
-|----------------------------	|------------ |
-| 20.3                     	  | tested ✅  | 
+| Github Project {branch versionOficial}   	| Version - On Embarcadero GetIt 	| Version 	   |
+|-------------------------------------------|---------------------------------|-----------  | 
+| 20.4                     	                |20.3                             | Tested ✅   | 
 
 Tested Delphi version
 
-| Version  	| Supported 	|
-|----------	|-----------	|
-| > 12.x   	|    ✅ 	    |
-| > 11.x   	|    ✅    	|
-| > 10.x   	|    ✅ 	    |
-| Seattle  	|    ✅ 	    |
-| XE 8     	|    ✅ 	    |
-| Delphi 7 	|    ✅    	|
+| Version  	| Supported 	|   Windows version Tested    |
+|----------	|-----------	| --------------------------- | 
+| Seattle  	|    ✅ 	    | Win7, Win 10, Win 11        |
+| XE 8     	|    ✅ 	    | Win7, Win 10, Win 11        |
+| Delphi 7 	|    ✅    	 | Win7, Win 10                |
+| > 10.x   	|    ✅ 	    | Win 10                      |
+| > 11.x   	|    ✅ 	    | Win 10, Win 11              |
+| > 12.x   	|    ✅ 	    | Win 11                      |
 
 ## For Unigui 
  You need add FDGUIxWaitCursor to your serverModule and in your serverModule checked the property AutoCoInitialize
