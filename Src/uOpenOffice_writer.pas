@@ -27,6 +27,7 @@ type
 
   TTableWriter = TTableWriter_;
   TLineFieldValue = TLineFieldValue_;
+
   TOpenOffice_writer = class(TOpenOffice)
   private
     FobjTextCursor: Variant;
@@ -57,6 +58,7 @@ type
     function CreateTable(ATable: TClientDataset): TOpenOffice_writer; overload;
     function SelectBetweenText(AStartText, AEndText: string): TOpenOffice_writer;
     function SelectTextRange(AStartPos, AEndPos: Integer): TOpenOffice_writer;
+    function ReplaceText(const ASearch, AReplace: string): TOpenOffice_writer;
 
     property BoldActive : boolean read FBoldActive write FBoldActive;
     property Cursor : variant read FoCursor;
@@ -112,6 +114,39 @@ begin
   Alphabet[23]:= 'W';
   Alphabet[24]:= 'Y';
   Alphabet[25]:= 'Z';
+end;
+
+{code ReplaceText provided by @fabiokruger on Github: https://github.com/Daniel09Fernandes/DinosOffice/discussions/86#discussioncomment-13640228}
+function TOpenOffice_writer.ReplaceText(const ASearch, AReplace: string): TOpenOffice_writer;
+var
+  SearchDescriptor, Found: OleVariant;
+begin
+  try
+    SearchDescriptor := FobjDocument.createSearchDescriptor;
+    SearchDescriptor.setSearchString(ASearch);
+
+    SearchDescriptor.SearchCaseSensitive := false;
+    SearchDescriptor.SearchWords := false;
+    SearchDescriptor.SearchRegularExpression := false;
+
+    Found := FobjDocument.findFirst(SearchDescriptor);
+
+    while not VarIsEmpty(Found) and not VarIsNull(Found) do
+    begin
+      try
+        Found.setString(AReplace);
+      except
+        on E: Exception do
+          OutputDebugString(PChar('Erro ao substituir texto: ' + E.Message));
+      end;
+
+      // Encontra a próxima ocorrência
+      Found := FobjDocument.findNext(Found.End, SearchDescriptor);
+    end;
+  Except
+    On E: Exception do
+      OutputDebugString(PChar('Erro no ReplaceText: ' + E.Message));
+  end;
 end;
 
 function TOpenOffice_writer.EnsureTextCursor: Boolean;

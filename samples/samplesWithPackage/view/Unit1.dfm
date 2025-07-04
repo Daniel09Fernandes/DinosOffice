@@ -18,7 +18,7 @@ object Form1: TForm1
     Top = 0
     Width = 779
     Height = 712
-    ActivePage = TabSheet2
+    ActivePage = TabSheet1
     Align = alClient
     TabOrder = 0
     object TabSheet1: TTabSheet
@@ -136,7 +136,7 @@ object Form1: TForm1
         OnClick = Button10Click
       end
       object Button2: TButton
-        Left = 263
+        Left = 130
         Top = 363
         Width = 81
         Height = 30
@@ -145,16 +145,16 @@ object Form1: TForm1
         OnClick = Button2Click
       end
       object Button3: TButton
-        Left = 352
-        Top = 363
-        Width = 121
+        Left = 545
+        Top = 327
+        Width = 64
         Height = 30
         Caption = 'Salvar'
         TabOrder = 5
         OnClick = Button3Click
       end
       object Button4: TButton
-        Left = 480
+        Left = 217
         Top = 363
         Width = 67
         Height = 30
@@ -163,8 +163,8 @@ object Form1: TForm1
         OnClick = Button4Click
       end
       object Button5: TButton
-        Left = 134
-        Top = 363
+        Left = 545
+        Top = 291
         Width = 121
         Height = 30
         Caption = 'Carregar documeto'
@@ -299,7 +299,7 @@ object Form1: TForm1
       object edtArq: TLabeledEdit
         Left = 3
         Top = 337
-        Width = 668
+        Width = 510
         Height = 21
         Anchors = [akLeft, akTop, akRight]
         EditLabel.Width = 99
@@ -403,7 +403,7 @@ object Form1: TForm1
       object edtSalvar: TLabeledEdit
         Left = 3
         Top = 296
-        Width = 668
+        Width = 510
         Height = 21
         Anchors = [akLeft, akTop, akRight]
         EditLabel.Width = 47
@@ -565,7 +565,7 @@ object Form1: TForm1
         TitleFont.Style = []
       end
       object Button11: TButton
-        Left = 554
+        Left = 291
         Top = 363
         Width = 97
         Height = 30
@@ -574,11 +574,11 @@ object Form1: TForm1
         OnClick = Button11Click
       end
       object Button12: TButton
-        Left = 3
-        Top = 534
-        Width = 148
+        Left = 109
+        Top = 531
+        Width = 100
         Height = 25
-        Caption = 'Planilha para DataSet'
+        Caption = 'Sheet to Dataset'
         TabOrder = 37
         OnClick = Button12Click
       end
@@ -641,8 +641,8 @@ object Form1: TForm1
         TitleFont.Style = []
       end
       object Button16: TButton
-        Left = 673
-        Top = 337
+        Left = 519
+        Top = 336
         Width = 20
         Height = 21
         Anchors = [akTop, akRight]
@@ -651,7 +651,7 @@ object Form1: TForm1
         OnClick = Button16Click
       end
       object Button17: TButton
-        Left = 673
+        Left = 519
         Top = 296
         Width = 20
         Height = 21
@@ -686,21 +686,39 @@ object Form1: TForm1
         OnClick = BtnDeleteClick
       end
       object mBase64: TMemo
-        Left = 343
-        Top = 529
-        Width = 425
+        Left = 383
+        Top = 527
+        Width = 385
         Height = 33
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 48
       end
       object Button22: TButton
-        Left = 180
-        Top = 532
-        Width = 157
+        Left = 242
+        Top = 531
+        Width = 135
         Height = 25
         Caption = 'Convert Sheet to Base64'
         TabOrder = 49
         OnClick = Button22Click
+      end
+      object Button25: TButton
+        Left = 615
+        Top = 327
+        Width = 90
+        Height = 30
+        Caption = 'Export to PDF'
+        TabOrder = 50
+        OnClick = Button25Click
+      end
+      object Button28: TButton
+        Left = 3
+        Top = 531
+        Width = 100
+        Height = 25
+        Caption = 'Dataset to Sheet'
+        TabOrder = 51
+        OnClick = Button28Click
       end
     end
     object TabSheet2: TTabSheet
@@ -726,21 +744,21 @@ object Form1: TForm1
       end
       object Label7: TLabel
         Left = 48
-        Top = 81
+        Top = 121
         Width = 54
         Height = 13
         Caption = 'Inicio texto'
       end
       object Label8: TLabel
         Left = 119
-        Top = 81
+        Top = 121
         Width = 47
         Height = 13
         Caption = 'Fim Texto'
       end
       object BitBtn3: TBitBtn
         Left = 48
-        Top = 129
+        Top = 169
         Width = 75
         Height = 25
         Caption = 'Iniciar'
@@ -749,7 +767,7 @@ object Form1: TForm1
       end
       object BitBtn4: TBitBtn
         Left = 129
-        Top = 129
+        Top = 169
         Width = 75
         Height = 25
         Caption = 'Fechar'
@@ -757,8 +775,8 @@ object Form1: TForm1
         OnClick = BitBtn4Click
       end
       object BitBtn5: TBitBtn
-        Left = 224
-        Top = 129
+        Left = 550
+        Top = 499
         Width = 75
         Height = 25
         Caption = 'Salvar'
@@ -766,8 +784,8 @@ object Form1: TForm1
         OnClick = BitBtn5Click
       end
       object BitBtn6: TBitBtn
-        Left = 305
-        Top = 129
+        Left = 550
+        Top = 460
         Width = 75
         Height = 25
         Caption = 'Carregar'
@@ -776,8 +794,8 @@ object Form1: TForm1
       end
       object mmo: TMemo
         Left = 48
-        Top = 160
-        Width = 635
+        Top = 200
+        Width = 697
         Height = 210
         Lines.Strings = (
           'Ol'#225' mundo')
@@ -785,7 +803,7 @@ object Form1: TForm1
       end
       object BitBtn7: TBitBtn
         Left = 48
-        Top = 376
+        Top = 416
         Width = 129
         Height = 25
         Caption = 'Adicionar texto'
@@ -820,8 +838,8 @@ object Form1: TForm1
         TabOrder = 8
       end
       object BitBtn8: TBitBtn
-        Left = 386
-        Top = 129
+        Left = 210
+        Top = 169
         Width = 104
         Height = 25
         Caption = 'Montar exemplo'
@@ -869,7 +887,7 @@ object Form1: TForm1
       end
       object BitBtn10: TBitBtn
         Left = 179
-        Top = 376
+        Top = 416
         Width = 198
         Height = 25
         Caption = 'Mover cursor para o final da pagina'
@@ -878,7 +896,7 @@ object Form1: TForm1
       end
       object edtArqWriter: TLabeledEdit
         Left = 48
-        Top = 434
+        Top = 462
         Width = 457
         Height = 21
         EditLabel.Width = 99
@@ -889,7 +907,7 @@ object Form1: TForm1
       end
       object DBGrid2: TDBGrid
         Left = 48
-        Top = 478
+        Top = 530
         Width = 577
         Height = 120
         DataSource = DataSource2
@@ -902,7 +920,7 @@ object Form1: TForm1
       end
       object Button15: TButton
         Left = 48
-        Top = 604
+        Top = 656
         Width = 149
         Height = 25
         Caption = 'Grid to Doc Table'
@@ -910,17 +928,17 @@ object Form1: TForm1
         OnClick = Button15Click
       end
       object Button18: TButton
-        Left = 464
-        Top = 376
-        Width = 75
+        Left = 550
+        Top = 416
+        Width = 64
         Height = 25
         Caption = 'Get Text'
         TabOrder = 16
         OnClick = Button18Click
       end
       object Button19: TButton
-        Left = 545
-        Top = 376
+        Left = 618
+        Top = 416
         Width = 75
         Height = 25
         Caption = 'Replace'
@@ -929,7 +947,7 @@ object Form1: TForm1
       end
       object Button20: TButton
         Left = 383
-        Top = 376
+        Top = 416
         Width = 75
         Height = 25
         Caption = 'Select All'
@@ -938,7 +956,7 @@ object Form1: TForm1
       end
       object Button21: TButton
         Left = 511
-        Top = 434
+        Top = 462
         Width = 20
         Height = 21
         Anchors = [akTop, akRight]
@@ -948,28 +966,68 @@ object Form1: TForm1
       end
       object EdtTextIniSelect: TEdit
         Left = 48
-        Top = 96
+        Top = 136
         Width = 65
         Height = 21
         TabOrder = 20
-        Text = 'Ola'
+        Text = 'Ol'#225
       end
       object EdtTextFimSelect: TEdit
         Left = 119
-        Top = 96
+        Top = 136
         Width = 65
         Height = 21
         TabOrder = 21
-        Text = 'Mundo'
+        Text = 'mundo'
       end
       object Button23: TButton
         Left = 200
-        Top = 96
+        Top = 136
         Width = 137
         Height = 25
         Caption = 'Selecionar texto'
         TabOrder = 22
         OnClick = Button23Click
+      end
+      object Button24: TButton
+        Left = 631
+        Top = 499
+        Width = 97
+        Height = 25
+        Caption = 'Export to PDF'
+        TabOrder = 23
+        OnClick = Button24Click
+      end
+      object EdtSalvarWriter: TLabeledEdit
+        Left = 48
+        Top = 503
+        Width = 457
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        EditLabel.Width = 47
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Salvar em'
+        TabOrder = 24
+        Text = 'c:\'
+      end
+      object Button26: TButton
+        Left = 511
+        Top = 503
+        Width = 20
+        Height = 21
+        Anchors = [akTop, akRight]
+        Caption = '...'
+        TabOrder = 25
+        OnClick = Button17Click
+      end
+      object Button27: TButton
+        Left = 466
+        Top = 416
+        Width = 75
+        Height = 25
+        Caption = 'Clear Select'
+        TabOrder = 26
+        OnClick = Button27Click
       end
     end
   end

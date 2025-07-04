@@ -91,22 +91,23 @@ Type
       write FOnAfterSetValue;
     property DocVisible : boolean read FDocVisible write FDocVisible;
   public
-    procedure print;
+    procedure Print;
     procedure CloseFile;
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    procedure saveFile(aFileName: String);
-    
-     property ServicesManager: OleVariant read FobjServiceManager;
-     property Cell: OleVariant read FobjCell write FobjCell;
-     property oSCalc: OleVariant read FobjSCalc write FobjSCalc;
-     property CoreReflection :OleVariant read FobjCoreReflection;
+    procedure SaveFile(aFileName: String);
+    procedure ExportToPDF(const aOutputFile: string);
+
+    property ServicesManager: OleVariant read FobjServiceManager;
+    property Cell: OleVariant read FobjCell write FobjCell;
+    property oSCalc: OleVariant read FobjSCalc write FobjSCalc;
+    property CoreReflection :OleVariant read FobjCoreReflection;
   end;
 
 implementation
 
 uses
-  System.SysUtils, System.Win.ComObj;
+  System.SysUtils, System.Win.ComObj, StrUtils;
 
 { TOpenOffice }
 
@@ -119,6 +120,47 @@ begin
 
   if Assigned(FOnAfterCloseFile) then
     FOnAfterCloseFile(self);
+end;
+
+{code ExportToPDF provided by @fabiokruger on Github: https://github.com/Daniel09Fernandes/DinosOffice/discussions/86#discussioncomment-13640228
+Adjusted by @DinosDev
+}
+procedure TOpenOffice.ExportToPDF(const aOutputFile: string);
+var
+  ExportProps: array [0..1] of Variant;
+  PDFFileUrl: string;
+begin
+  ExportProps[0] := FobjServiceManager.Bridge_GetStruct('com.sun.star.beans.PropertyValue');
+  ExportProps[0].Name := 'FilterName';
+
+  PDFFileUrl := aOutputFile;
+
+  if PDFFileUrl.Length <=3 then
+    PDFFileUrl := ''; //Not save in your c:/
+
+  if URlFile.ToLower.Contains('.ods') or URlFile.ToLower.Contains('scalc') then
+    ExportProps[0].Value := 'calc_pdf_Export'
+  else
+    ExportProps[0].Value := 'writer_pdf_Export';
+
+  if PDFFileUrl.Trim.IsEmpty then
+    PDFFileUrl := GetCurrentDir +'\' +ExportProps[0].Value + '.pdf';
+
+  if not PDFFileUrl.Contains('pdf') then
+  begin
+      PDFFileUrl := ExtractFilePath(
+                      PDFFileUrl +
+                      ifthen(ExtractFileExt(PDFFileUrl) = '' ,'\', '' )
+                    ) + '\' +ExportProps[0].Value + '.pdf';
+  end;
+
+  PDFFileUrl := convertFilePathToUrlFile(PDFFileUrl);
+
+  ExportProps[1] := FobjServiceManager.Bridge_GetStruct('com.sun.star.beans.PropertyValue');
+  ExportProps[1].Name := 'Overwrite';
+  ExportProps[1].Value := True;
+
+  FobjDocument.storeToURL(PDFFileUrl, VarArrayOf(ExportProps));
 end;
 
 function TOpenOffice.convertFilePathToUrlFile(aFilePath: string): string;

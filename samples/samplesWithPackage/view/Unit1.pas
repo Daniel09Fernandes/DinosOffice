@@ -141,6 +141,12 @@ type
     Label7: TLabel;
     Label8: TLabel;
     Button23: TButton;
+    Button24: TButton;
+    Button25: TButton;
+    EdtSalvarWriter: TLabeledEdit;
+    Button26: TButton;
+    Button27: TButton;
+    Button28: TButton;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -190,6 +196,10 @@ type
     procedure Button21Click(Sender: TObject);
     procedure Button22Click(Sender: TObject);
     procedure Button23Click(Sender: TObject);
+    procedure Button25Click(Sender: TObject);
+    procedure Button24Click(Sender: TObject);
+    procedure Button27Click(Sender: TObject);
+    procedure Button28Click(Sender: TObject);
   private
     FontTop, fontLeft: integer;
     SettingsChart: TSettingsChart;
@@ -236,12 +246,12 @@ end;
 
 procedure TForm1.BitBtn5Click(Sender: TObject);
 begin
-  OpenOffice_writer1.saveFile(edtSalvar.Text);
+  OpenOffice_writer1.saveFile(EdtSalvarWriter.Text);
 end;
 
 procedure TForm1.BitBtn6Click(Sender: TObject);
 begin
-  OpenOffice_writer1.URlFile := edtArq.Text;
+  OpenOffice_writer1.URlFile := edtArqWriter.Text;
   OpenOffice_writer1.startDoc;
 end;
 
@@ -336,9 +346,9 @@ end;
 
 procedure TForm1.Button12Click(Sender: TObject);
 begin
-  if edtAba.Text = '' then
-    edtAba.Text := 'Planilha 1';
-
+  if (edtAba.Text = '') or
+    (not (OpenOffice_calc1.TabSheetExists(edtAba.Text ))) then
+      edtAba.Text := OpenOffice_calc1.SheetName;
 
   if EdtPos.Text <> '' then
     CdsDados.Data := OpenOffice_calc1.SheetToDataSet('', StrToIntDef(EdtPos.Text, 0)).Data
@@ -395,9 +405,13 @@ end;
 procedure TForm1.Button19Click(Sender: TObject);
 var
   lData:string;
+const
+  sPauta = #9'1º) Prestação de contas com previsão orçamentaria;'#10 +
+           #9'2°) Eleição de síndico, subsíndo e conselho consultivo;'#10 +
+           #9'3°) Temas de interesse geral, sugestões. ';
 begin
-  lData :=  DateToStr(Now);
-
+//  lData :=  DateToStr(Now);
+// Other Exemple, commented becouse is of context
 //    OpenOffice_writer1
 //      .SelectAllText  //Seleciona o texto para replace
 //	    .SetFontHeight(14)
@@ -409,7 +423,7 @@ begin
 //                                      .Replace('[DATA]', lData))
 //      .ClearSelection
 //      .gotoStartOfSentence
-//      .setValue(' Assembleia Geral '+#13#13) // Titulo incluso depois
+//      .setValue(' Assembleia Geral '+#13#13)
 //        .SetBold(True)
 //      .ClearSelection
 //      .SelectBetweenText('NEW','YORK')
@@ -418,9 +432,17 @@ begin
 //      .SelectBetweenText(Copy(lData,0,3),Copy(lData,4))
 //        .SetBold(True);
 
-  OpenOffice_writer1
-      .SelectAllText
-      .setValue(mmo.text);
+//  OpenOffice_writer1.ReplaceText('[DATA]', '29/06/2025');
+//  OpenOffice_writer1.ReplaceText('[PAUTA]', sPauta);
+
+//  OpenOffice_writer1
+//      .SelectAllText
+//      .setValue(mmo.text);
+
+  if OpenOffice_writer1.GetValue.Value.Contains('Título') then //Montado pelo exemplo
+    OpenOffice_writer1.ReplaceText('Título: Apresentando o componente Libre Office writer via Delphi <3', 'Título: Replace do titulo')
+  else
+    OpenOffice_writer1.ReplaceText(EdtTextIniSelect.text, mmo.text)
 end;
 
 procedure TForm1.BtnDeleteClick(Sender: TObject);
@@ -449,7 +471,10 @@ end;
 procedure TForm1.CreateDemoSheet;
 var
   lOutCountRow, lOutCountCell: integer;
+  lSheetname: string;
 begin
+  lSheetname := OpenOffice_calc1.SheetName;
+
   OpenOffice_calc1.DocVisible := CheckBox1.Checked;
   OpenOffice_calc1.StartSheet
     .SetValue(1, 'A', 'STATUS')
@@ -529,7 +554,7 @@ begin
       .setBold(true)
     .setFormula(8, 'B', '=B2+B3+B4+B5+B6')
       .setBold(true)
-    .positionSheetByName('Planilha1');
+    .positionSheetByName(lSheetname);
 
   // Configure the chart settings
   SettingsChart.Height := 11000;
@@ -588,6 +613,26 @@ begin
   OpenOffice_writer1
     .ClearSelection
     .SelectBetweenText(EdtTextIniSelect.text, EdtTextFimSelect.Text);
+end;
+
+procedure TForm1.Button24Click(Sender: TObject);
+begin
+  OpenOffice_writer1.ExportToPDF(EdtSalvarWriter.Text);
+end;
+
+procedure TForm1.Button25Click(Sender: TObject);
+begin
+  OpenOffice_calc1.ExportToPDF(EdtSalvar.Text);
+end;
+
+procedure TForm1.Button27Click(Sender: TObject);
+begin
+  OpenOffice_writer1.ClearSelection;
+end;
+
+procedure TForm1.Button28Click(Sender: TObject);
+begin
+  PopupMenu1.Items[0].Click;
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
@@ -750,6 +795,7 @@ begin
   ClientDataSet1Idade.Value := 25;
   ClientDataSet1.Post;
 
+  PageControl2.ActivePageIndex := 0;
 end;
 
 procedure TForm1.OpenOffice1AfterCloseSheet(Sender: TObject);
