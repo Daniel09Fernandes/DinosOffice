@@ -162,6 +162,8 @@ begin
     FobjDocument.Sheets.removeByName(aSheetName)
   else
     raise Exception.CreateFmt('A aba "%s" não existe no documento', [aSheetName]);
+
+  Result := Self;
 end;
 
 function TOpenOffice_calc.RemoveSheet(aSheetIndex: Integer):TOpenOffice_calc;
@@ -175,6 +177,8 @@ begin
   end
   else
     raise Exception.CreateFmt('Índice de aba inválido: %d', [aSheetIndex]);
+
+  Result := Self;
 end;
 
 procedure TOpenOffice_calc.ValidateSheetName;
@@ -438,6 +442,7 @@ begin
     end;
 
     Result.CreateDataSet;
+    Result.Open;
     Result.DisableControls;
     Result.LogChanges := false;
 	  lCountRow := CountRow;
@@ -496,6 +501,7 @@ var
   rep,aux, firstIdx,
   secondIdx : integer;
 begin
+  i := 0;
   Result := 0;
   rep := 26;
   aux := 0;

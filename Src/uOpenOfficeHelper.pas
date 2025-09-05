@@ -95,7 +95,8 @@ type
 implementation
 
 uses
-  System.Win.ComObj, System.Classes, Soap.EncdDecd;
+  System.Win.ComObj, System.Classes, Soap.EncdDecd,
+  System.NetEncoding;
 
 function THelperOpenOffice_calc.addChart(aSettingsChart: TSettingsChart): TOpenOffice_calc;
 var
@@ -399,6 +400,7 @@ end;
 function THelperOpenOffice_calc.setCellWidth(const aWidth: integer): TOpenOffice_calc;
 begin
    Cell.getColumns.getByIndex(0).Width := aWidth;
+   Result := Self;
 end;
 
 function THelperOpenOffice_calc.setColor(aFontColor, aBackgroud: TOpenColor)
@@ -428,7 +430,7 @@ begin
   stream := TMemoryStream.Create;
   try
     stream.LoadFromFile(aPathFile);
-    Result := EncodeBase64(stream.Memory, stream.Size);
+    Result := String(EncodeBase64(stream.Memory, stream.Size));
   finally
     stream.Free;
   end;

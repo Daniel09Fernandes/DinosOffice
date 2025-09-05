@@ -24,6 +24,7 @@ interface
  type TBeforeSetValue   = procedure (sender : TObject) of object;
  type TAfterGetValue    = procedure (sender : TObject) of object;
  type TBeforeGetValue   = procedure (sender : TObject) of object;
+
 implementation
 
 end.

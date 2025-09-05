@@ -173,7 +173,7 @@ var
   oTextTable: Variant;
   FoCursor: Variant;
   key, line, linesCol, numRows, numCols: Integer;
-  lColl, lOutVal: string;
+  lOutVal: string;
   lPair: TPair<TTableRowFields, TTableLinesValues>;
   lLines: TList<TLineFieldValue>;
 begin
@@ -220,7 +220,7 @@ end;
 
 function TOpenOffice_writer.ClearSelection: TOpenOffice_writer;
 begin
-  if not EnsureDocument then Exit;
+  if not EnsureDocument then Exit(Self);
   try
     FoCursor := FobjDocument.getCurrentController.getViewCursor;
     if not (VarIsEmpty(FoCursor) or VarIsNull(FoCursor)) then
@@ -242,6 +242,8 @@ var
   lTable: TTableWriter;
   lLog: Boolean;
 begin
+  lLog := False;
+  lRecNo := 0;
   ATable.DisableControls;
   lTable := TTableWriter.New;
   try
@@ -283,8 +285,9 @@ var
   lRecNo: Integer;
   lTable: TTableWriter;
   lLog: Boolean;
-  lLines: TLineFieldValue;
 begin
+  lRecNo := 0;
+  lLog := False;
   ATable.DisableControls;
   lTable := TTableWriter.New;
   try
@@ -378,7 +381,7 @@ end;
 
 function TOpenOffice_writer.setValue(const aText: string): TOpenOffice_writer;
 begin
-  if not EnsureDocument or not EnsureTextCursor then Exit;
+  if not EnsureDocument or not EnsureTextCursor then Exit(Self);
 
   if Assigned(onBeforeSetValue) then
     onBeforeSetValue(self);
@@ -428,8 +431,6 @@ end;
 
 function TOpenOffice_writer.SelectBetweenText(AStartText, AEndText: string): TOpenOffice_writer;
 var
-  oText: Variant;
-  oCursor: Variant;
   lFullText: string;
   lStartPos, lEndPos: Integer;
 begin
@@ -503,7 +504,6 @@ end;
 function TOpenOffice_writer.SelectAllText: TOpenOffice_writer;
 var
   loController, loViewCursor: Variant;
-  largs: array[0..0] of Variant;
 begin
   try
     loController := FobjDocument.getCurrentController;
