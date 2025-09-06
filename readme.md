@@ -7,17 +7,30 @@ the DocVisible property was included, by default it is false, so when generating
 If you want to see the spreadsheet being generated, set it to true;
 
 ## Running in: 
-### Vcl, Fmx(Win32/64), Unigui, Intraweb
+### Vcl, Fmx(Win32/64), Unigui, Intraweb, MCPServer
 
 ![image](https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/assets/29381329/ddec6e5c-ea7e-4840-a080-facc7e2384bf)
 ![image](https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/assets/29381329/ec6738a6-f775-4d99-996e-5a6fdc092a73) 
-![image](https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/assets/29381329/d1509f79-eb7e-496a-9292-a2bfab710b7b) &nbsp;
-![image](https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/assets/29381329/cc66f699-1eb7-400c-9cf7-6a2132f95457) 
+<img width="151" height="162" alt="Unigui" src="https://github.com/user-attachments/assets/28a0707a-1a3f-459b-a4aa-0c3be4e67e0f" /> &nbsp;
+<img width="256" height="256" alt="image" src="https://github.com/user-attachments/assets/e913ded5-a2a9-461b-9977-0b99d1a42545" />
+<img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/0291a693-c60d-4752-8930-980c1e9838ae" />
 
+---
+## About 🎯
+ DinosOffice is an open source project for creating, customizing, and reading spreadsheets quickly and easily.
+ 
+---- 
+# Installation ⚙️
 
-----
 Need install:
 https://pt-br.libreoffice.org/baixe-ja/libreoffice-novo/
+
+Installation is done using the [`boss install`](https://github.com/HashLoad/boss) command:
+``` sh
+boss install github.com/Daniel09Fernandes/DinosOffice
+```
+
+OR manually:
 
  - 1 - Open project "C:\yourLocal\ComponentDinosOffice-OpenOffice\srcPackage\OpenOfficeComponent_install.dproj"
          For delphi 7 use the C:\yourLocal\ComponentDinosOffice-OpenOffice\srcPackag\OpenOfficeComponent_install_Delphi7.dpk
@@ -75,6 +88,29 @@ To Unigui on IIS, use this path to access your spreadsheet
 |-------------------------	|-----------	|
 | Unigui 1.95.0.1584 	     |    ✅ 	   |
 | Intraweb 14    	         |    ✅ 	   |
+
+
+---
+## Run MCPServer 
+ In you MCP Client apont to DinosOfficeMCP.exe (use the STDIO protocol).
+
+Claude IA exemple 
+
+Access the configuration on developer and edit config
+
+<img width="364" height="167" alt="image" src="https://github.com/user-attachments/assets/b0e1d02c-3806-49ec-81a2-b1bef521e93b" /><br>
+
+
+<img width="945" height="685" alt="image" src="https://github.com/user-attachments/assets/5cdc6748-6437-4ed6-84ff-e8cfe8502de3" /><br>
+
+
+In mcpServers node, attach DinosOfficeMCP.exe
+
+
+<img width="1058" height="403" alt="image" src="https://github.com/user-attachments/assets/7c43bd89-1832-4964-8b5e-217574ae775a" />
+<br>
+
+There you go, now you can read and create spreadsheets with AI
 
 ----
 For basic read and write sheet usage, just use the component 
