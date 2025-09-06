@@ -90,6 +90,7 @@ type
     {************************************}
 
     function SheetToBase64(aPathFile:string):string;
+    function SheetToString(aSeparator: string; aTabSheetIndex: Integer = 0): string;
   end;
 
 implementation
@@ -433,6 +434,26 @@ begin
     Result := String(EncodeBase64(stream.Memory, stream.Size));
   finally
     stream.Free;
+  end;
+end;
+
+function THelperOpenOffice_calc.SheetToString(aSeparator: string; aTabSheetIndex: Integer = 0): string;
+var
+  lCells, lRows: Integer;
+  lNumbersCell, lNumbersRow: Integer;
+begin
+  Self.PositionSheetByIndex(aTabSheetIndex);
+
+  lNumbersCell := Self.CountCell;
+  lNumbersRow := Self.CountRow;
+  Result := '';
+
+  for lRows := 1 to lNumbersRow do
+  begin
+    for lCells := 0 to lNumbersCell- 1 do
+    begin
+      Result := Result + GetValue(lRows, Fields.getField(lCells)).Value + aSeparator;
+    end;
   end;
 end;
 

@@ -1,0 +1,9 @@
+{
+	"name": "dinos_office",
+	"description": "Compontent Delphi for LibreOffice",
+	"version": "20.4",
+	"homepage": "https://github.com/Daniel09Fernandes/DinosOffice",
+	"mainsrc": "Src",
+	"projects": [],
+	"dependencies": {}
+}
