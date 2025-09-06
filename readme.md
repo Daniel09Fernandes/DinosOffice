@@ -30,6 +30,8 @@ Installation is done using the [`boss install`](https://github.com/HashLoad/boss
 boss install github.com/Daniel09Fernandes/DinosOffice
 ```
 
+Install via [`Embarcadero - GetIt`](https://getitnow.embarcadero.com/dinosoffice-libreoffice-for-delphi/)
+
 OR manually:
 
  - 1 - Open project "C:\yourLocal\ComponentDinosOffice-OpenOffice\srcPackage\OpenOfficeComponent_install.dproj"
@@ -58,6 +60,11 @@ Tested Delphi version
 | > 12.x   	|    ✅ 	    | Win 11                      |
 | > 13 Beta	|    ✅ 	    | Win 11                      |
 
+| Frameworks Web   	       | Supported 	|
+|-------------------------	|-----------	|
+| Unigui 1.95.0.1584 	     |    ✅ 	   |
+| Intraweb 14    	         |    ✅ 	   |
+
 ## For Unigui 
  You need add FDGUIxWaitCursor to your serverModule and in your serverModule checked the property AutoCoInitialize
  
@@ -82,13 +89,6 @@ To Unigui on IIS, use this path to access your spreadsheet
  
 
  ![image](https://github.com/Daniel09Fernandes/ComponentDinosOffice-OpenOffice/assets/29381329/a164b806-ca33-4242-a183-1a62a6882e7b)
-
- 
-| Version Tested   	       | Supported 	|
-|-------------------------	|-----------	|
-| Unigui 1.95.0.1584 	     |    ✅ 	   |
-| Intraweb 14    	         |    ✅ 	   |
-
 
 ---
 ## Run MCPServer 
@@ -116,6 +116,174 @@ There you go, now you can read and create spreadsheets with AI
 For basic read and write sheet usage, just use the component 
 To style the worksheet and documents, use the additional units: uOpenOfficeHelper.pas, uOpenOfficeCollors.pas 
 
+Calc(Spreedsheet) Example
+```pascal
+var
+   OpenOffice_calc1: TOpenOffice_calc;
+begin
+   OpenOffice_calc1 := TOpenOffice_calc.Create(Self);
+
+  OpenOffice_calc1.DocVisible := False; //True to visible doc on screen
+  OpenOffice_calc1.StartSheet
+    .SetValue(1, 'A', 'STATUS')
+       .SetBorder([bAll], opBrown)
+       .changeJustify(fthRIGHT, ftvTOP)
+       .SetBold(true)
+       .changeFont('Arial', 12)
+       .SetUnderline(true)
+       .SetColor(opWhite, opMagenta)
+    .setValue(1, 'B', 'VALOR')
+       .changeJustify(fthRIGHT, ftvTOP)
+       .SetBorder([bAll], opBrown)
+       .SetBold(true)
+       .ChangeFont('Arial', 12)
+       .SetUnderline(true)
+       .SetColor(opWhite, opMagenta)
+    .setValue(2, 'B', 109, ftNumeric)
+       .SetBorder([bAll], opBrown)
+    .setValue(2, 'A', 'AGUA')
+       .SetBorder([bAll], opBrown)
+    .setValue(3, 'B', 105.55, ftNumeric)
+       .SetBorder([bAll], opBrown)
+    .setValue(3, 'A', 'LUZ')
+       .SetBorder([bAll], opBrown)
+    .setValue(4, 'B', 1005.22, ftNumeric)
+    .setValue(4, 'A', 'ALUGUEL')
+    .setValue(6, 'A', 'Total de linhas');
+
+  OpenOffice_calc1.GetCountRow(lOutCountRow); 
+
+  OpenOffice_calc1
+    .setValue(6, 'B', lOutCountRow, ftNumeric)
+    .setValue(7, 'A', 'Total de Colunas');
+
+   OpenOffice_calc1.GetCountCell(lOutCountCell);
+
+   OpenOffice_calc1
+    .setValue(7, 'B', lOutCountCell, ftNumeric)
+    .addNewSheet('A Receber', 1)
+    .setValue(1, 'A', 'VALOR')
+      .SetBorder([bAll], opBrown)
+      .changeJustify(fthRIGHT, ftvTOP)
+      .setBold(true)
+    .setValue(1, 'B', 'DESC')
+      .SetBorder([bAll], opBrown)
+      .changeJustify(fthRIGHT, ftvTOP)
+      .setBold(true)
+      .changeFont('Arial', 12)
+      .setUnderline(true)
+      .setColor(opWhite, opCiano)
+    .setValue(2, 'B', 200, ftNumeric)
+    .setValue(2, 'A', 'Emprestimo')
+    .setValue(3, 'B', 369.55, ftNumeric)
+    .setValue(3, 'A', 'Dividendos')
+    .setValue(4, 'B', 1585.22, ftNumeric)
+    .setValue(4, 'A', 'ALUGUEL')
+    .setValue(5, 'B', 1585.22, ftNumeric)
+    .setValue(5, 'A', 'Renda extra')
+    .setValue(6, 'B', 1585.22, ftNumeric)
+    .setValue(6, 'A', 'ALUGUEL 2')
+    .setValue(9, 'A', 'Total de linhas')
+      .SetBold(True)
+      .SetCellWidth(5000);
+
+   OpenOffice_calc1.GetCountRow(lOutCountRow);
+
+   OpenOffice_calc1
+    .setValue(9, 'B', lOutCountRow, ftNumeric)
+    .setValue(10, 'A', 'Total de Colunas')
+    .SetBold(True);
+
+   OpenOffice_calc1.GetCountCell(lOutCountCell);
+
+   OpenOffice_calc1
+    .setValue(10, 'B', lOutCountCell, ftNumeric)
+    .setValue(8, 'A', 'Total')
+      .setBold(true)
+    .setFormula(8, 'B', '=B2+B3+B4+B5+B6')
+      .setBold(true)
+    .positionSheetByName(lSheetname);
+
+  // Configure the chart settings
+  SettingsChart.Height := 11000;
+  SettingsChart.Width := 22000;
+  SettingsChart.Position_X := 1500;
+  SettingsChart.Position_Y := 5000;
+  SettingsChart.StartRow := 0;
+  SettingsChart.EndRow := 3;
+  SettingsChart.PositionSheet := 0; // first tab
+  SettingsChart.StartColumn := 'A';
+  SettingsChart.EndColumn := 'B';
+  SettingsChart.ChartName := 'TestChart';
+  SettingsChart.typeChart := ctDefault;
+
+  OpenOffice_calc1.addChart(SettingsChart);
+
+  SettingsChart.typeChart := ctVertical;
+  OpenOffice_calc1.addChart(SettingsChart);
+
+  SettingsChart.typeChart := ctPie;
+  OpenOffice_calc1.addChart(SettingsChart);
+
+  SettingsChart.typeChart := ctLine;
+  OpenOffice_calc1.addChart(SettingsChart);
+
+  OpenOffice_writer1.saveFile('c:/temp/sheet.xlsx');
+  OpenOffice_calc1.Free;
+```
+
+
+Writer(DOCX) Example
+```pascal
+var
+  lTable: TTableWriter;
+  OpenOffice_writer1:  TOpenOffice_writer;
+begin
+  OpenOffice_writer1 :=  TOpenOffice_writer.Create(Self);  
+  OpenOffice_writer1.setBold(true).setFontHeight(16)
+    .setValue(
+       'Título: Apresentando o componente Libre Office writer via Delphi <3'+ #13#13)
+    .gotoEndOfSentence
+    .setBold(false).setFontHeight(12)
+    .setValue(
+       'Neste exemplo estou mostrando a criação de documentos via código, de um jeito simples, rápido e fácil.'+ #13)
+    .gotoEndOfSentence
+    .setBold(false).setFontHeight(12)
+    .setValue(
+        'Espero que seja útil e que estejam gostando, lembrando o componente é open source e totalmente free!'+ #13#13)
+    .gotoEndOfSentence
+    .setBold(false).setFontHeight(12).setBold(true)
+      .setValue('Obrigado a todos pela presença!!!' + #13)
+    .gotoEndOfSentence;
+
+  lTable := TTableWriter.New;
+  try
+    lTable.TableFields.Add('Participantes');
+    lTable.TableFields.Add('Idade');
+    lTable.TableFields.Add('Local');
+
+    lTable.Lines.Line.Add('Dinos');
+    lTable.Lines.Line.Add('31');
+    lTable.Lines.Line.Add('Brasil');
+
+    lTable.Lines := TTableWriter.AddNewLines; //Adiciona uma nova linha
+    lTable.Lines.Line.Add('Jao');
+    lTable.Lines.Line.Add('22');
+    lTable.Lines.Line.Add('USA');
+    lTable.TableLines.Add(lTable.Lines);
+
+    OpenOffice_writer1
+      .CreateTable(lTable)
+      .gotoEndOfSentence
+      .setValue(#13#13);
+
+    OpenOffice_writer1.saveFile('c:/temp/sdoc.docx');
+  finally
+    lTable.Free;
+    OpenOffice_writer1.Free; 
+  end;
+end;
+```
 
 This software is MIT open source!
 
