@@ -1,4 +1,6 @@
 # DinosOffice: Delphi Components for LibreOffice
+<img width="256" height="256" alt="image" src="https://github.com/Daniel09Fernandes/DinosOffice/blob/versionOficial/img/logoCalc.png" />
+
 
 ### Important
 ----
