@@ -35,6 +35,7 @@ type
     function setFontHeight(aFontHeight: integer): TOpenOffice_writer;
     function setColorText(aColor: TOpenColor) : TOpenOffice_writer;
     function setFontName(aFont : string): TOpenOffice_writer;
+	function ReplaceText(const ASearch, AReplace: string): TOpenOffice_writer;
   published
     property ServicesManager: OleVariant read objServiceManager;
     property DocName: string read FDocName write SetDocName;
@@ -80,6 +81,44 @@ begin
     onAfterGetValue(self);
 end;
 
+function TOpenOffice_writer.ReplaceText(const ASearch, AReplace: string): TOpenOffice_writer;
+var
+  SearchDescriptor, Found: OleVariant;
+begin
+  try
+    try
+      SearchDescriptor := objDocument.createSearchDescriptor;
+      SearchDescriptor.setSearchString(ASearch);
+
+      SearchDescriptor.SearchCaseSensitive := false;
+      SearchDescriptor.SearchWords := false;
+      SearchDescriptor.SearchRegularExpression := false;
+
+      Found := objDocument.findFirst(SearchDescriptor);
+
+      while not VarIsEmpty(Found) and not VarIsNull(Found) and (VarType(Found) = varDispatch) do
+      begin
+        try
+          if AReplace = '' then
+            Found.setString(Variant(''))
+          else
+            Found.setString(Variant(AReplace));
+        except
+          on E: Exception do
+            OutputDebugString(PChar('Erro ao substituir texto: ' + E.Message));
+        end;
+
+        // Encontra a próxima ocorrência
+        Found := objDocument.findNext(Found.End, SearchDescriptor);
+      end;
+    Except
+      On E: Exception do
+        OutputDebugString(PChar('Erro no ReplaceText: ' + E.Message));
+    end;
+  finally
+    Result := Self;
+  end;
+end;
 
 function TOpenOffice_writer.gotoEndOfSentence: TOpenOffice_writer;
 begin
