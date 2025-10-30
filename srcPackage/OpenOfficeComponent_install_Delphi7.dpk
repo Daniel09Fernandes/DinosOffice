@@ -32,8 +32,7 @@ requires
   dbrtl,
   inet,
   xmlrtl,
-  dsnap,
-  OpenOfficeComponent_install_DX7;
+  dsnap;
 
 contains
   uOpenOffice in '..\src_dx7\uOpenOffice.pas',
