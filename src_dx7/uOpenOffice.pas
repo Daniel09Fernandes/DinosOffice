@@ -93,7 +93,7 @@ procedure TOpenOffice.SetURlFile(const Value: string);
 begin
   FURlFile := Value;
 
-  if (trim(FURlFile) <> '') or (FURlFile = NewFile[integer(TpCalc)] )
+  if (trim(FURlFile) = '') or (FURlFile = NewFile[integer(TpCalc)] )
                            or (FURlFile = NewFile[integer(TpWriter)]) then
     exit;
 
