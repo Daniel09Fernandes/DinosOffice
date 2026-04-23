@@ -60,7 +60,7 @@ Tested Delphi version
 | > 10.x   	|    ✅ 	    | Win 10                      |
 | > 11.x   	|    ✅ 	    | Win 10, Win 11              |
 | > 12.x   	|    ✅ 	    | Win 11                      |
-| > 13 Beta	|    ✅ 	    | Win 11                      |
+| > 13.X   	|    ✅ 	    | Win 11                      |
 
 | Frameworks Web   	       | Supported 	|
 |-------------------------	|-----------	|
