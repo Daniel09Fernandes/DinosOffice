@@ -1,4 +1,4 @@
-{ ******************************************************* }
+﻿{ ******************************************************* }
 
 { Delphi openOffice Library }
 
@@ -67,6 +67,28 @@ type
     ChartName: string;
     typeChart: TTypeChart;
   end;
+  
+  //0; //1234,2
+  //1; //1234
+  //3; //1.234
+  //4; //1.234,20
+  //10; //123420%
+  //11; //123420,00%
+  //20; //R$ 1.234
+  //21; //R$ 1.234,20
+  //24; // 1.234,20 BRL
+  //30; // DD/MM/YY
+  //31; // DDDD DD/MM/YY
+  //32; // MM/YY
+  //33; // DD/MMMM
+  //34; // MMMM
+  //35; // TRIMESTRE
+  //36; // DD/MM/YYYY
+  //39; // DD MMMM YY
+  //40; // DD MMMM YYYY
+  TNumberMask = (Default, NoDecimalSeparator, WithDecimalSeparator = 3, WithDecimalSeparatorAndComma, Percent = 10, PercentWithComma, CurrencySymbolWithoutDecimal = 20,
+                   CurrencySymbolWithDecimal, CurrencySuffix = 24, Date_dd_mm_yy = 30, Date_dddd_dd_mm_yyy,  Date_mm_yy, Date_dd_mmmm, Date_mmmm,
+                   Date_QUARTER, Date_Default, Date_dd_mmmm_yy = 39, Date_dd_mmmm_yyyy);
 
   TOpenOffice_calc = class(TOpenOffice)
   private
@@ -79,6 +101,7 @@ type
     FOnAfterStartFile : TAfterStartFile;
     //--------------------//
     FSheetName: string;
+	FCustomFormat: Integer;
     procedure ValidateSheetName;
     procedure SetSheetName(const Value: string);
     procedure setArrayFieldsSheet;
@@ -90,7 +113,12 @@ type
     procedure positionSheetByName(aSheetName: string);
     procedure addNewSheet(aSheetName: string; aPosition: integer);
     function setFormula(aCellNumber: integer; aCollName: string; aFormula: string): TOpenOffice_calc;
-    function SetValue(aCellNumber: integer; aCollName: string; aValue: variant; TypeValue: TTypeValue = ftString; Wrapped: boolean = false): TOpenOffice_calc;
+    function SetValue(aCellNumber: integer; const aCollName: string;
+      AValue: variant; TypeValue: TTypeValue = ftString;
+      Wrapped: Boolean = false;
+      ANumberMask: TNumberMask = Default): TOpenOffice_calc; overload;
+    function SetValue(aCellNumber: integer; const aCollName: string;
+      AValue: variant; ACustomMask: string): TOpenOffice_calc; overload;
     function GetValue(aCellNumber: integer; aCollName: String): TOpenOffice_calc;
     procedure DataSetToSheet(const aCds : TClientDataSet); overload;
     procedure DataSetToSheet(const aCds : TDataSet); overload;
@@ -109,6 +137,8 @@ type
     function getField(aIndex: integer): string;
     function getIndex(aNameField: String): integer;
 	function TabSheetExists(ATabSheetName: string):Boolean;
+	function GetOrCreateFormatKey(const aFormatStr: string;
+      const aLocale: string = 'pt_BR'): Integer;
   published
     property ServicesManager: OleVariant read objServiceManager;
     property Cell: OleVariant read objCell write objCell;
@@ -132,6 +162,28 @@ uses
 procedure Register;
 begin
   RegisterComponents('DinosOffice', [TOpenOffice_calc]);
+end;
+
+function TOpenOffice_calc.GetOrCreateFormatKey(const aFormatStr: string; const aLocale: string = 'pt_BR'): Integer;
+var
+  lFormatsSupplier: OleVariant;
+  lNumberFormats: OleVariant;
+  lLocaleObj: OleVariant;
+  lKey: Integer;
+begin
+  lFormatsSupplier := ObjDocument;
+  lNumberFormats   := lFormatsSupplier.getNumberFormats;
+
+  lLocaleObj := ObjDocument.createInstance('com.sun.star.lang.Locale');
+//  lLocaleObj.Language := Copy(aLocale, 1, 2); // 'pt'
+//  lLocaleObj.Country  := Copy(aLocale, 4, 2); // 'BR'
+
+  lKey := lNumberFormats.queryKey(aFormatStr, lLocaleObj, True);
+
+  if lKey = -1 then
+    lKey := lNumberFormats.addNew(aFormatStr, lLocaleObj);
+
+  Result := lKey;
 end;
 
 function TOpenOffice_calc.HoryJustifyToInteger(pValue:THoriJustify):Integer;
@@ -191,30 +243,52 @@ begin
   end;
 end;
 
-function TOpenOffice_calc.SetValue(aCellNumber: integer; aCollName: string; aValue: variant; TypeValue: TTypeValue; Wrapped: boolean): TOpenOffice_calc;
+
+function TOpenOffice_calc.SetValue(aCellNumber: integer; const aCollName: string;
+      AValue: variant; ACustomMask: string): TOpenOffice_calc;
+begin
+   FCustomFormat := GetOrCreateFormatKey(ACustomMask);
+   SetValue(aCellNumber, aCollName, AValue, ftNumeric);
+   FCustomFormat := 0;
+   Result := Self;
+end;
+
+function TOpenOffice_calc.SetValue(aCellNumber: integer; const aCollName: string;
+      AValue: variant; TypeValue: TTypeValue = ftString;
+      Wrapped: Boolean = false;
+      ANumberMask: TNumberMask = Default): TOpenOffice_calc;
 var
   map: string;
+  lIdFormat: Integer;
 begin
   if aCellNumber = 0 then
     aCellNumber := 1;
 
-  map := aCollName + IntToStr(aCellNumber);
-  objCell := objSCalc.getCellRangeByName(map);
+  map := aCollName + aCellNumber.ToString;
+  ObjCell := ObjSCalc.getCellRangeByName(map);
 
   if  assigned(OnBeforeSetValue) then
     OnBeforeSetValue(self);
 
   if TypeValue = ftString then
   begin
-    objCell.IsTextWrapped := false;
+    ObjCell.IsTextWrapped := false;
 
     if Wrapped then
-      objCell.IsTextWrapped := True;
+      ObjCell.IsTextWrapped := True;
 
-    objCell.setString(aValue);
+    ObjCell.setString(aValue);
   end
   else
-    objCell.SetValue(aValue);
+  begin   
+    if FCustomFormat > 0 then
+      lIdFormat := FCustomFormat
+    else
+      lIdFormat := Integer(ANumberMask);
+
+    ObjCell.NumberFormat := lIdFormat;
+    ObjCell.SetValue(aValue);
+  end;
 
   Result := self;
 
@@ -228,6 +302,7 @@ begin
    setArrayFieldsSheet;
    DefaultNewSheetNamePT := 'Planilha1';
    DefaultNewSheetNameEn := 'Sheet1';
+   FCustomFormat := 0;
 end;
 
 procedure TOpenOffice_calc.SetSheetName(const Value: string);

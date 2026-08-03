@@ -54,7 +54,6 @@ type
                    CurrencySymbolWithDecimal, CurrencySuffix = 24, Date_dd_mm_yy = 30, Date_dddd_dd_mm_yyy,  Date_mm_yy, Date_dd_mmmm, Date_mmmm,
                    Date_QUARTER, Date_Default, Date_dd_mmmm_yy = 39, Date_dd_mmmm_yyyy);
 
-
   TFieldsSheet = record
   private
   var
@@ -79,6 +78,7 @@ type
     //--------------------//
     FFields: TFieldsSheet;
     FSheetName: string;
+    FCustomFormat: Integer;
     FNumberMask: TNumberMask;
     FValue: string;
 
@@ -93,20 +93,33 @@ type
    	function ExeThread(pProc : Tproc): TOpenOffice_calc;
     function PositionSheetByIndex(const aSheetIndex: integer): TOpenOffice_calc;
     function PositionSheetByName(const aSheetName: string):TOpenOffice_calc;
-    function SetFormula(aCellNumber: integer; const aCollName: string; const aFormula: string): TOpenOffice_calc;
-    function SetValue(aCellNumber: integer; const aCollName: string; aValue: variant; TypeValue: TTypeValue = ftString; Wrapped: boolean = false): TOpenOffice_calc;
-    function GetValue(aCellNumber: integer; const aCollName: String) : TOpenOffice_calc;    
-    function SheetToDataSet(const TabSheetName: String; TabSheetIndex: Integer = 0; IndexOfHeaderToFieldCds: Integer = 1): TClientDataSet;
+    function SetFormula(aCellNumber: integer; const aCollName: string;
+      const aFormula: string): TOpenOffice_calc;
+    function SetValue(aCellNumber: integer; const aCollName: string;
+      AValue: variant; TypeValue: TTypeValue = ftString;
+      Wrapped: Boolean = false;
+      ANumberMask: TNumberMask = Default): TOpenOffice_calc; overload;
+    function SetValue(aCellNumber: integer; const aCollName: string;
+      AValue: variant; ACustomMask: string): TOpenOffice_calc; overload;
+    function GetValue(aCellNumber: integer;
+      const aCollName: String): TOpenOffice_calc;
+    function SheetToDataSet(const TabSheetName: String;
+      TabSheetIndex: Integer = 0; IndexOfHeaderToFieldCds: Integer = 1): TClientDataSet;
     function TabSheetExists(ATabSheetName: string):Boolean; overload;
     function TabSheetExists(ATabSheetIndex: integer):Boolean; overload;
   	function RemoveSheet(const aSheetName: string):TOpenOffice_calc; overload;
     function RemoveSheet(aSheetIndex: Integer):TOpenOffice_calc; overload;
     function GetSheetList: TDictionary<integer, string>;
+    function GetOrCreateFormatKey(const aFormatStr: string;
+      const aLocale: string = 'pt_BR'): Integer;
 
     destructor Destroy; override;
     constructor Create(AOwner: TComponent); override;
   published
     property SheetName: string read FSheetName write SetSheetName;
+    ///<summary>
+    ///  depecrated
+    ///</summary>
     property NumberMask: TNumberMask read FNumberMask write FNumberMask;
     property Fields: TFieldsSheet read FFields;
     property Value: string read FValue write FValue;
@@ -129,6 +142,28 @@ uses
 procedure Register;
 begin
   RegisterComponents('DinosOffice', [TOpenOffice_calc]);
+end;
+
+function TOpenOffice_calc.GetOrCreateFormatKey(const aFormatStr: string; const aLocale: string = 'pt_BR'): Integer;
+var
+  lFormatsSupplier: OleVariant;
+  lNumberFormats: OleVariant;
+  lLocaleObj: OleVariant;
+  lKey: Integer;
+begin
+  lFormatsSupplier := FobjDocument;
+  lNumberFormats   := lFormatsSupplier.getNumberFormats;
+
+  lLocaleObj := FobjDocument.createInstance('com.sun.star.lang.Locale');
+//  lLocaleObj.Language := Copy(aLocale, 1, 2); // 'pt'
+//  lLocaleObj.Country  := Copy(aLocale, 4, 2); // 'BR'
+
+  lKey := lNumberFormats.queryKey(aFormatStr, lLocaleObj, True);
+
+  if lKey = -1 then
+    lKey := lNumberFormats.addNew(aFormatStr, lLocaleObj);
+
+  Result := lKey;
 end;
 
 function TOpenOffice_calc.CallConversorPDFTOSheet: TOpenOffice_calc;
@@ -203,9 +238,22 @@ begin
   end;
 end;
 
-function TOpenOffice_calc.SetValue(aCellNumber: integer; const aCollName: string; aValue: variant; TypeValue: TTypeValue; Wrapped: boolean): TOpenOffice_calc;
+function TOpenOffice_calc.SetValue(aCellNumber: integer; const aCollName: string;
+      AValue: variant; ACustomMask: string): TOpenOffice_calc;
+begin
+   FCustomFormat := GetOrCreateFormatKey(ACustomMask);
+   SetValue(aCellNumber, aCollName, AValue, ftNumeric);
+   FCustomFormat := 0;
+   Result := Self;
+end;
+
+function TOpenOffice_calc.SetValue(aCellNumber: integer; const aCollName: string;
+      AValue: variant; TypeValue: TTypeValue = ftString;
+      Wrapped: Boolean = false;
+      ANumberMask: TNumberMask = Default): TOpenOffice_calc;
 var
   map: string;
+  lIdFormat: Integer;
 begin
   if aCellNumber = 0 then
     aCellNumber := 1;
@@ -227,7 +275,16 @@ begin
   end
   else
   begin
-    FobjCell.NumberFormat := Integer(NumberMask);
+    //Just compatibilty
+    if (ANumberMask = Default) and (FNumberMask <> ANumberMask) then
+      ANumberMask := FNumberMask;
+
+    if FCustomFormat > 0 then
+      lIdFormat := FCustomFormat
+    else
+      lIdFormat := Integer(ANumberMask);
+
+    FobjCell.NumberFormat := lIdFormat;
     FobjCell.SetValue(aValue);
   end;
 
@@ -241,6 +298,8 @@ constructor TOpenOffice_calc.Create(AOwner: TComponent);
 begin
   inherited;
   Fields.setArrayFieldsSheet;
+  FCustomFormat := 0;
+  FNumberMask := Default;
 end;
 
 procedure TOpenOffice_calc.SetSheetName(const Value: string);

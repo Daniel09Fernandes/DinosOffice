@@ -200,6 +200,7 @@ type
     procedure Button24Click(Sender: TObject);
     procedure Button27Click(Sender: TObject);
     procedure Button28Click(Sender: TObject);
+    procedure BtnSetCustomFormatClick(Sender: TObject);
   private
     FontTop, fontLeft: integer;
     SettingsChart: TSettingsChart;
@@ -466,6 +467,13 @@ begin
      OpenOffice_calc1.PositionSheetByIndex(0); //Volte para o index que estava antes;
      lListSheet.Free;
    end;
+end;
+
+procedure TForm1.BtnSetCustomFormatClick(Sender: TObject);
+begin
+  //Custom format value,
+  //Now is dd/mm/yyyy, with this format is ex: sun 03/aug
+  OpenOffice_calc1.SetValue(1, 'A',Now, 'NN DD/MMM');
 end;
 
 procedure TForm1.CreateDemoSheet;

@@ -62,30 +62,30 @@ object Form1: TForm1
       object Label1: TLabel
         Left = 6
         Top = 5
-        Width = 71
+        Width = 43
         Height = 13
-        Caption = 'tamanho fonte'
+        Caption = 'Font size'
       end
       object Label2: TLabel
         Left = 6
         Top = 50
-        Width = 61
+        Width = 48
         Height = 13
-        Caption = 'Cor da fonte'
+        Caption = 'Font color'
       end
       object Label3: TLabel
         Left = 163
         Top = 50
-        Width = 63
+        Width = 82
         Height = 13
-        Caption = 'Cor do fundo'
+        Caption = 'Background color'
       end
       object Label4: TLabel
         Left = 93
         Top = 5
-        Width = 33
+        Width = 27
         Height = 13
-        Caption = 'Fontes'
+        Caption = 'Fonts'
       end
       object lbl1: TLabel
         Left = 3
@@ -100,20 +100,20 @@ object Form1: TForm1
         Height = 13
       end
       object BitBtn1: TBitBtn
-        Left = 180
+        Left = 139
         Top = 160
         Width = 62
         Height = 25
-        Caption = 'Qde Coluna'
+        Caption = 'Count Col'
         TabOrder = 0
         OnClick = BitBtn1Click
       end
       object BitBtn2: TBitBtn
-        Left = 252
+        Left = 204
         Top = 160
-        Width = 56
+        Width = 68
         Height = 25
-        Caption = 'Qde Linha'
+        Caption = 'Count Row'
         TabOrder = 1
         OnClick = BitBtn2Click
       end
@@ -122,7 +122,7 @@ object Form1: TForm1
         Top = 363
         Width = 121
         Height = 30
-        Caption = 'Criar nova planilha'
+        Caption = 'Create new spreadsheet'
         TabOrder = 2
         OnClick = Button1Click
       end
@@ -131,7 +131,7 @@ object Form1: TForm1
         Top = 237
         Width = 75
         Height = 21
-        Caption = 'Add grafico'
+        Caption = 'Add chart'
         TabOrder = 3
         OnClick = Button10Click
       end
@@ -140,7 +140,7 @@ object Form1: TForm1
         Top = 363
         Width = 81
         Height = 30
-        Caption = 'Imprimir '
+        Caption = 'Print'
         TabOrder = 4
         OnClick = Button2Click
       end
@@ -149,7 +149,7 @@ object Form1: TForm1
         Top = 327
         Width = 64
         Height = 30
-        Caption = 'Salvar'
+        Caption = 'Save'
         TabOrder = 5
         OnClick = Button3Click
       end
@@ -158,7 +158,7 @@ object Form1: TForm1
         Top = 363
         Width = 67
         Height = 30
-        Caption = 'Fechar'
+        Caption = 'Close'
         TabOrder = 6
         OnClick = Button4Click
       end
@@ -167,25 +167,25 @@ object Form1: TForm1
         Top = 291
         Width = 121
         Height = 30
-        Caption = 'Carregar documeto'
+        Caption = 'Load document'
         TabOrder = 7
         OnClick = Button5Click
       end
       object Button6: TButton
-        Left = 84
+        Left = 70
         Top = 160
-        Width = 89
+        Width = 67
         Height = 25
-        Caption = 'Adicionar Valor'
+        Caption = 'Set Value'
         TabOrder = 8
         OnClick = Button6Click
       end
       object Button7: TButton
         Left = 6
         Top = 160
-        Width = 75
+        Width = 61
         Height = 25
-        Caption = 'Pegar valor'
+        Caption = 'Get Value'
         TabOrder = 9
         OnClick = Button7Click
       end
@@ -194,7 +194,7 @@ object Form1: TForm1
         Top = 164
         Width = 57
         Height = 25
-        Caption = 'Adicionar'
+        Caption = 'Add'
         TabOrder = 10
         OnClick = Button8Click
       end
@@ -203,7 +203,7 @@ object Form1: TForm1
         Top = 164
         Width = 76
         Height = 25
-        Caption = 'Trocar - Nome'
+        Caption = 'Change - Name'
         TabOrder = 11
         OnClick = Button9Click
       end
@@ -212,7 +212,7 @@ object Form1: TForm1
         Top = 97
         Width = 60
         Height = 17
-        Caption = 'Negrito'
+        Caption = 'Bold'
         TabOrder = 12
       end
       object CBCorFont: TComboBox
@@ -266,7 +266,7 @@ object Form1: TForm1
         Top = 97
         Width = 97
         Height = 17
-        Caption = 'Quebra de linha'
+        Caption = 'Word wrap'
         TabOrder = 16
       end
       object CBUnderline: TCheckBox
@@ -274,7 +274,7 @@ object Form1: TForm1
         Top = 97
         Width = 82
         Height = 17
-        Caption = 'Sublinhado'
+        Caption = 'Underline'
         TabOrder = 17
       end
       object chNumeric: TCheckBox
@@ -290,9 +290,9 @@ object Form1: TForm1
         Top = 139
         Width = 170
         Height = 21
-        EditLabel.Width = 73
+        EditLabel.Width = 80
         EditLabel.Height = 13
-        EditLabel.Caption = 'Aba da planilha'
+        EditLabel.Caption = 'Spreadsheet tab'
         TabOrder = 19
         Text = ''
       end
@@ -302,9 +302,9 @@ object Form1: TForm1
         Width = 510
         Height = 21
         Anchors = [akLeft, akTop, akRight]
-        EditLabel.Width = 99
+        EditLabel.Width = 73
         EditLabel.Height = 13
-        EditLabel.Caption = 'Carregar documento'
+        EditLabel.Caption = 'Load document'
         TabOrder = 20
         Text = ''
       end
@@ -313,9 +313,9 @@ object Form1: TForm1
         Top = 210
         Width = 53
         Height = 21
-        EditLabel.Width = 53
+        EditLabel.Width = 48
         EditLabel.Height = 13
-        EditLabel.Caption = 'Coluna Ate'
+        EditLabel.Caption = 'Column to'
         TabOrder = 21
         Text = ''
       end
@@ -324,9 +324,9 @@ object Form1: TForm1
         Top = 210
         Width = 52
         Height = 21
-        EditLabel.Width = 48
+        EditLabel.Width = 60
         EditLabel.Height = 13
-        EditLabel.Caption = 'Coluna de'
+        EditLabel.Caption = 'Column from'
         TabOrder = 22
         Text = ''
       end
@@ -336,9 +336,9 @@ object Form1: TForm1
         Width = 34
         Height = 21
         CharCase = ecUpperCase
-        EditLabel.Width = 33
+        EditLabel.Width = 35
         EditLabel.Height = 13
-        EditLabel.Caption = 'Coluna'
+        EditLabel.Caption = 'Column'
         TabOrder = 23
         Text = ''
       end
@@ -347,9 +347,9 @@ object Form1: TForm1
         Top = 210
         Width = 40
         Height = 21
-        EditLabel.Width = 41
+        EditLabel.Width = 34
         EditLabel.Height = 13
-        EditLabel.Caption = 'linha ate'
+        EditLabel.Caption = 'Row to'
         NumbersOnly = True
         TabOrder = 24
         Text = ''
@@ -359,9 +359,9 @@ object Form1: TForm1
         Top = 210
         Width = 42
         Height = 21
-        EditLabel.Width = 40
+        EditLabel.Width = 46
         EditLabel.Height = 13
-        EditLabel.Caption = 'Linha de'
+        EditLabel.Caption = 'Row from'
         NumbersOnly = True
         TabOrder = 25
         Text = ''
@@ -371,9 +371,9 @@ object Form1: TForm1
         Top = 133
         Width = 35
         Height = 21
-        EditLabel.Width = 25
+        EditLabel.Width = 21
         EditLabel.Height = 13
-        EditLabel.Caption = 'Linha'
+        EditLabel.Caption = 'Row'
         NumbersOnly = True
         TabOrder = 26
         Text = ''
@@ -383,9 +383,9 @@ object Form1: TForm1
         Top = 210
         Width = 181
         Height = 21
-        EditLabel.Width = 64
+        EditLabel.Width = 57
         EditLabel.Height = 13
-        EditLabel.Caption = 'Nome Grafico'
+        EditLabel.Caption = 'Chart Name'
         TabOrder = 27
         Text = ''
       end
@@ -394,9 +394,9 @@ object Form1: TForm1
         Top = 139
         Width = 34
         Height = 21
-        EditLabel.Width = 36
+        EditLabel.Width = 37
         EditLabel.Height = 13
-        EditLabel.Caption = 'Posi'#231#227'o'
+        EditLabel.Caption = 'Position'
         TabOrder = 28
         Text = ''
       end
@@ -406,9 +406,9 @@ object Form1: TForm1
         Width = 510
         Height = 21
         Anchors = [akLeft, akTop, akRight]
-        EditLabel.Width = 47
+        EditLabel.Width = 35
         EditLabel.Height = 13
-        EditLabel.Caption = 'Salvar em'
+        EditLabel.Caption = 'Save in'
         TabOrder = 29
         Text = 'c:\'
       end
@@ -417,9 +417,9 @@ object Form1: TForm1
         Top = 132
         Width = 221
         Height = 21
-        EditLabel.Width = 24
+        EditLabel.Width = 26
         EditLabel.Height = 13
-        EditLabel.Caption = 'Valor'
+        EditLabel.Caption = 'Value'
         TabOrder = 30
         Text = ''
       end
@@ -428,7 +428,7 @@ object Form1: TForm1
         Top = 44
         Width = 123
         Height = 70
-        Caption = 'Tipos de Graficos'
+        Caption = 'Chart types'
         TabOrder = 31
         object RBDefault: TRadioButton
           Left = 9
@@ -471,14 +471,14 @@ object Form1: TForm1
         Width = 362
         Height = 37
         Anchors = [akLeft, akTop, akRight]
-        Caption = 'Alinhamento horizontal'
+        Caption = 'Horizontal alignment'
         TabOrder = 33
         object RBhCenter: TRadioButton
           Left = 87
           Top = 18
           Width = 58
           Height = 17
-          Caption = 'Centro'
+          Caption = 'Center'
           TabOrder = 0
         end
         object RBhLeft: TRadioButton
@@ -486,7 +486,7 @@ object Form1: TForm1
           Top = 18
           Width = 70
           Height = 17
-          Caption = 'Esquerda'
+          Caption = 'Left'
           TabOrder = 1
         end
         object RBhRight: TRadioButton
@@ -494,7 +494,7 @@ object Form1: TForm1
           Top = 18
           Width = 113
           Height = 17
-          Caption = 'Direita'
+          Caption = 'Right'
           TabOrder = 2
         end
         object PageControl1: TPageControl
@@ -510,7 +510,7 @@ object Form1: TForm1
         Top = 44
         Width = 102
         Height = 70
-        Caption = 'Alinha. Vertical'
+        Caption = 'Vertical align.'
         TabOrder = 32
         DesignSize = (
           102
@@ -521,7 +521,7 @@ object Form1: TForm1
           Width = 113
           Height = 17
           Anchors = [akLeft, akTop, akRight]
-          Caption = 'Cima'
+          Caption = 'Top'
           TabOrder = 0
         end
         object RBvBottom: TRadioButton
@@ -529,7 +529,7 @@ object Form1: TForm1
           Top = 51
           Width = 113
           Height = 17
-          Caption = 'Baixo'
+          Caption = 'Bottom'
           TabOrder = 1
         end
         object RBvCenter: TRadioButton
@@ -537,7 +537,7 @@ object Form1: TForm1
           Top = 33
           Width = 113
           Height = 17
-          Caption = 'Centro'
+          Caption = 'Center'
           TabOrder = 2
         end
       end
@@ -569,7 +569,7 @@ object Form1: TForm1
         Top = 363
         Width = 97
         Height = 30
-        Caption = 'Pdf para planilha'
+        Caption = 'PDF to spreadsheet'
         TabOrder = 36
         OnClick = Button11Click
       end
@@ -587,7 +587,7 @@ object Form1: TForm1
         Top = 235
         Width = 181
         Height = 17
-        Caption = 'Visualizar gera'#231#227'o do documento? '
+        Caption = 'Preview document generation?'
         Checked = True
         State = cbChecked
         TabOrder = 38
@@ -601,7 +601,7 @@ object Form1: TForm1
         CharCase = ecUpperCase
         EditLabel.Width = 48
         EditLabel.Height = 13
-        EditLabel.Caption = 'Cel lWidth'
+        EditLabel.Caption = 'Cell Width'
         EditLabel.Color = clBackground
         EditLabel.ParentColor = False
         ImeName = 'Portuguese (Brazilian ABNT)'
@@ -613,7 +613,7 @@ object Form1: TForm1
         Top = 164
         Width = 80
         Height = 25
-        Caption = 'Trocar - Index'
+        Caption = 'Change - Index'
         TabOrder = 40
         OnClick = Button13Click
       end
@@ -672,7 +672,7 @@ object Form1: TForm1
         Top = 197
         Width = 107
         Height = 25
-        Caption = 'Listar as planilhas'
+        Caption = 'List spreadsheets'
         TabOrder = 46
         OnClick = BtnListSheetClick
       end
@@ -720,6 +720,15 @@ object Form1: TForm1
         TabOrder = 51
         OnClick = Button28Click
       end
+      object BtnSetCustomFormat: TButton
+        Left = 274
+        Top = 160
+        Width = 122
+        Height = 25
+        Caption = 'Set Value Custom Format'
+        TabOrder = 52
+        OnClick = BtnSetCustomFormatClick
+      end
     end
     object TabSheet2: TTabSheet
       Caption = 'Writer'
@@ -731,37 +740,37 @@ object Form1: TForm1
       object Label5: TLabel
         Left = 132
         Top = 31
-        Width = 73
+        Width = 43
         Height = 13
-        Caption = 'Tamanho fonte'
+        Caption = 'Font size'
       end
       object Label6: TLabel
         Left = 235
         Top = 31
-        Width = 17
+        Width = 25
         Height = 13
-        Caption = 'Cor'
+        Caption = 'Color'
       end
       object Label7: TLabel
         Left = 48
         Top = 121
-        Width = 54
+        Width = 47
         Height = 13
-        Caption = 'Inicio texto'
+        Caption = 'Start text'
       end
       object Label8: TLabel
         Left = 119
         Top = 121
-        Width = 47
+        Width = 41
         Height = 13
-        Caption = 'Fim Texto'
+        Caption = 'End text'
       end
       object BitBtn3: TBitBtn
         Left = 48
         Top = 169
         Width = 75
         Height = 25
-        Caption = 'Iniciar'
+        Caption = 'Start'
         TabOrder = 0
         OnClick = BitBtn3Click
       end
@@ -770,7 +779,7 @@ object Form1: TForm1
         Top = 169
         Width = 75
         Height = 25
-        Caption = 'Fechar'
+        Caption = 'Close'
         TabOrder = 1
         OnClick = BitBtn4Click
       end
@@ -779,7 +788,7 @@ object Form1: TForm1
         Top = 499
         Width = 75
         Height = 25
-        Caption = 'Salvar'
+        Caption = 'Save'
         TabOrder = 2
         OnClick = BitBtn5Click
       end
@@ -788,7 +797,7 @@ object Form1: TForm1
         Top = 460
         Width = 75
         Height = 25
-        Caption = 'Carregar'
+        Caption = 'Load'
         TabOrder = 3
         OnClick = BitBtn6Click
       end
@@ -806,7 +815,7 @@ object Form1: TForm1
         Top = 416
         Width = 129
         Height = 25
-        Caption = 'Adicionar texto'
+        Caption = 'Add text'
         TabOrder = 5
         OnClick = BitBtn7Click
       end
@@ -832,7 +841,7 @@ object Form1: TForm1
         Top = 6
         Width = 161
         Height = 17
-        Caption = 'Apar texto antes de escrever'
+        Caption = 'Trim text before writing'
         Checked = True
         State = cbChecked
         TabOrder = 8
@@ -842,7 +851,7 @@ object Form1: TForm1
         Top = 169
         Width = 104
         Height = 25
-        Caption = 'Montar exemplo'
+        Caption = 'Build example'
         TabOrder = 9
         OnClick = BitBtn8Click
       end
@@ -851,7 +860,7 @@ object Form1: TForm1
         Top = 52
         Width = 78
         Height = 17
-        Caption = 'UnderLine'
+        Caption = 'Underline'
         TabOrder = 10
       end
       object cbColorWriter: TComboBox
@@ -890,7 +899,7 @@ object Form1: TForm1
         Top = 416
         Width = 198
         Height = 25
-        Caption = 'Mover cursor para o final da pagina'
+        Caption = 'Move cursor to end of page'
         TabOrder = 12
         OnClick = BitBtn10Click
       end
@@ -899,9 +908,9 @@ object Form1: TForm1
         Top = 462
         Width = 457
         Height = 21
-        EditLabel.Width = 99
+        EditLabel.Width = 73
         EditLabel.Height = 13
-        EditLabel.Caption = 'Carregar documento'
+        EditLabel.Caption = 'Load document'
         TabOrder = 13
         Text = ''
       end
@@ -985,7 +994,7 @@ object Form1: TForm1
         Top = 136
         Width = 137
         Height = 25
-        Caption = 'Selecionar texto'
+        Caption = 'Select text'
         TabOrder = 22
         OnClick = Button23Click
       end
@@ -1004,9 +1013,9 @@ object Form1: TForm1
         Width = 457
         Height = 21
         Anchors = [akLeft, akTop, akRight]
-        EditLabel.Width = 47
+        EditLabel.Width = 35
         EditLabel.Height = 13
-        EditLabel.Caption = 'Salvar em'
+        EditLabel.Caption = 'Save in'
         TabOrder = 24
         Text = 'c:\'
       end
@@ -1060,7 +1069,7 @@ object Form1: TForm1
     Left = 468
     Top = 480
     object Exportarplanilha1: TMenuItem
-      Caption = 'Exportar planilha'
+      Caption = 'Export spreadsheet'
       OnClick = Exportarplanilha1Click
     end
   end
